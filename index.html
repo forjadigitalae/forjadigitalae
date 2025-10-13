@@ -3,6 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script>
+        /**
+         * Sustituto temporal para que las llamadas a trackEvent en main.js no fallen.
+         * Eliminar cuando se integre el script de analítica real (GA/GTM).
+         */
+        function trackEvent(eventName, data = {}) {
+            // console.log(`Evento en pausa: ${eventName}`, data); 
+            // La función no hace nada, pero ahora existe.
+        }
+    </script>
     
     <!-- SEO Meta Tags -->
     <title>ForjaDigitalAE | Arquitectos del Crecimiento PYME</title>
@@ -1204,13 +1215,6 @@
             </div>
 
             <!-- JavaScript Externo -->
-            <script>
-                function trackEvent(eventName, data = {}) {
-                    // Esta función está vacía para permitir la ejecución del código sin analíticas externas.
-                    // Si tienes código de Google Analytics/GTM, pégalo aquí.
-                    console.log(`Analítica desactivada: ${eventName}`, data); 
-                }
-            </script>
             <script src="js/main.js"></script>
             
             <!-- Script adicional para el formulario -->
@@ -1331,7 +1335,7 @@
         </div>
 
 </body>
-=======
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -2510,13 +2514,7 @@
     </div>
 </div>
 
-
-
-
-
-
-
-            <!-- Modales de Políticas -->
+        <!-- Modales de Políticas -->
             <div id="policyModal" class="modal">
                 <div class="modal-content">
                     <button onclick="closeModal()" class="modal-close">&times;</button>
@@ -2537,9 +2535,6 @@
                 </div>
             </div>
 
-            <!-- JavaScript Externo -->
-            <script src="js/main.js"></script>
-            
             <!-- Script adicional para el formulario -->
             <script>
                 function openContactForm() {
@@ -2657,5 +2652,7 @@
             </div>
         </div>
 
+    <!-- JavaScript Externo -->
+    <script src="js/main.js"></script>
 </body>
 </html>

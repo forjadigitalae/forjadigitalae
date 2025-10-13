@@ -428,15 +428,6 @@ document.addEventListener('DOMContentLoaded', function() {
 console.log('%c🚀 ForjaDigitalAE inicializado correctamente', 'color: #4CCED5; font-size: 16px; font-weight: bold;');
 console.log('%c📊 Versión: 3.0 - Modales Corregidos', 'color: #EE8028; font-size: 12px;');
 
-// Activar botón de beneficios
-document.addEventListener('DOMContentLoaded', function() {
-    const btnBenefits = document.getElementById('btnBenefits');
-    if (btnBenefits) {
-        btnBenefits.addEventListener('click', function() {
-            openBenefitsModal();
-        });
-    }
-=======
 /* ================================
    FORJADIGITALAE - MAIN.JS
    JavaScript Optimizado - VERSIÓN FINAL CORREGIDA

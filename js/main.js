@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* ================================
    FORJADIGITALAE - MAIN.JS
    JavaScript Optimizado - VERSIÓN FINAL CORREGIDA
@@ -876,5 +875,4 @@ document.addEventListener('DOMContentLoaded', function() {
             openBenefitsModal();
         });
     }
->>>>>>> 73091f84ae883350289a68c87aa7b4d1ede6c588
 });

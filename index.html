@@ -1204,6 +1204,13 @@
             </div>
 
             <!-- JavaScript Externo -->
+            <script>
+                function trackEvent(eventName, data = {}) {
+                    // Esta función está vacía para permitir la ejecución del código sin analíticas externas.
+                    // Si tienes código de Google Analytics/GTM, pégalo aquí.
+                    console.log(`Analítica desactivada: ${eventName}`, data); 
+                }
+            </script>
             <script src="js/main.js"></script>
             
             <!-- Script adicional para el formulario -->

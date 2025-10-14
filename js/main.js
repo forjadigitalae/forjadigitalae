@@ -121,22 +121,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// ===== MOBILE MENU TOGGLE =====
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuToggle = document.getElementById('mobileToggle');
-    const navMenu = document.getElementById('navMenu');
-
-    if (mobileMenuToggle && navMenu) {
-        mobileMenuToggle.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
-            const icon = this.querySelector('i');
-            if (icon) {
-                icon.classList.toggle('fa-bars');
-                icon.classList.toggle('fa-times');
-            }
-        });
-    }
-});
 
 // ===== NÚMEROS ANIMADOS EN HERO =====
 function animateNumbers() {

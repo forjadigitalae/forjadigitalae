@@ -278,86 +278,105 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Manejar envío del formulario (Captura y procesamiento de nuevos campos)
-document.addEventListener('DOMContentLoaded', function() {
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const data = {};
-            
-            // 1. Procesamiento de FormData para capturar todos los campos, incluyendo selección múltiple
-            const desafios = [];
-            for (let [key, value] of formData.entries()) {
-                if (key === 'desafio') {
-                    desafios.push(value);
-                } else if (key !== 'nombre' && key !== 'apellido') { // Omitir campos que no existen en el nuevo HTML
-                    data[key] = value;
-                }
+// ===== CONFIGURACIÓN DEL FORMULARIO - CONEXIÓN CON GOOGLE SHEETS =====
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOV7RjRU9fOPsutSOscgbj-gPD4e5Eh9uLmLU789XqxBzrGWkRzz0p6Ti4o908kt4o/exec'; // ← CAMBIA ESTO
+
+// Manejar envío del formulario
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Validar términos
+    const terminosCheckbox = this.querySelector('input[name="terminos"]');
+    if (!terminosCheckbox || !terminosCheckbox.checked) {
+        alert('❌ Debes aceptar la Política de Privacidad para continuar');
+        return;
+    }
+    
+    // Obtener el botón de envío
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const textoOriginal = submitBtn.innerHTML;
+    
+    // Cambiar estado del botón
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+    submitBtn.disabled = true;
+    
+    try {
+        // Preparar datos del formulario
+        const formData = new FormData(this);
+        
+        // Agregar timestamp de aceptación
+        formData.append('fecha_aceptacion', new Date().toISOString());
+        formData.append('acepta_politicas', 'Sí');
+        
+        // Convertir FormData a URLSearchParams para envío POST
+        const datos = new URLSearchParams(formData);
+        
+        // Log para debugging (puedes eliminarlo después)
+        console.log('📤 Enviando datos al servidor...');
+        
+        // Enviar a Google Apps Script
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: datos,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
             }
-            data.desafio = desafios.join(', '); // Cadena con desafíos separados por coma
+        });
+        
+        // Verificar si la respuesta es OK
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        // Obtener respuesta JSON
+        const resultado = await response.json();
+        
+        console.log('✅ Respuesta del servidor:', resultado);
+        
+        if (resultado.success) {
+            // Éxito - cerrar formulario y mostrar mensaje
+            closeContactForm();
+            document.getElementById('successMessage').style.display = 'flex';
             
-            // 2. Validación de términos
-            if (!data.terminos) {
-                alert('Debes aceptar los términos y condiciones');
-                return;
+            // Limpiar formulario
+            this.reset();
+            
+            // Tracking de evento (si tienes analytics configurado)
+            if (typeof trackEvent === 'function') {
+                trackEvent('Formulario_Enviado', {
+                    empresa: formData.get('empresa'),
+                    sector: formData.get('sector')
+                });
             }
             
-            // 3. Simulación de Envío / Integración (Aquí iría tu llamada FETCH/AJAX a Google Sheets)
-            const submitBtn = this.querySelector('button[type="submit"]');
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-            submitBtn.disabled = true;
-            
-            console.log('✅ Data lista para Google Sheets (POST):', data);
-            trackEvent('form_submission', {
-                company: data.empresa,
-                contact_email: data.email
+        } else {
+            // Error del servidor
+            throw new Error(resultado.message || 'Error desconocido del servidor');
+        }
+        
+    } catch (error) {
+        // Manejo de errores
+        console.error('❌ Error al enviar formulario:', error);
+        
+        // Mostrar mensaje de error al usuario
+        alert('❌ Hubo un error al enviar el formulario. Por favor, intenta nuevamente o contáctanos directamente por WhatsApp: +57 314 236 5590');
+        
+        // Tracking de error (si tienes analytics)
+        if (typeof trackEvent === 'function') {
+            trackEvent('Formulario_Error', {
+                error: error.message
             });
-            
-            // Simular delay de envío
-            setTimeout(() => {
-                closeContactForm();
-                closeSuccessMessage(); // Asegurar que no esté visible
-                const successMsg = document.getElementById('successMessage');
-                if (successMsg) successMsg.style.display = 'flex'; // Usar flex para mostrar el modal
-
-                // Restaurar botón
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> ENVIAR SOLICITUD';
-                submitBtn.disabled = false;
-            }, 1500);
-        });
-    }
-
-    // Listener para cerrar Modales al hacer clic fuera del contenido
-    const contactModal = document.getElementById('contactFormModal');
-    if (contactModal) {
-        contactModal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeContactForm();
-            }
-        });
-    }
-
-    const privacyModal = document.getElementById('privacyPolicyModal');
-    if (privacyModal) {
-        privacyModal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closePrivacyPolicy();
-            }
-        });
-    }
-
-    const successModal = document.getElementById('successMessage');
-    if (successModal) {
-        successModal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeSuccessMessage();
-            }
-        });
+        }
+        
+    } finally {
+        // Restaurar botón (siempre se ejecuta)
+        submitBtn.innerHTML = textoOriginal;
+        submitBtn.disabled = false;
     }
 });
+
+// Log de inicialización
+console.log('✅ Script de formulario cargado - Versión con Google Sheets');
 
 
 // ===== ANALYTICS TRACKING (Mantenido) =====

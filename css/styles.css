@@ -1918,6 +1918,9 @@ body {
 /* ================================================= */
 /* SECCIÓN EL DOLOR REAL - CORREGIDA */
 /* ================================================= */
+.problema {
+    background: green;
+}
 
 .problema-grid {
     display: grid;

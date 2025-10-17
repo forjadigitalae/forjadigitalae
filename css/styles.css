@@ -74,7 +74,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10000;
+    z-index: 10000 !important;
     transition: opacity 0.5s ease-out;
 }
 
@@ -137,7 +137,7 @@ body {
     background: rgba(39, 50, 90, 0.95);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 10000;
+    z-index: 10000 !important;
     transition: all 0.3s ease;
 }
 
@@ -422,7 +422,7 @@ body {
     transition: all 0.3s ease;
     box-shadow: var(--shadow-heavy);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 10001;
+    z-index: 10001 !important;
 }
 
 .nav-item:hover .dropdown {
@@ -1514,7 +1514,7 @@ body {
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.8);
-    z-index: 10003;
+    z-index: 10003 !important;
     justify-content: center;
     align-items: center;
 }
@@ -1568,7 +1568,7 @@ body {
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.5);
-    z-index: 10000;
+    z-index: 10000 !important;
     display: none;
 }
 
@@ -1581,7 +1581,7 @@ body {
     padding: 30px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-heavy);
-    z-index: 10001;
+    z-index: 10001 !important;
     max-width: 500px;
     text-align: center;
     display: none;
@@ -2476,4 +2476,76 @@ a.btn-secondary:focus,
         bottom: 15px;
         right: 15px;
     }
+}
+
+/* ============================================
+   BOTÓN NARANJA - AJUSTES PARA MÓVILES
+   ============================================ */
+
+/* Ocultar el botón flotante (líneas 115-120 del HTML) en móviles */
+@media (max-width: 768px) {
+    a[href="#contacto"].cta-button {
+        display: none !important; /* Ocultar botón flotante */
+    }
+    
+    /* Mostrar solo el que está en el menú */
+    .nav-menu .nav-cta {
+        display: block;
+    }
+}
+
+/* En desktop, ocultar el botón del menú y mostrar solo el flotante */
+@media (min-width: 769px) {
+    .nav-cta {
+        display: none; /* Ocultar en desktop */
+    }
+}
+
+/* Estilos del botón dentro del menú (para móviles) */
+.cta-button-menu {
+    background: linear-gradient(135deg, #EE8028 0%, #CC5E02 50%, #854009 100%);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(238, 128, 40, 0.3);
+    width: 100%;
+}
+
+.cta-button-menu:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(238, 128, 40, 0.5);
+}
+
+/* Contenedor del botón en el menú móvil */
+@media (max-width: 768px) {
+    .nav-cta {
+        padding: 20px;
+        border-top: 2px solid rgba(255, 255, 255, 0.1);
+        margin-top: 15px;
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Asegurar que el menú hamburguesa esté visible */
+header,
+.header,
+nav,
+.navbar {
+    z-index: 10000 !important;
+}
+
+.nav-toggle,
+.menu-toggle,
+button[class*="toggle"],
+.mobile-menu-toggle {
+    z-index: 10001 !important;
+    position: relative;
 }

@@ -466,40 +466,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-/* ============================================
-   MENÚ HAMBURGUESA - FUNCIONALIDAD DEFINITIVA
-   ============================================ */
-
+/* ===== MENÚ HAMBURGUESA MEJORADO ===== */
 (function() {
     'use strict';
     
-    // Esperar a que cargue el DOM
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initMenu);
-    } else {
-        initMenu();
-    }
-    
-    function initMenu() {
-        console.log('🔧 Inicializando menú hamburguesa...');
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggle = document.getElementById('mobileToggle');
+        const menu = document.querySelector('.nav-menu');
+        const body = document.body;
+        const links = document.querySelectorAll('.nav-link');
         
-        // Seleccionar elementos
-        const toggle = document.getElementById('mobileToggle') || document.querySelector('.mobile-menu-toggle');
-        const menu = document.querySelector('nav ul') || document.querySelector('.nav-menu');
+        if (!toggle || !menu) return;
         
-        if (!toggle) {
-            console.warn('⚠️ No se encontró el botón hamburguesa');
-            return;
-        }
-        
-        if (!menu) {
-            console.warn('⚠️ No se encontró el menú');
-            return;
-        }
-        
-        console.log('✅ Elementos encontrados correctamente');
-        
-        // Toggle del menú
+        // Toggle menú
         toggle.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -516,22 +495,18 @@ document.addEventListener('DOMContentLoaded', function() {
         function openMenu() {
             menu.classList.add('active');
             toggle.classList.add('active');
-            document.body.classList.add('menu-open');
-            console.log('🟢 Menú abierto');
+            body.classList.add('menu-open');
         }
         
         function closeMenu() {
             menu.classList.remove('active');
             toggle.classList.remove('active');
-            document.body.classList.remove('menu-open');
-            console.log('🔴 Menú cerrado');
+            body.classList.remove('menu-open');
         }
         
         // Cerrar al hacer clic en enlaces
-        const links = menu.querySelectorAll('a');
-        links.forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                // Si es un enlace ancla interno, cerrar menú
+        links.forEach(link => {
+            link.addEventListener('click', function() {
                 if (this.getAttribute('href').startsWith('#')) {
                     setTimeout(closeMenu, 100);
                 }
@@ -547,7 +522,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Cerrar al cambiar de móvil a desktop
+        // Cerrar al cambiar a desktop
         let lastWidth = window.innerWidth;
         window.addEventListener('resize', function() {
             const currentWidth = window.innerWidth;
@@ -556,7 +531,5 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             lastWidth = currentWidth;
         });
-        
-        console.log('✅ Menú hamburguesa listo');
-    }
+    });
 })();

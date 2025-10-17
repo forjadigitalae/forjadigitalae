@@ -932,65 +932,141 @@ body {
     }
 }
 
-/* Móviles grandes */
+/* ===== MENÚ MÓVIL REDISEÑADO ===== */
 @media (max-width: 768px) {
-    .rayos-x-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
     
-    .info-box {
-        padding: 30px 25px;
-    }
-    
-    .info-box h3 {
-        font-size: 1.3rem;
+    /* Botón hamburguesa mejorado */
+    .mobile-menu-toggle {
+        display: flex;
         flex-direction: column;
-        text-align: center;
+        justify-content: space-around;
+        width: 30px;
+        height: 25px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 10001;
+        position: relative;
     }
     
-    .benefits-list li {
-        padding: 15px 0;
-        font-size: 0.95rem;
+    .mobile-menu-toggle span {
+        width: 30px;
+        height: 3px;
+        background: white;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        transform-origin: center;
+    }
+    
+    /* Animación hamburguesa → X */
+    .mobile-menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(7px, 7px);
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+    }
+    
+    /* Menú desplegable */
+    .nav-menu {
+        position: fixed;
+        top: 80px;
+        left: -100%;
+        width: 85%;
+        max-width: 400px;
+        height: calc(100vh - 80px);
+        background: linear-gradient(180deg, 
+            rgba(39, 50, 90, 0.98) 0%, 
+            rgba(21, 46, 87, 0.98) 100%);
+        backdrop-filter: blur(20px);
         flex-direction: column;
-        gap: 8px;
+        padding: 30px 0;
+        transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 5px 0 30px rgba(0, 0, 0, 0.3);
+        overflow-y: auto;
+        z-index: 9999;
     }
     
-    .info-box + div {
-        padding: 25px 20px;
+    .nav-menu.active {
+        left: 0;
     }
     
-    .info-box + div h4 {
-        font-size: 1.1rem;
+    /* Items del menú */
+    .nav-item {
+        margin: 0;
+        width: 100%;
+        border-bottom: 1px solid rgba(76, 206, 213, 0.1);
     }
     
-    .evaluation-card {
-        padding: 30px 20px;
+    .nav-link {
+        padding: 18px 30px;
+        width: 100%;
+        justify-content: flex-start;
+        font-size: 1.05rem;
+        transition: all 0.3s ease;
+        border-left: 3px solid transparent;
     }
     
-    .evaluation-card h3 {
-        font-size: 1.3rem;
-        flex-direction: column;
+    .nav-link:hover {
+        background: rgba(76, 206, 213, 0.15);
+        border-left-color: var(--turquesa-digital);
+        padding-left: 35px;
     }
     
-    .feature-box {
-        padding: 20px;
+    /* Botones especiales en móvil */
+    .nav-link.destacado {
+        background: linear-gradient(135deg, var(--turquesa-digital), var(--purpura-innovacion));
+        margin: 10px 20px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(76, 206, 213, 0.3);
     }
     
-    .feature-box h4 {
-        font-size: 1rem;
-        flex-direction: column;
-        gap: 5px;
+    .cta-button {
+        margin: 10px 20px;
+        width: calc(100% - 40px);
+        justify-content: center;
+        background: linear-gradient(135deg, var(--naranja-energia), var(--rojo-forja));
+        box-shadow: 0 5px 15px rgba(238, 128, 40, 0.3);
     }
     
-    .dimensions-list {
-        grid-template-columns: 1fr;
-        gap: 8px;
+    /* Dropdown en móvil */
+    .dropdown {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        background: rgba(21, 46, 87, 0.5);
+        border-radius: 0;
+        margin: 0;
+        padding: 10px 0;
     }
     
-    .btn-full {
-        padding: 18px 25px;
-        font-size: 1rem;
+    .dropdown-item {
+        padding: 12px 30px 12px 50px;
+    }
+    
+    /* Overlay oscuro cuando menú abierto */
+    body.menu-open::before {
+        content: '';
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 80px);
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 9998;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
     }
 }
 
@@ -2478,217 +2554,45 @@ a.btn-secondary:focus,
     }
 }
 
-/* ============================================
-   NAVEGACIÓN RESPONSIVE - VERSIÓN DEFINITIVA
-   ============================================ */
-
-/* ===== Z-INDEX Y POSICIONAMIENTO ===== */
-
-header,
-.header,
-nav,
-.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 10000 !important;
-    background: rgba(39, 50, 90, 0.95);
-    backdrop-filter: blur(10px);
-}
-
-.mobile-menu-toggle,
-#mobileToggle {
-    z-index: 10001 !important;
-}
-
-/* ===== DESKTOP (PC) - MÁS DE 768PX ===== */
-
-@media (min-width: 769px) {
-    
-    /* MOSTRAR el botón naranja flotante (líneas 112-117) */
-    .nav-item:not(.nav-cta) .cta-button-menu,
-    a.cta-button-menu {
-        display: flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-    
-    /* OCULTAR el botón duplicado del menú móvil */
-    .nav-item.nav-cta {
-        display: none !important;
-    }
-    
-    /* OCULTAR botón hamburguesa en desktop */
-    .mobile-menu-toggle,
-    #mobileToggle {
-        display: none !important;
-    }
-    
-    /* Menú horizontal normal en desktop */
-    nav ul,
-    .nav-menu {
-        display: flex !important;
-        flex-direction: row !important;
-        position: relative !important;
-        left: auto !important;
-        top: auto !important;
-        width: auto !important;
-        height: auto !important;
-        background: transparent !important;
-        padding: 0 !important;
-    }
-    
-    nav ul li,
-    .nav-item {
-        border: none !important;
-        margin: 0 5px !important;
-    }
-}
-
-/* ===== MÓVIL - MENOS DE 768PX ===== */
-
-@media (max-width: 768px) {
-    
-    /* OCULTAR el botón naranja flotante original */
-    .nav-item:not(.nav-cta) .cta-button-menu {
-        display: none !important;
-    }
-    
-    /* MOSTRAR botón hamburguesa */
-    .mobile-menu-toggle,
-    #mobileToggle {
-        display: block !important;
-        cursor: pointer;
-        z-index: 10001;
-    }
-    
-    .mobile-menu-toggle i,
-    #mobileToggle i {
-        color: white;
-        font-size: 24px;
-    }
-    
-    /* ===== MENÚ DESPLEGABLE MÓVIL ===== */
-    
-    nav ul,
-    .nav-menu {
-        position: fixed;
-        top: 70px;
-        left: -100%;
-        width: 100%;
-        max-width: 100%;
-        height: calc(100vh - 70px);
-        background: rgba(39, 50, 90, 0.98);
-        backdrop-filter: blur(10px);
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: stretch;
-        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        padding: 0;
-        margin: 0;
-        overflow-y: auto;
-        z-index: 9999;
-        list-style: none;
-    }
-    
-    /* Menú abierto */
-    nav ul.active,
-    .nav-menu.active {
-        left: 0 !important;
-    }
-    
-    /* Items del menú */
-    nav ul li,
-    .nav-item {
-        width: 100%;
-        margin: 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    /* Enlaces normales del menú */
-    nav ul li a:not(.cta-button-menu),
-    .nav-item a:not(.cta-button-menu) {
-        display: block;
-        padding: 18px 25px;
-        color: white;
-        text-decoration: none;
-        font-size: 16px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        border-left: 3px solid transparent;
-    }
-    
-    nav ul li a:not(.cta-button-menu):hover,
-    .nav-item a:not(.cta-button-menu):hover {
-        background: rgba(76, 206, 213, 0.1);
-        border-left-color: #4CCED5;
-        padding-left: 30px;
-        color: #4CCED5;
-    }
-    
-    /* ===== BOTÓN NARANJA DENTRO DEL MENÚ ===== */
-    
-    .nav-item.nav-cta {
-        display: block !important;
-        margin-top: auto;
-        padding: 25px 20px 30px 20px;
-        background: linear-gradient(
-            to bottom,
-            rgba(0, 0, 0, 0) 0%,
-            rgba(0, 0, 0, 0.3) 100%
-        );
-        border-top: 2px solid rgba(76, 206, 213, 0.3);
-        border-bottom: none;
-    }
-    
-    .nav-item.nav-cta .cta-button-menu {
-        display: flex !important;
-        width: 100%;
-        padding: 16px 20px;
-        background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
-        color: white;
-        text-decoration: none;
-        border-radius: 12px;
-        font-size: 16px;
-        font-weight: 700;
-        text-align: center;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
-        transition: all 0.3s ease;
-        border: none;
-    }
-    
-    .nav-item.nav-cta .cta-button-menu:hover,
-    .nav-item.nav-cta .cta-button-menu:active {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 25px rgba(255, 107, 53, 0.6);
-        background: linear-gradient(135deg, #F7931E 0%, #FF6B35 100%);
-    }
-    
-    /* Icono dentro del botón */
-    .nav-item.nav-cta .cta-button-menu i {
-        font-size: 18px;
-    }
-}
-
-/* ===== PREVENIR SCROLL CUANDO MENÚ ESTÁ ABIERTO ===== */
-
-body.menu-open {
+/* ===== BOTÓN CTA PRINCIPAL - MEJORADO ===== */
+.cta-button {
+    background: linear-gradient(135deg, #EE8028 0%, #CC5E02 50%, #AA2F0C 100%);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 15px rgba(238, 128, 40, 0.4);
+    white-space: nowrap;
+    position: relative;
     overflow: hidden;
 }
 
-/* ===== ANIMACIÓN DEL ICONO HAMBURGUESA ===== */
-
-.mobile-menu-toggle {
-    transition: transform 0.3s ease;
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
 }
 
-.mobile-menu-toggle.active {
-    transform: rotate(90deg);
+.cta-button:hover::before {
+    left: 100%;
 }
 
-.mobile-menu-toggle.active i::before {
-    content: "\f00d"; /* Icono de X */
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(238, 128, 40, 0.6);
+}
+
+.cta-button i {
+    font-size: 1.1rem;
 }

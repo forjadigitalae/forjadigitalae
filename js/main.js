@@ -467,99 +467,96 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /* ============================================
-   MENÚ HAMBURGUESA - FUNCIONALIDAD COMPLETA
+   MENÚ HAMBURGUESA - FUNCIONALIDAD DEFINITIVA
    ============================================ */
 
-// Esperar a que cargue completamente el DOM
-document.addEventListener('DOMContentLoaded', function() {
+(function() {
+    'use strict';
     
-    console.log('🔧 Inicializando menú hamburguesa...');
-    
-    // Seleccionar elementos
-    const mobileToggle = document.getElementById('mobileToggle') || document.querySelector('.mobile-menu-toggle');
-    const navMenu = document.querySelector('nav ul') || document.querySelector('.nav-menu');
-    
-    // Verificar que existan los elementos
-    if (!mobileToggle) {
-        console.error('❌ No se encontró el botón hamburguesa (#mobileToggle)');
-        return;
+    // Esperar a que cargue el DOM
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMenu);
+    } else {
+        initMenu();
     }
     
-    if (!navMenu) {
-        console.error('❌ No se encontró el menú de navegación');
-        return;
-    }
-    
-    console.log('✅ Elementos encontrados:', {
-        toggle: mobileToggle,
-        menu: navMenu
-    });
-    
-    // Función para abrir/cerrar menú
-    function toggleMenu() {
-        const isActive = navMenu.classList.contains('active');
+    function initMenu() {
+        console.log('🔧 Inicializando menú hamburguesa...');
         
-        if (isActive) {
-            // Cerrar menú
-            navMenu.classList.remove('active');
-            mobileToggle.classList.remove('active');
-            document.body.classList.remove('menu-open');
-            console.log('🔴 Menú cerrado');
-        } else {
-            // Abrir menú
-            navMenu.classList.add('active');
-            mobileToggle.classList.add('active');
+        // Seleccionar elementos
+        const toggle = document.getElementById('mobileToggle') || document.querySelector('.mobile-menu-toggle');
+        const menu = document.querySelector('nav ul') || document.querySelector('.nav-menu');
+        
+        if (!toggle) {
+            console.warn('⚠️ No se encontró el botón hamburguesa');
+            return;
+        }
+        
+        if (!menu) {
+            console.warn('⚠️ No se encontró el menú');
+            return;
+        }
+        
+        console.log('✅ Elementos encontrados correctamente');
+        
+        // Toggle del menú
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const isActive = menu.classList.contains('active');
+            
+            if (isActive) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+        
+        function openMenu() {
+            menu.classList.add('active');
+            toggle.classList.add('active');
             document.body.classList.add('menu-open');
             console.log('🟢 Menú abierto');
         }
-    }
-    
-    // Evento click en el botón hamburguesa
-    mobileToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log('🍔 Click en hamburguesa');
-        toggleMenu();
-    });
-    
-    // Cerrar menú al hacer clic en un enlace
-    const menuLinks = navMenu.querySelectorAll('a');
-    console.log(`📎 Encontrados ${menuLinks.length} enlaces en el menú`);
-    
-    menuLinks.forEach(function(link) {
-        link.addEventListener('click', function() {
-            console.log('🔗 Click en enlace del menú');
-            navMenu.classList.remove('active');
-            mobileToggle.classList.remove('active');
+        
+        function closeMenu() {
+            menu.classList.remove('active');
+            toggle.classList.remove('active');
             document.body.classList.remove('menu-open');
-        });
-    });
-    
-    // Cerrar menú al hacer clic fuera
-    document.addEventListener('click', function(e) {
-        if (!mobileToggle.contains(e.target) && !navMenu.contains(e.target)) {
-            if (navMenu.classList.contains('active')) {
-                console.log('🔴 Cerrar menú (click fuera)');
-                navMenu.classList.remove('active');
-                mobileToggle.classList.remove('active');
-                document.body.classList.remove('menu-open');
-            }
+            console.log('🔴 Menú cerrado');
         }
-    });
-    
-    // Cerrar menú al cambiar tamaño de ventana (de móvil a desktop)
-    let resizeTimer;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function() {
-            if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
-                console.log('📱➡️🖥️ Cambiando a desktop, cerrar menú');
-                navMenu.classList.remove('active');
-                mobileToggle.classList.remove('active');
-                document.body.classList.remove('menu-open');
+        
+        // Cerrar al hacer clic en enlaces
+        const links = menu.querySelectorAll('a');
+        links.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                // Si es un enlace ancla interno, cerrar menú
+                if (this.getAttribute('href').startsWith('#')) {
+                    setTimeout(closeMenu, 100);
+                }
+            });
+        });
+        
+        // Cerrar al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+                if (menu.classList.contains('active')) {
+                    closeMenu();
+                }
             }
-        }, 250);
-    });
-    
-    console.log('✅ Menú hamburguesa inicializado correctamente');
-});
+        });
+        
+        // Cerrar al cambiar de móvil a desktop
+        let lastWidth = window.innerWidth;
+        window.addEventListener('resize', function() {
+            const currentWidth = window.innerWidth;
+            if (lastWidth <= 768 && currentWidth > 768) {
+                closeMenu();
+            }
+            lastWidth = currentWidth;
+        });
+        
+        console.log('✅ Menú hamburguesa listo');
+    }
+})();

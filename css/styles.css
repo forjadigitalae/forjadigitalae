@@ -2479,116 +2479,119 @@ a.btn-secondary:focus,
 }
 
 /* ============================================
-   MENÚ HAMBURGUESA Y BOTÓN NARANJA - FIX COMPLETO
+   NAVEGACIÓN RESPONSIVE - VERSIÓN DEFINITIVA
    ============================================ */
 
-/* ========== ESTILOS DEL HEADER ========== */
+/* ===== Z-INDEX Y POSICIONAMIENTO ===== */
 
-/* Asegurar z-index correcto */
 header,
 .header,
 nav,
 .navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
     z-index: 10000 !important;
+    background: rgba(39, 50, 90, 0.95);
+    backdrop-filter: blur(10px);
 }
 
-/* Botón hamburguesa siempre encima */
 .mobile-menu-toggle,
 #mobileToggle {
     z-index: 10001 !important;
-    position: relative !important;
 }
 
-/* ========== BOTÓN NARANJA DENTRO DEL MENÚ ========== */
-
-.cta-button-menu {
-    background: linear-gradient(135deg, #EE8028 0%, #CC5E02 50%, #854009 100%);
-    color: white !important;
-    padding: 15px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-weight: 600;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(238, 128, 40, 0.3);
-}
-
-.cta-button-menu:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(238, 128, 40, 0.5);
-    background: linear-gradient(135deg, #D6721F 0%, #B34D01 50%, #6B3307 100%);
-}
-
-/* ========== RESPONSIVE - DESKTOP ========== */
+/* ===== DESKTOP (PC) - MÁS DE 768PX ===== */
 
 @media (min-width: 769px) {
-    /* En desktop: Ocultar el botón del menú */
+    
+    /* MOSTRAR el botón naranja flotante (líneas 112-117) */
+    .nav-item:not(.nav-cta) .cta-button-menu,
+    a.cta-button-menu {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* OCULTAR el botón duplicado del menú móvil */
     .nav-item.nav-cta {
         display: none !important;
     }
     
-    /* En desktop: Mostrar botón hamburguesa normal (si existe) */
-    .mobile-menu-toggle {
+    /* OCULTAR botón hamburguesa en desktop */
+    .mobile-menu-toggle,
+    #mobileToggle {
         display: none !important;
     }
     
-    /* En desktop: Asegurar que el botón flotante se vea */
-    .cta-button {
+    /* Menú horizontal normal en desktop */
+    nav ul,
+    .nav-menu {
         display: flex !important;
+        flex-direction: row !important;
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        width: auto !important;
+        height: auto !important;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+    
+    nav ul li,
+    .nav-item {
+        border: none !important;
+        margin: 0 5px !important;
     }
 }
 
-/* ========== RESPONSIVE - MÓVIL ========== */
+/* ===== MÓVIL - MENOS DE 768PX ===== */
 
 @media (max-width: 768px) {
     
-    /* Ocultar SOLO el primer botón naranja (líneas 112-117) en móviles */
-    .nav-item:not(.nav-cta) > .cta-button-menu {
+    /* OCULTAR el botón naranja flotante original */
+    .nav-item:not(.nav-cta) .cta-button-menu {
         display: none !important;
     }
     
-    /* Mostrar botón hamburguesa en móviles */
-    .mobile-menu-toggle {
+    /* MOSTRAR botón hamburguesa */
+    .mobile-menu-toggle,
+    #mobileToggle {
         display: block !important;
-        position: relative;
         cursor: pointer;
         z-index: 10001;
     }
     
-    /* Estilos del icono hamburguesa */
-    .mobile-menu-toggle i {
+    .mobile-menu-toggle i,
+    #mobileToggle i {
         color: white;
         font-size: 24px;
     }
     
     /* ===== MENÚ DESPLEGABLE MÓVIL ===== */
     
-    /* Menú oculto por defecto */
     nav ul,
     .nav-menu {
         position: fixed;
         top: 70px;
         left: -100%;
         width: 100%;
+        max-width: 100%;
         height: calc(100vh - 70px);
         background: rgba(39, 50, 90, 0.98);
         backdrop-filter: blur(10px);
         flex-direction: column;
         justify-content: flex-start;
         align-items: stretch;
-        transition: left 0.3s ease-in-out;
-        padding: 20px 0;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 0;
+        margin: 0;
         overflow-y: auto;
         z-index: 9999;
-        margin: 0;
         list-style: none;
     }
     
-    /* Menú visible cuando tiene clase 'active' */
+    /* Menú abierto */
     nav ul.active,
     .nav-menu.active {
         left: 0 !important;
@@ -2598,47 +2601,85 @@ nav,
     nav ul li,
     .nav-item {
         width: 100%;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         margin: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
     
-    /* Enlaces del menú */
-    nav ul li a,
-    .nav-item a {
+    /* Enlaces normales del menú */
+    nav ul li a:not(.cta-button-menu),
+    .nav-item a:not(.cta-button-menu) {
         display: block;
-        padding: 20px 30px;
+        padding: 18px 25px;
         color: white;
         text-decoration: none;
         font-size: 16px;
+        font-weight: 500;
         transition: all 0.3s ease;
-        text-align: left;
+        border-left: 3px solid transparent;
     }
     
-    nav ul li a:hover,
-    .nav-item a:hover {
-        background: rgba(255, 255, 255, 0.1);
+    nav ul li a:not(.cta-button-menu):hover,
+    .nav-item a:not(.cta-button-menu):hover {
+        background: rgba(76, 206, 213, 0.1);
+        border-left-color: #4CCED5;
+        padding-left: 30px;
         color: #4CCED5;
-        padding-left: 40px;
     }
     
-    /* Botón CTA dentro del menú móvil */
+    /* ===== BOTÓN NARANJA DENTRO DEL MENÚ ===== */
+    
     .nav-item.nav-cta {
         display: block !important;
-        padding: 20px;
-        border-top: 2px solid rgba(255, 255, 255, 0.15);
+        margin-top: auto;
+        padding: 25px 20px 30px 20px;
+        background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0.3) 100%
+        );
+        border-top: 2px solid rgba(76, 206, 213, 0.3);
         border-bottom: none;
-        margin-top: 15px;
-        background: rgba(0, 0, 0, 0.2);
     }
     
     .nav-item.nav-cta .cta-button-menu {
+        display: flex !important;
         width: 100%;
-        padding: 15px;
+        padding: 16px 20px;
+        background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 12px;
         font-size: 16px;
+        font-weight: 700;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+        transition: all 0.3s ease;
+        border: none;
+    }
+    
+    .nav-item.nav-cta .cta-button-menu:hover,
+    .nav-item.nav-cta .cta-button-menu:active {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(255, 107, 53, 0.6);
+        background: linear-gradient(135deg, #F7931E 0%, #FF6B35 100%);
+    }
+    
+    /* Icono dentro del botón */
+    .nav-item.nav-cta .cta-button-menu i {
+        font-size: 18px;
     }
 }
 
-/* ========== ANIMACIÓN DEL ICONO HAMBURGUESA ========== */
+/* ===== PREVENIR SCROLL CUANDO MENÚ ESTÁ ABIERTO ===== */
+
+body.menu-open {
+    overflow: hidden;
+}
+
+/* ===== ANIMACIÓN DEL ICONO HAMBURGUESA ===== */
 
 .mobile-menu-toggle {
     transition: transform 0.3s ease;
@@ -2648,8 +2689,6 @@ nav,
     transform: rotate(90deg);
 }
 
-/* ========== PREVENIR SCROLL CUANDO MENÚ ABIERTO ========== */
-
-body.menu-open {
-    overflow: hidden;
+.mobile-menu-toggle.active i::before {
+    content: "\f00d"; /* Icono de X */
 }

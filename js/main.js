@@ -284,16 +284,34 @@ document.getElementById('contactForm').addEventListener('submit', async function
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
     submitBtn.disabled = true;
     
-    try {
+        try {
         // Preparar datos del formulario
         const formData = new FormData(this);
         
-        // Agregar timestamp de aceptación
-        formData.append('fecha_aceptacion', new Date().toISOString());
-        formData.append('acepta_politicas', 'Sí');
+        // PROCESAR CHECKBOXES DE DESAFÍOS (CRÍTICO PARA MÚLTIPLES SELECCIONES)
+        const desafiosSeleccionados = [];
+        const checkboxes = this.querySelectorAll('input[name="desafio"]:checked');
+        checkboxes.forEach((checkbox, index) => {
+            desafiosSeleccionados.push(checkbox.value);
+        });
         
-        // Convertir FormData a URLSearchParams para envío POST
+        console.log('📋 Desafíos seleccionados:', desafiosSeleccionados);
+        console.log('📊 Total de desafíos:', desafiosSeleccionados.length);
+        
+        // ... resto del código nuevo ...
+        
+        // Convertir FormData a URLSearchParams
         const datos = new URLSearchParams(formData);
+        
+        // Log para debugging
+        console.log('📤 Datos que se enviarán:', Array.from(datos.entries()));
+        
+        console.log('📤 Enviando datos al servidor...');  // ← Esta línea ya existía (línea 299 en tu captura)
+        
+        // Enviar a Google Apps Script
+        const response = await fetch(SCRIPT_URL, {  // ← Continúa con el código que ya tenías
+            method: 'POST',
+            body: datos,
         
         // Log para debugging (puedes eliminarlo después)
         console.log('📤 Enviando datos al servidor...');

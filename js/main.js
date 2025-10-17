@@ -284,7 +284,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
     submitBtn.disabled = true;
     
-        try {
+       try {
         // Preparar datos del formulario
         const formData = new FormData(this);
         
@@ -298,7 +298,22 @@ document.getElementById('contactForm').addEventListener('submit', async function
         console.log('📋 Desafíos seleccionados:', desafiosSeleccionados);
         console.log('📊 Total de desafíos:', desafiosSeleccionados.length);
         
-        // ... resto del código nuevo ...
+        // Agregar campos adicionales
+        formData.append('fecha_aceptacion', new Date().toISOString());
+        formData.append('acepta_politicas', 'Sí');
+        
+        // IMPORTANTE: Eliminar los desafíos individuales y agregar todos juntos
+        formData.delete('desafio');
+        
+        // Agregar cada desafío con un índice único
+        desafiosSeleccionados.forEach((desafio, index) => {
+            formData.append(`desafio_${index}`, desafio);
+        });
+        
+        // También agregar el total como un solo campo (para compatibilidad)
+        if (desafiosSeleccionados.length > 0) {
+            formData.append('desafios_total', desafiosSeleccionados.join(' | '));
+        }
         
         // Convertir FormData a URLSearchParams
         const datos = new URLSearchParams(formData);
@@ -306,14 +321,6 @@ document.getElementById('contactForm').addEventListener('submit', async function
         // Log para debugging
         console.log('📤 Datos que se enviarán:', Array.from(datos.entries()));
         
-        console.log('📤 Enviando datos al servidor...');  // ← Esta línea ya existía (línea 299 en tu captura)
-        
-        // Enviar a Google Apps Script
-        const response = await fetch(SCRIPT_URL, {  // ← Continúa con el código que ya tenías
-            method: 'POST',
-            body: datos,
-        
-        // Log para debugging (puedes eliminarlo después)
         console.log('📤 Enviando datos al servidor...');
         
         // Enviar a Google Apps Script

@@ -932,141 +932,65 @@ body {
     }
 }
 
-/* ===== MENÚ MÓVIL REDISEÑADO ===== */
+/* Móviles grandes */
 @media (max-width: 768px) {
+    .rayos-x-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
     
-    /* Botón hamburguesa mejorado */
-    .mobile-menu-toggle {
-        display: flex;
+    .info-box {
+        padding: 30px 25px;
+    }
+    
+    .info-box h3 {
+        font-size: 1.3rem;
         flex-direction: column;
-        justify-content: space-around;
-        width: 30px;
-        height: 25px;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding: 0;
-        z-index: 10001;
-        position: relative;
+        text-align: center;
     }
     
-    .mobile-menu-toggle span {
-        width: 30px;
-        height: 3px;
-        background: white;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        transform-origin: center;
-    }
-    
-    /* Animación hamburguesa → X */
-    .mobile-menu-toggle.active span:nth-child(1) {
-        transform: rotate(45deg) translate(7px, 7px);
-    }
-    
-    .mobile-menu-toggle.active span:nth-child(2) {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    
-    .mobile-menu-toggle.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -7px);
-    }
-    
-    /* Menú desplegable */
-    .nav-menu {
-        position: fixed;
-        top: 80px;
-        left: -100%;
-        width: 85%;
-        max-width: 400px;
-        height: calc(100vh - 80px);
-        background: linear-gradient(180deg, 
-            rgba(39, 50, 90, 0.98) 0%, 
-            rgba(21, 46, 87, 0.98) 100%);
-        backdrop-filter: blur(20px);
+    .benefits-list li {
+        padding: 15px 0;
+        font-size: 0.95rem;
         flex-direction: column;
-        padding: 30px 0;
-        transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 5px 0 30px rgba(0, 0, 0, 0.3);
-        overflow-y: auto;
-        z-index: 9999;
+        gap: 8px;
     }
     
-    .nav-menu.active {
-        left: 0;
+    .info-box + div {
+        padding: 25px 20px;
     }
     
-    /* Items del menú */
-    .nav-item {
-        margin: 0;
-        width: 100%;
-        border-bottom: 1px solid rgba(76, 206, 213, 0.1);
+    .info-box + div h4 {
+        font-size: 1.1rem;
     }
     
-    .nav-link {
-        padding: 18px 30px;
-        width: 100%;
-        justify-content: flex-start;
-        font-size: 1.05rem;
-        transition: all 0.3s ease;
-        border-left: 3px solid transparent;
+    .evaluation-card {
+        padding: 30px 20px;
     }
     
-    .nav-link:hover {
-        background: rgba(76, 206, 213, 0.15);
-        border-left-color: var(--turquesa-digital);
-        padding-left: 35px;
+    .evaluation-card h3 {
+        font-size: 1.3rem;
+        flex-direction: column;
     }
     
-    /* Botones especiales en móvil */
-    .nav-link.destacado {
-        background: linear-gradient(135deg, var(--turquesa-digital), var(--purpura-innovacion));
-        margin: 10px 20px;
-        border-radius: 12px;
-        box-shadow: 0 5px 15px rgba(76, 206, 213, 0.3);
+    .feature-box {
+        padding: 20px;
     }
     
-    .cta-button {
-        margin: 10px 20px;
-        width: calc(100% - 40px);
-        justify-content: center;
-        background: linear-gradient(135deg, var(--naranja-energia), var(--rojo-forja));
-        box-shadow: 0 5px 15px rgba(238, 128, 40, 0.3);
+    .feature-box h4 {
+        font-size: 1rem;
+        flex-direction: column;
+        gap: 5px;
     }
     
-    /* Dropdown en móvil */
-    .dropdown {
-        position: static;
-        opacity: 1;
-        visibility: visible;
-        transform: none;
-        background: rgba(21, 46, 87, 0.5);
-        border-radius: 0;
-        margin: 0;
-        padding: 10px 0;
+    .dimensions-list {
+        grid-template-columns: 1fr;
+        gap: 8px;
     }
     
-    .dropdown-item {
-        padding: 12px 30px 12px 50px;
-    }
-    
-    /* Overlay oscuro cuando menú abierto */
-    body.menu-open::before {
-        content: '';
-        position: fixed;
-        top: 80px;
-        left: 0;
-        width: 100%;
-        height: calc(100vh - 80px);
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 9998;
-        animation: fadeIn 0.3s ease;
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+    .btn-full {
+        padding: 18px 25px;
+        font-size: 1rem;
     }
 }
 
@@ -2554,45 +2478,74 @@ a.btn-secondary:focus,
     }
 }
 
-/* ===== BOTÓN CTA PRINCIPAL - MEJORADO ===== */
-.cta-button {
-    background: linear-gradient(135deg, #EE8028 0%, #CC5E02 50%, #AA2F0C 100%);
+/* ============================================
+   BOTÓN NARANJA - AJUSTES PARA MÓVILES
+   ============================================ */
+
+/* Ocultar el botón flotante (líneas 115-120 del HTML) en móviles */
+@media (max-width: 768px) {
+    a[href="#contacto"].cta-button {
+        display: none !important; /* Ocultar botón flotante */
+    }
+    
+    /* Mostrar solo el que está en el menú */
+    .nav-menu .nav-cta {
+        display: block;
+    }
+}
+
+/* En desktop, ocultar el botón del menú y mostrar solo el flotante */
+@media (min-width: 769px) {
+    .nav-cta {
+        display: none; /* Ocultar en desktop */
+    }
+}
+
+/* Estilos del botón dentro del menú (para móviles) */
+.cta-button-menu {
+    background: linear-gradient(135deg, #EE8028 0%, #CC5E02 50%, #854009 100%);
     color: white;
-    padding: 12px 24px;
-    border-radius: 30px;
+    padding: 15px 20px;
+    border-radius: 8px;
     text-decoration: none;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
-    font-size: 0.95rem;
-    box-shadow: 0 4px 15px rgba(238, 128, 40, 0.4);
-    white-space: nowrap;
-    position: relative;
-    overflow: hidden;
-}
-
-.cta-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(238, 128, 40, 0.3);
     width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: left 0.5s ease;
 }
 
-.cta-button:hover::before {
-    left: 100%;
-}
-
-.cta-button:hover {
+.cta-button-menu:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(238, 128, 40, 0.6);
+    box-shadow: 0 6px 20px rgba(238, 128, 40, 0.5);
 }
 
-.cta-button i {
-    font-size: 1.1rem;
+/* Contenedor del botón en el menú móvil */
+@media (max-width: 768px) {
+    .nav-cta {
+        padding: 20px;
+        border-top: 2px solid rgba(255, 255, 255, 0.1);
+        margin-top: 15px;
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Asegurar que el menú hamburguesa esté visible */
+header,
+.header,
+nav,
+.navbar {
+    z-index: 10000 !important;
+}
+
+.nav-toggle,
+.menu-toggle,
+button[class*="toggle"],
+.mobile-menu-toggle {
+    z-index: 10001 !important;
+    position: relative;
 }

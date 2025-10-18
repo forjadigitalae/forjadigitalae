@@ -957,7 +957,7 @@
                     </div>
                 </div>
 
-        <div id="successMessage" class="modal">
+        <!-- <div id="successMessage" class="modal">
             <div class="modal-content" style="max-width: 500px; text-align: center; padding: 40px; border-radius: 15px;">
                 <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--turquesa-digital); margin-bottom: 15px;"></i>
                 <h3 style="color: var(--azul-marino); margin-bottom: 10px;">¡Solicitud Recibida!</h3>
@@ -966,7 +966,7 @@
                     Cerrar
                 </button>
             </div>
-        </div>
+        </div> -->
 
         <div id="privacyPolicyModal" class="modal">
             <div class="modal-content" style="max-width: 700px; padding: 40px; text-align: left; background: #f8f9fa; max-height: 90vh; overflow-y: auto;">
@@ -1012,7 +1012,7 @@
             </div>
 
              <!-- Mensaje de Éxito -->
-            <div id="successMessage" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 40px; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); z-index: 10004; max-width: 500px; text-align: center;">
+            <!--<div id="successMessage" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 40px; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); z-index: 10004; max-width: 500px; text-align: center;">
                 <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #4CAF50, #45a049); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
                     <i class="fas fa-check" style="color: white; font-size: 2.5rem;"></i>
                 </div>
@@ -1023,7 +1023,63 @@
                 <button onclick="closeSuccessMessage()" style="background: #4CCED5; color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: 600; cursor: pointer;">
                     Continuar Navegando
                 </button>
+            </div> -->
+
+<div id="successMessage" class="modal">
+    <div class="modal-content" style="max-width: 500px; text-align: center; padding: 0; border-radius: 20px; overflow: hidden;">
+        <!-- Header con gradiente -->
+        <div style="background: linear-gradient(135deg, var(--azul-marino), var(--azul-profundo)); padding: 40px 30px; color: white;">
+            <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="fas fa-check-circle" style="font-size: 2.5rem; color: var(--turquesa-digital);"></i>
             </div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 10px; color: white;">
+                ¡Solicitud Enviada con Éxito!
+            </h3>
+            <p style="opacity: 0.9; font-size: 1.1rem;">
+                Un Forjador se contactará contigo en <strong>menos de 2 horas</strong>
+            </p>
+        </div>
+        
+        <!-- Contenido -->
+        <div style="padding: 30px;">
+            <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+                <p style="margin: 0; color: var(--azul-marino); font-weight: 600;">
+                    <i class="fas fa-clock" style="color: var(--naranja-energia); margin-right: 8px;"></i>
+                    Respuesta en menos de 2 horas
+                </p>
+            </div>
+            
+            <p style="color: var(--azul-secundario); margin-bottom: 30px; line-height: 1.6;">
+                Mientras tanto, puedes explorar nuestro <strong>Framework FORJA®</strong> o realizar la <strong>Evaluación de Madurez GRATUITA</strong>.
+            </p>
+            
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button onclick="closeSuccessMessage()" 
+                        style="background: linear-gradient(135deg, var(--turquesa-digital), var(--purpura-innovacion)); 
+                               color: white; border: none; padding: 12px 25px; border-radius: 25px; 
+                               font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                    <i class="fas fa-check"></i> Continuar
+                </button>
+                
+                <a href="#rayos-x" 
+                   onclick="closeSuccessMessage()"
+                   style="background: transparent; color: var(--azul-marino); border: 2px solid var(--azul-marino); 
+                          padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: 600; 
+                          transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-chart-line"></i> Evaluación
+                </a>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div style="background: #f8f9fa; padding: 15px; border-top: 1px solid #e9ecef;">
+            <p style="margin: 0; color: #666; font-size: 0.9rem;">
+                <i class="fas fa-shield-alt" style="color: var(--turquesa-digital); margin-right: 5px;"></i>
+                Tus datos están 100% protegidos
+            </p>
+        </div>
+    </div>
+</div>
 
             <!-- Modal Gestión de Datos -->
             <div id="dataPolicyModal" class="modal">

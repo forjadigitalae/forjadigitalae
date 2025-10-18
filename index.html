@@ -957,7 +957,7 @@
                     </div>
                 </div>
 
-        <div id="successMessage" class="modal">
+        <!-- <div id="successMessage" class="modal">
             <div class="modal-content" style="max-width: 500px; text-align: center; padding: 40px; border-radius: 15px;">
                 <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--turquesa-digital); margin-bottom: 15px;"></i>
                 <h3 style="color: var(--azul-marino); margin-bottom: 10px;">¡Solicitud Recibida!</h3>
@@ -966,7 +966,7 @@
                     Cerrar
                 </button>
             </div>
-        </div>
+        </div> -->
 
         <div id="privacyPolicyModal" class="modal">
             <div class="modal-content" style="max-width: 700px; padding: 40px; text-align: left; background: #f8f9fa; max-height: 90vh; overflow-y: auto;">
@@ -1026,171 +1026,166 @@
             </div>
 
             <!-- Modal Gestión de Datos -->
-<div id="dataPolicyModal" class="modal">
-    <div class="modal-content" style="max-width: 700px; padding: 40px; text-align: left; background: #f8f9fa; max-height: 90vh; overflow-y: auto;">
-        
-        <button onclick="closeDataPolicy()" class="modal-close" 
-                style="top: 15px; right: 15px; background: none; color: var(--azul-marino); 
-                       width: 30px; height: 30px; border: none; font-size: 1.5rem; 
-                       cursor: pointer; position: absolute; z-index: 10; opacity: 0.7; transition: opacity 0.2s;">
-            &times;
-        </button>
-        
-        <h3 style="color: var(--azul-marino); margin-bottom: 20px; border-bottom: 2px solid var(--turquesa-digital); padding-bottom: 5px;">
-            Política de Gestión de Datos
-        </h3>
-        
-        <p style="color: var(--azul-secundario); font-size: 0.95rem; margin-bottom: 20px;">
-            En ForjaDigitalAE nos comprometemos a proteger y gestionar responsablemente tus datos personales.
-        </p>
-        
-        <h4 style="color: var(--turquesa-digital); margin-top: 20px; margin-bottom: 10px;">1. Recopilación de Datos</h4>
-        <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
-            Recopilamos únicamente los datos necesarios para brindarte nuestros servicios:
-        </p>
-        <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
-            <li>Información de contacto (nombre, email, teléfono)</li>
-            <li>Información empresarial (nombre de empresa, sector, tamaño)</li>
-            <li>Objetivos y desafíos empresariales</li>
-            <li>Datos de navegación (cookies técnicas)</li>
-        </ul>
+            <div id="dataPolicyModal" class="modal">
+                <div class="modal-content" style="max-width: 700px; padding: 40px; text-align: left; background: #f8f9fa; max-height: 90vh; overflow-y: auto;">
+                    
+                    <button onclick="closeDataPolicy()" class="modal-close" 
+                            style="top: 15px; right: 15px; background: none; color: var(--azul-marino); 
+                                   width: 30px; height: 30px; border: none; font-size: 1.5rem; 
+                                   cursor: pointer; position: absolute; z-index: 10; opacity: 0.7; transition: opacity 0.2s;">
+                        &times;
+                    </button>
+                    
+                    <h3 style="color: var(--azul-marino); margin-bottom: 20px; border-bottom: 2px solid var(--turquesa-digital); padding-bottom: 5px;">
+                        Política de Gestión de Datos
+                    </h3>
+                    
+                    <p style="color: var(--azul-secundario); font-size: 0.95rem; margin-bottom: 20px;">
+                        En ForjaDigitalAE nos comprometemos a proteger y gestionar responsablemente tus datos personales.
+                    </p>
+                    
+                    <h4 style="color: var(--turquesa-digital); margin-top: 20px; margin-bottom: 10px;">1. Recopilación de Datos</h4>
+                    <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
+                        Recopilamos únicamente los datos necesarios para brindarte nuestros servicios:
+                    </p>
+                    <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+                        <li>Información de contacto (nombre, email, teléfono)</li>
+                        <li>Información empresarial (nombre de empresa, sector, tamaño)</li>
+                        <li>Objetivos y desafíos empresariales</li>
+                        <li>Datos de navegación (cookies técnicas)</li>
+                    </ul>
 
-        <h4 style="color: var(--turquesa-digital); margin-top: 20px; margin-bottom: 10px;">2. Almacenamiento y Seguridad</h4>
-        <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
-            Tus datos se almacenan de forma segura utilizando:
-        </p>
-        <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
-            <li><strong>Encriptación SSL/TLS</strong> en todas las comunicaciones</li>
-            <li><strong>Servidores seguros</strong> con certificaciones internacionales</li>
-            <li><strong>Acceso restringido</strong> solo a personal autorizado</li>
-            <li><strong>Copias de seguridad</strong> periódicas</li>
-        </ul>
+                    <h4 style="color: var(--turquesa-digital); margin-top: 20px; margin-bottom: 10px;">2. Almacenamiento y Seguridad</h4>
+                    <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
+                        Tus datos se almacenan de forma segura utilizando:
+                    </p>
+                    <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+                        <li><strong>Encriptación SSL/TLS</strong> en todas las comunicaciones</li>
+                        <li><strong>Servidores seguros</strong> con certificaciones internacionales</li>
+                        <li><strong>Acceso restringido</strong> solo a personal autorizado</li>
+                        <li><strong>Copias de seguridad</strong> periódicas</li>
+                    </ul>
 
-        <h4 style="color: var(--turquesa-digital); margin-top: 20px; margin-bottom: 10px;">3. Uso de los Datos</h4>
-        <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
-            Utilizamos tus datos exclusivamente para:
-        </p>
-        <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
-            <li>Contactarte sobre tu solicitud de servicio</li>
-            <li>Realizar diagnósticos y evaluaciones empresariales</li>
-            <li>Enviar información relevante (solo con tu consentimiento)</li>
-            <li>Mejorar nuestros servicios</li>
-        </ul>
+                    <h4 style="color: var(--turquesa-digital); margin-top: 20px; margin-bottom: 10px;">3. Uso de los Datos</h4>
+                    <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
+                        Utilizamos tus datos exclusivamente para:
+                    </p>
+                    <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+                        <li>Contactarte sobre tu solicitud de servicio</li>
+                        <li>Realizar diagnósticos y evaluaciones empresariales</li>
+                        <li>Enviar información relevante (solo con tu consentimiento)</li>
+                        <li>Mejorar nuestros servicios</li>
+                    </ul>
 
-        <h4 style="color: var(--turquesa-digital); margin-top: 20px; margin-bottom: 10px;">4. Tus Derechos</h4>
-        <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
-            Tienes derecho a:
-        </p>
-        <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
-            <li><strong>Acceder</strong> a tus datos personales</li>
-            <li><strong>Rectificar</strong> información incorrecta</li>
-            <li><strong>Eliminar</strong> tus datos (derecho al olvido)</li>
-            <li><strong>Portabilidad</strong> de tus datos</li>
-            <li><strong>Revocar</strong> el consentimiento en cualquier momento</li>
-        </ul>
+                    <h4 style="color: var(--turquesa-digital); margin-top: 20px; margin-bottom: 10px;">4. Tus Derechos</h4>
+                    <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
+                        Tienes derecho a:
+                    </p>
+                    <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+                        <li><strong>Acceder</strong> a tus datos personales</li>
+                        <li><strong>Rectificar</strong> información incorrecta</li>
+                        <li><strong>Eliminar</strong> tus datos (derecho al olvido)</li>
+                        <li><strong>Portabilidad</strong> de tus datos</li>
+                        <li><strong>Revocar</strong> el consentimiento en cualquier momento</li>
+                    </ul>
 
-        <h4 style="color: var(--turquesa-digital); margin-top: 20px; margin-bottom: 10px;">5. Contacto</h4>
-        <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
-            Para ejercer tus derechos o consultas sobre tus datos, contáctanos en:<br>
-            <strong>Email:</strong> forjadigitalae@gmail.com<br>
-            <strong>Teléfono:</strong> +57 (314) 236 55-90
-        </p>
-        
-        <div style="text-align: center; margin-top: 30px;">
-            <button onclick="closeDataPolicy()" style="background-color: var(--turquesa-digital); color: white; border: none; padding: 10px 25px; border-radius: 30px; cursor: pointer; font-weight: 700;">
-                Entendido y Cerrar
-            </button>
-        </div>
-    </div>
-</div>
+                    <h4 style="color: var(--turquesa-digital); margin-top: 20px; margin-bottom: 10px;">5. Contacto</h4>
+                    <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
+                        Para ejercer tus derechos o consultas sobre tus datos, contáctanos en:<br>
+                        <strong>Email:</strong> forjadigitalae@gmail.com<br>
+                        <strong>Teléfono:</strong> +57 (314) 236 55-90
+                    </p>
+                    
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button onclick="closeDataPolicy()" style="background-color: var(--turquesa-digital); color: white; border: none; padding: 10px 25px; border-radius: 30px; cursor: pointer; font-weight: 700;">
+                            Entendido y Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-<!-- Modal Política de Cookies -->
-<div id="cookiesPolicyModal" class="modal">
-    <div class="modal-content" style="max-width: 700px; padding: 40px; text-align: left; background: #f8f9fa; max-height: 90vh; overflow-y: auto;">
-        
-        <button onclick="closeCookiesPolicy()" class="modal-close" 
-                style="top: 15px; right: 15px; background: none; color: var(--azul-marino); 
-                       width: 30px; height: 30px; border: none; font-size: 1.5rem; 
-                       cursor: pointer; position: absolute; z-index: 10; opacity: 0.7; transition: opacity 0.2s;">
-            &times;
-        </button>
-        
-        <div style="text-align: center; margin-bottom: 20px;">
-            <span style="font-size: 3rem;">🍪</span>
-        </div>
-        
-        <h3 style="color: var(--azul-marino); margin-bottom: 20px; border-bottom: 2px solid var(--naranja-energia); padding-bottom: 5px; text-align: center;">
-            Política de Cookies
-        </h3>
-        
-        <p style="color: var(--azul-secundario); font-size: 0.95rem; margin-bottom: 20px;">
-            Utilizamos cookies para mejorar tu experiencia en nuestro sitio web.
-        </p>
-        
-        <h4 style="color: var(--naranja-energia); margin-top: 20px; margin-bottom: 10px;">¿Qué son las cookies?</h4>
-        <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
-            Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas un sitio web. 
-            Nos ayudan a recordar tus preferencias y mejorar tu experiencia de navegación.
-        </p>
+            <!-- Modal Política de Cookies -->
+            <div id="cookiesPolicyModal" class="modal">
+                <div class="modal-content" style="max-width: 700px; padding: 40px; text-align: left; background: #f8f9fa; max-height: 90vh; overflow-y: auto;">
+                    
+                    <button onclick="closeCookiesPolicy()" class="modal-close" 
+                            style="top: 15px; right: 15px; background: none; color: var(--azul-marino); 
+                                   width: 30px; height: 30px; border: none; font-size: 1.5rem; 
+                                   cursor: pointer; position: absolute; z-index: 10; opacity: 0.7; transition: opacity 0.2s;">
+                        &times;
+                    </button>
+                    
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <span style="font-size: 3rem;">🍪</span>
+                    </div>
+                    
+                    <h3 style="color: var(--azul-marino); margin-bottom: 20px; border-bottom: 2px solid var(--naranja-energia); padding-bottom: 5px; text-align: center;">
+                        Política de Cookies
+                    </h3>
+                    
+                    <p style="color: var(--azul-secundario); font-size: 0.95rem; margin-bottom: 20px;">
+                        Utilizamos cookies para mejorar tu experiencia en nuestro sitio web.
+                    </p>
+                    
+                    <h4 style="color: var(--naranja-energia); margin-top: 20px; margin-bottom: 10px;">¿Qué son las cookies?</h4>
+                    <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
+                        Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas un sitio web. 
+                        Nos ayudan a recordar tus preferencias y mejorar tu experiencia de navegación.
+                    </p>
 
-        <h4 style="color: var(--naranja-energia); margin-top: 20px; margin-bottom: 10px;">Tipos de cookies que utilizamos</h4>
-        
-        <div style="background: white; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid var(--turquesa-digital);">
-            <h5 style="color: var(--azul-marino); margin-bottom: 8px;">🔧 Cookies Técnicas (Necesarias)</h5>
-            <p style="font-size: 0.85rem; color: #666; margin: 0;">
-                Esenciales para el funcionamiento del sitio. No se pueden desactivar.
-            </p>
-        </div>
+                    <h4 style="color: var(--naranja-energia); margin-top: 20px; margin-bottom: 10px;">Tipos de cookies que utilizamos</h4>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid var(--turquesa-digital);">
+                        <h5 style="color: var(--azul-marino); margin-bottom: 8px;">🔧 Cookies Técnicas (Necesarias)</h5>
+                        <p style="font-size: 0.85rem; color: #666; margin: 0;">
+                            Esenciales para el funcionamiento del sitio. No se pueden desactivar.
+                        </p>
+                    </div>
 
-        <div style="background: white; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid var(--purpura-innovacion);">
-            <h5 style="color: var(--azul-marino); margin-bottom: 8px;">📊 Cookies Analíticas</h5>
-            <p style="font-size: 0.85rem; color: #666; margin: 0;">
-                Nos ayudan a entender cómo los visitantes interactúan con nuestro sitio.
-            </p>
-        </div>
+                    <div style="background: white; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid var(--purpura-innovacion);">
+                        <h5 style="color: var(--azul-marino); margin-bottom: 8px;">📊 Cookies Analíticas</h5>
+                        <p style="font-size: 0.85rem; color: #666; margin: 0;">
+                            Nos ayudan a entender cómo los visitantes interactúan con nuestro sitio.
+                        </p>
+                    </div>
 
-        <div style="background: white; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid var(--naranja-energia);">
-            <h5 style="color: var(--azul-marino); margin-bottom: 8px;">🎯 Cookies de Preferencias</h5>
-            <p style="font-size: 0.85rem; color: #666; margin: 0;">
-                Recuerdan tus preferencias y configuraciones.
-            </p>
-        </div>
+                    <div style="background: white; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid var(--naranja-energia);">
+                        <h5 style="color: var(--azul-marino); margin-bottom: 8px;">🎯 Cookies de Preferencias</h5>
+                        <p style="font-size: 0.85rem; color: #666; margin: 0;">
+                            Recuerdan tus preferencias y configuraciones.
+                        </p>
+                    </div>
 
-        <h4 style="color: var(--naranja-energia); margin-top: 20px; margin-bottom: 10px;">Gestión de cookies</h4>
-        <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
-            Puedes controlar y eliminar las cookies a través de la configuración de tu navegador:
-        </p>
-        <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
-            <li><strong>Chrome:</strong> Configuración → Privacidad y seguridad → Cookies</li>
-            <li><strong>Firefox:</strong> Opciones → Privacidad y seguridad → Cookies</li>
-            <li><strong>Safari:</strong> Preferencias → Privacidad → Cookies</li>
-            <li><strong>Edge:</strong> Configuración → Privacidad → Cookies</li>
-        </ul>
+                    <h4 style="color: var(--naranja-energia); margin-top: 20px; margin-bottom: 10px;">Gestión de cookies</h4>
+                    <p style="font-size: 0.9rem; line-height: 1.6; color: #666;">
+                        Puedes controlar y eliminar las cookies a través de la configuración de tu navegador:
+                    </p>
+                    <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+                        <li><strong>Chrome:</strong> Configuración → Privacidad y seguridad → Cookies</li>
+                        <li><strong>Firefox:</strong> Opciones → Privacidad y seguridad → Cookies</li>
+                        <li><strong>Safari:</strong> Preferencias → Privacidad → Cookies</li>
+                        <li><strong>Edge:</strong> Configuración → Privacidad → Cookies</li>
+                    </ul>
 
-        <div style="background: rgba(238, 128, 40, 0.1); padding: 15px; border-radius: 10px; margin-top: 20px;">
-            <p style="font-size: 0.85rem; color: var(--azul-marino); margin: 0; text-align: center;">
-                <strong>⚠️ Importante:</strong> Desactivar las cookies puede afectar la funcionalidad del sitio.
-            </p>
-        </div>
+                    <div style="background: rgba(238, 128, 40, 0.1); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                        <p style="font-size: 0.85rem; color: var(--azul-marino); margin: 0; text-align: center;">
+                            <strong>⚠️ Importante:</strong> Desactivar las cookies puede afectar la funcionalidad del sitio.
+                        </p>
+                    </div>
 
-        <h4 style="color: var(--naranja-energia); margin-top: 20px; margin-bottom: 10px;">Duración de las cookies</h4>
-        <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
-            <li><strong>Cookies de sesión:</strong> Se eliminan al cerrar el navegador</li>
-            <li><strong>Cookies persistentes:</strong> Permanecen hasta su fecha de caducidad (máximo 12 meses)</li>
-        </ul>
-        
-        <div style="text-align: center; margin-top: 30px;">
-            <button onclick="closeCookiesPolicy()" style="background: linear-gradient(135deg, var(--naranja-energia), var(--rojo-forja)); color: white; border: none; padding: 10px 25px; border-radius: 30px; cursor: pointer; font-weight: 700;">
-                Entendido y Cerrar
-            </button>
-        </div>
-    </div>
-</div>
-
-
-
-
-
+                    <h4 style="color: var(--naranja-energia); margin-top: 20px; margin-bottom: 10px;">Duración de las cookies</h4>
+                    <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+                        <li><strong>Cookies de sesión:</strong> Se eliminan al cerrar el navegador</li>
+                        <li><strong>Cookies persistentes:</strong> Permanecen hasta su fecha de caducidad (máximo 12 meses)</li>
+                    </ul>
+                    
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button onclick="closeCookiesPolicy()" style="background: linear-gradient(135deg, var(--naranja-energia), var(--rojo-forja)); color: white; border: none; padding: 10px 25px; border-radius: 30px; cursor: pointer; font-weight: 700;">
+                            Entendido y Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
 
 
             <!-- Modales de Políticas -->

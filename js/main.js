@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-/* ===== MENÚ HAMBURGUESA - VERSIÓN DEFINITIVA ===== */
+/* ===== MENÚ HAMBURGUESA MEJORADO ===== */
 (function() {
     'use strict';
     
@@ -474,14 +474,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const toggle = document.getElementById('mobileToggle');
         const menu = document.querySelector('.nav-menu');
         const body = document.body;
-        const links = document.querySelectorAll('.nav-link, .cta-button-menu');
+        const links = document.querySelectorAll('.nav-link');
         
-        if (!toggle || !menu) {
-            console.warn('⚠️ Elementos del menú no encontrados');
-            return;
-        }
-        
-        console.log('✅ Menú hamburguesa inicializado');
+        if (!toggle || !menu) return;
         
         // Toggle menú
         toggle.addEventListener('click', function(e) {
@@ -501,21 +496,18 @@ document.addEventListener('DOMContentLoaded', function() {
             menu.classList.add('active');
             toggle.classList.add('active');
             body.classList.add('menu-open');
-            console.log('🟢 Menú abierto');
         }
         
         function closeMenu() {
             menu.classList.remove('active');
             toggle.classList.remove('active');
             body.classList.remove('menu-open');
-            console.log('🔴 Menú cerrado');
         }
         
         // Cerrar al hacer clic en enlaces
         links.forEach(link => {
-            link.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                if (href && href.startsWith('#')) {
+            link.addEventListener('click', function() {
+                if (this.getAttribute('href').startsWith('#')) {
                     setTimeout(closeMenu, 100);
                 }
             });

@@ -456,6 +456,73 @@ document.addEventListener('DOMContentLoaded', function() {
 console.log('%c🚀 ForjaDigitalAE inicializado correctamente', 'color: #4CCED5; font-size: 16px; font-weight: bold;');
 console.log('%c📊 Versión: 3.0 - Modales Corregidos', 'color: #EE8028; font-size: 12px;');
 
+// ===== MENÚ MÓVIL - TOGGLE HAMBURGUESA =====
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileToggle = document.getElementById('mobileToggle');
+    const navMenu = document.getElementById('navMenu');
+    
+    if (mobileToggle && navMenu) {
+        mobileToggle.addEventListener('click', function(e) {
+            e.stopPropagation(); // Evitar propagación
+            
+            // Toggle del menú
+            navMenu.classList.toggle('active');
+            
+            // Cambiar icono hamburguesa/cerrar
+            const icon = this.querySelector('i');
+            if (navMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+                document.body.style.overflow = 'hidden'; // Bloquear scroll
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+                document.body.style.overflow = 'auto'; // Restaurar scroll
+            }
+        });
+        
+        // Cerrar menú al hacer clic en un enlace
+        const navLinks = navMenu.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    navMenu.classList.remove('active');
+                    const icon = mobileToggle.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+        
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (navMenu.classList.contains('active') && 
+                !navMenu.contains(e.target) && 
+                !mobileToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+                const icon = mobileToggle.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Cerrar menú al cambiar orientación/resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                const icon = mobileToggle.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    }
+});
+
+console.log('✅ Menú móvil inicializado correctamente');
+
 // Activar botón de beneficios
 document.addEventListener('DOMContentLoaded', function() {
     const btnBenefits = document.getElementById('btnBenefits');

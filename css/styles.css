@@ -1699,25 +1699,25 @@ body {
     }
 }
 
+/* ===== RESPONSIVE MÓVIL - HAMBURGUESA A LA IZQUIERDA ===== */
+
 @media (max-width: 768px) {
     /* Header ajustado */
     .header {
         padding: 0;
     }
     
+    /* ESTRUCTURA: Logo centro, Hamburguesa izquierda, Botón naranja derecha */
     .nav-container {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 50px 1fr 200px;
         align-items: center;
-        padding: 0 15px;
+        padding: 0 10px;
         height: 70px;
+        gap: 10px;
     }
     
-    .logo img {
-        max-width: 180px;
-    }
-    
-    /* MENÚ HAMBURGUESA - VISIBLE EN MÓVIL */
+    /* MENÚ HAMBURGUESA - LADO IZQUIERDO */
     .mobile-menu-toggle {
         display: flex !important;
         align-items: center;
@@ -1728,7 +1728,8 @@ body {
         border-radius: 8px;
         transition: all 0.3s ease;
         z-index: 1002;
-        order: 3;
+        order: 1; /* PRIMERO - IZQUIERDA */
+        grid-column: 1;
     }
     
     .mobile-menu-toggle:hover {
@@ -1738,6 +1739,35 @@ body {
     .mobile-menu-toggle i {
         font-size: 1.3rem;
         transition: transform 0.3s ease;
+        color: white;
+    }
+    
+    /* LOGO - CENTRO */
+    .logo {
+        order: 2;
+        grid-column: 2;
+        text-align: left;
+        padding-left: 10px;
+    }
+    
+    .logo img {
+        max-width: 160px;
+        height: auto;
+    }
+    
+    /* BOTÓN CTA NARANJA - DERECHA */
+    .cta-button {
+        order: 3;
+        grid-column: 3;
+        padding: 10px 15px !important;
+        font-size: 0.85rem !important;
+        min-width: auto !important;
+        white-space: nowrap;
+        animation: none !important;
+    }
+    
+    .cta-button i {
+        display: none; /* Ocultar icono en móvil para ahorrar espacio */
     }
     
     /* MENÚ MÓVIL - FULL SCREEN OVERLAY */
@@ -1757,7 +1787,7 @@ body {
         gap: 0;
         overflow-y: auto;
         
-        /* OCULTO POR DEFECTO */
+        /* OCULTO POR DEFECTO - DESLIZA DESDE LA IZQUIERDA */
         opacity: 0;
         visibility: hidden;
         transform: translateX(-100%);
@@ -1818,9 +1848,8 @@ body {
         background: rgba(255, 255, 255, 0.15);
     }
     
-    /* Botones CTA en móvil */
-    .nav-link.destacado,
-    .cta-button {
+    /* Botón destacado dentro del menú */
+    .nav-link.destacado {
         width: 90%;
         max-width: 300px;
         margin: 15px auto !important;
@@ -1904,6 +1933,81 @@ body {
     
     .social-links {
         justify-content: center;
+    }
+}
+
+/* ===== MÓVILES PEQUEÑOS (iPhone SE, etc) ===== */
+@media (max-width: 480px) {
+    .nav-container {
+        grid-template-columns: 45px 1fr 160px;
+        height: 65px;
+        padding: 0 8px;
+        gap: 8px;
+    }
+    
+    .mobile-menu-toggle {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .mobile-menu-toggle i {
+        font-size: 1.2rem;
+    }
+    
+    .logo img {
+        max-width: 140px;
+    }
+    
+    .cta-button {
+        padding: 8px 12px !important;
+        font-size: 0.8rem !important;
+        border-radius: 20px;
+    }
+    
+    .nav-menu {
+        top: 65px;
+        height: calc(100vh - 65px);
+        padding: 30px 15px;
+    }
+    
+    .nav-link {
+        padding: 15px 15px !important;
+        font-size: 1rem;
+    }
+    
+    .nav-link.destacado {
+        width: 95%;
+        padding: 14px 20px !important;
+        font-size: 0.95rem;
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .framework-circle {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+/* ===== MÓVILES MUY PEQUEÑOS ===== */
+@media (max-width: 375px) {
+    .nav-container {
+        grid-template-columns: 40px 1fr 140px;
+    }
+    
+    .logo img {
+        max-width: 120px;
+    }
+    
+    .cta-button {
+        padding: 6px 10px !important;
+        font-size: 0.75rem !important;
     }
 }
 

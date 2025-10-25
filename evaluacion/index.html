@@ -74,67 +74,8 @@
     </section>
 
     <!-- ========================================
-         MODAL: CONSENTIMIENTO
+         MODAL: CONSENTIMIENTO (ELIMINADO)
          ======================================== -->
-    <div id="consentModal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div style="font-size: 3rem; margin-bottom: 1rem; color: var(--accent-purple);">🔒</div>
-                <h2 class="text-h2">Tus Datos Están Seguros Con Nosotros</h2>
-                <p class="text-body" style="opacity: 0.8; margin-top: 1rem;">
-                    En ForjaDigitalAE respetamos la privacidad de tu empresa. Para ofrecerte la mejor evaluación de madurez, necesitamos tu autorización para:
-                </p>
-            </div>
-            <div class="modal-body">
-                <div class="consent-section">
-                    <h3 style="color: var(--accent-purple); margin-bottom: 1rem;">✅ ESENCIAL PARA EL SERVICIO:</h3>
-                    <div class="consent-item essential">
-                        <input type="checkbox" class="consent-checkbox" checked disabled>
-                        <div>
-                            <strong>Almacenar datos de tu empresa para generar la evaluación</strong>
-                            <p style="font-size: 0.875rem; opacity: 0.7; margin-top: 0.25rem;">Se elimina automáticamente tras 90 días de inactividad</p>
-                        </div>
-                    </div>
-                    <div class="consent-item essential">
-                        <input type="checkbox" class="consent-checkbox" checked disabled>
-                        <div>
-                            <strong>Procesar tus respuestas para crear tu reporte personalizado</strong>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="consent-section">
-                    <h3 style="color: var(--accent-orange); margin-bottom: 1rem;">🎯 MEJORA TU EXPERIENCIA (Opcional):</h3>
-                    <div class="consent-item">
-                        <input type="checkbox" class="consent-checkbox" id="consentCommunications">
-                        <div>
-                            <strong>Recibir consejos personalizados sobre transformación digital</strong>
-                        </div>
-                    </div>
-                    <div class="consent-item">
-                        <input type="checkbox" class="consent-checkbox" id="consentBenchmarking">
-                        <div>
-                            <strong>Participar en benchmarking anónimo sectorial</strong>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="background: var(--primary-50); padding: 1rem; border-radius: 0.5rem; font-size: 0.875rem;">
-                    <strong style="color: var(--accent-purple);">💡 TU MANTIENES EL CONTROL:</strong>
-                    <ul style="margin-top: 0.5rem; padding-left: 1rem;">
-                        <li>Puedes retirar tu consentimiento en cualquier momento</li>
-                        <li>Tus datos nunca se venden a terceros</li>
-                        <li>Eliminamos tus datos cuando lo solicites</li>
-                    </ul>
-                    <p class="mt-2">Puedes consultar nuestra <span class="policy-link" id="privacyPolicyLink">Política de Privacidad completa</span> para más información.</p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" id="btnCancelConsent">No acepto</button>
-                <button class="btn btn-primary" id="btnAcceptConsent">Acepto y Continúo</button>
-            </div>
-        </div>
-    </div>
 
     <!-- ========================================
          MODAL: POLÍTICA DE PRIVACIDAD
@@ -533,20 +474,51 @@
                             </div>
                         </div>
 
-                        <!-- TÉRMINOS Y CONDICIONES -->
+                        <!-- 6. CONSENTIMIENTO Y PRIVACIDAD (NUEVO BLOQUE UNIFICADO) -->
                         <div class="form-section">
-                            <div class="consent-checkbox-wrapper">
+                            <h3 class="form-section-title"><i class="fas fa-user-shield"></i> 6. Privacidad y Consentimiento</h3>
+
+                            <div class="consent-section">
+                                <h4 style="color: var(--accent-purple); margin-bottom: 1rem;">✅ Para generar tu reporte, necesitamos tu autorización para:</h4>
+                                <div class="consent-item essential">
+                                    <input type="checkbox" checked disabled>
+                                    <div>
+                                        <strong>Almacenar y procesar tus respuestas para crear tu reporte personalizado.</strong>
+                                        <p style="font-size: 0.875rem; opacity: 0.7; margin-top: 0.25rem;">Tus datos se usan exclusivamente para la evaluación y nunca se venden a terceros.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="consent-section">
+                                <h4 style="color: var(--accent-orange); margin-bottom: 1rem;">🎯 Mejora tu experiencia (Opcional):</h4>
+                                <div class="consent-item">
+                                    <input type="checkbox" class="consent-checkbox" id="consentCommunications">
+                                    <div>
+                                        <strong>Recibir consejos y recursos sobre transformación digital.</strong>
+                                    </div>
+                                </div>
+                                <div class="consent-item">
+                                    <input type="checkbox" class="consent-checkbox" id="consentBenchmarking">
+                                    <div>
+                                        <strong>Participar de forma anónima en el benchmark de tu sector.</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TÉRMINOS Y CONDICIONES (CHECKBOX OBLIGATORIO FINAL) -->
+                            <div class="consent-checkbox-wrapper mt-4">
                                 <input type="checkbox" id="terminos" name="terminos" required>
                                 <label for="terminos">
-                                    Acepto la <span class="policy-link" onclick="showPrivacyPolicy()">Política de Privacidad</span> y autorizo el tratamiento de mis datos.
+                                    * He leído y acepto la <span class="policy-link" onclick="showPrivacyPolicy()">Política de Privacidad</span> y autorizo el tratamiento de mis datos.
                                 </label>
                             </div>
                         </div>
 
+
                         <!-- BOTÓN SUBMIT -->
                         <button type="submit" class="btn btn-primary btn-submit-full">
-                            <i class="fas fa-paper-plane"></i>
-                            ENVIAR INFORMACIÓN
+                            <i class="fas fa-rocket"></i>
+                            CONTINUAR A LA EVALUACIÓN
                         </button>
 
                         <p class="form-footer-note">

@@ -200,27 +200,12 @@ function resetApp() {
     location.reload();
 }
 
-function showConsentModal() {
-    document.getElementById('consentModal').classList.remove('hidden');
-}
-
-function hideConsentModal() {
-    document.getElementById('consentModal').classList.add('hidden');
-}
-
 function showPrivacyPolicy() {
     document.getElementById('privacyPolicyModal').classList.remove('hidden');
 }
 
 function hidePrivacyPolicy() {
     document.getElementById('privacyPolicyModal').classList.add('hidden');
-}
-
-function acceptConsent() {
-    appState.consent.communications = document.getElementById('consentCommunications').checked;
-    appState.consent.benchmarking = document.getElementById('consentBenchmarking').checked;
-    hideConsentModal();
-    showSection('registration');
 }
 
 function showToast(message, type = 'success') {
@@ -1966,18 +1951,7 @@ function initEventListeners() {
     // Botón principal de landing
     const btnEvaluar = document.getElementById('btnStartEvaluation');
     if (btnEvaluar) {
-        btnEvaluar.addEventListener('click', showConsentModal);
-    }
-
-    // Botones de consentimiento
-    const btnAcceptConsent = document.getElementById('btnAcceptConsent');
-    if (btnAcceptConsent) {
-        btnAcceptConsent.addEventListener('click', acceptConsent);
-    }
-
-    const btnCancelConsent = document.getElementById('btnCancelConsent');
-    if (btnCancelConsent) {
-        btnCancelConsent.addEventListener('click', hideConsentModal);
+        btnEvaluar.addEventListener('click', () => showSection('registration'));
     }
 
     // Enlace de política de privacidad

@@ -927,12 +927,50 @@ body.section-view::before {
 .recommendation-priority {
     display: inline-block;
     padding: 0.25rem 0.75rem;
-    background: var(--gradient-accent);
     color: white;
     border-radius: 1rem;
     font-size: 0.875rem;
     font-weight: 600;
     margin-bottom: 1rem;
+}
+
+.priority-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    color: white;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* Colores de prioridad para las tarjetas de recomendación */
+.recommendation-card.priority-critico {
+    border-left-color: var(--accent-red);
+}
+.recommendation-card.priority-critico .priority-badge {
+    background-color: var(--accent-red);
+}
+
+.recommendation-card.priority-alto {
+    border-left-color: var(--accent-orange);
+}
+.recommendation-card.priority-alto .priority-badge {
+    background-color: var(--accent-orange);
+}
+
+.recommendation-card.priority-medio {
+    border-left-color: #888; /* Gris */
+}
+.recommendation-card.priority-medio .priority-badge {
+    background-color: #888; /* Gris */
+}
+
+.recommendation-card.priority-bajo {
+    border-left-color: var(--accent-turquoise);
+}
+.recommendation-card.priority-bajo .priority-badge {
+    background-color: var(--accent-turquoise);
 }
 
 .cta-final-card {

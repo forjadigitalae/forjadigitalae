@@ -902,8 +902,10 @@ function renderRecommendations() {
     const recommendations = generateRecommendations();
     const container = document.getElementById('recommendations');
     
-    container.innerHTML = recommendations.map((rec, idx) => `
-        <div class="recommendation-card">
+    container.innerHTML = recommendations.map((rec, idx) => {
+        const priorityClass = `priority-${rec.priority.toLowerCase().replace('í', 'i')}`;
+        return `
+        <div class="recommendation-card ${priorityClass}">
             <div class="recommendation-header">
                 <span class="priority-badge">${rec.priority}</span>
                 <span class="category-icon">${rec.categoryIcon}</span>
@@ -911,13 +913,12 @@ function renderRecommendations() {
             <h3>${rec.title}</h3>
             <p class="recommendation-description">${rec.description}</p>
             <div class="actions-list">
-                <h4>Acciones recomendadas:</h4>
                 <ul>
                     ${rec.actions.map(action => `<li>${action}</li>`).join('')}
                 </ul>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 }
 
 function generateRecommendations() {
@@ -930,63 +931,63 @@ function generateRecommendations() {
     const recs = {
         'vision_estrategia': {
             title: 'Fortalecer Visión Estratégica',
-            description: 'Definir y comunicar un norte claro.',
+            description: 'Un puntaje bajo aquí sugiere que la empresa podría carecer de un rumbo claro y unificado. Esto puede generar desalineación entre equipos y dificultar la toma de decisiones a largo plazo. Es crucial definir un futuro inspirador y comunicarlo eficazmente.',
             priority: 'CRÍTICO',
-            actions: ['Documentar visión y estrategia', 'Comunicar a todo el equipo', 'Definir KPIs estratégicos']
+            actions: ['Documentar una visión y misión claras y ambiciosas.', 'Desarrollar un plan estratégico a 3-5 años con objetivos medibles (KPIs).', 'Asegurar que cada miembro del equipo entienda cómo su rol contribuye a la visión.']
         },
         'gobierno_empresarial': {
             title: 'Estructurar Gobierno Corporativo',
-            description: 'Establecer roles y controles claros.',
+            description: 'Una estructura de gobierno débil puede llevar a decisiones lentas, falta de rendición de cuentas y dependencia excesiva en los fundadores. Formalizar roles y procesos es clave para la escalabilidad y la toma de decisiones ágil.',
             priority: 'ALTO',
-            actions: ['Definir organigrama y roles', 'Documentar políticas clave', 'Establecer comité de dirección']
+            actions: ['Crear un organigrama claro con roles y responsabilidades definidos.', 'Documentar políticas y procedimientos clave para estandarizar operaciones.', 'Establecer un comité de dirección con reuniones periódicas para el seguimiento estratégico.']
         },
         'procesos_operaciones': {
-            title: 'Optimizar Procesos',
-            description: 'Mapear y automatizar flujos clave.',
+            title: 'Optimizar Procesos y Operaciones',
+            description: 'Procesos ineficientes o manuales son un freno para el crecimiento. Mapear, estandarizar y automatizar los flujos de trabajo clave liberará recursos y reducirá errores, mejorando la capacidad operativa.',
             priority: 'ALTO',
-            actions: ['Mapear 5 procesos principales', 'Identificar cuellos de botella', 'Implementar herramienta BPM']
+            actions: ['Mapear los 5 procesos de negocio más críticos (ej. ventas, entrega).', 'Identificar cuellos de botella y oportunidades de automatización.', 'Implementar una herramienta de gestión de procesos (BPM) o un ERP simple.']
         },
         'talento_cultura': {
-            title: 'Impulsar Talento',
-            description: 'Invertir en desarrollo del equipo.',
+            title: 'Impulsar la Gestión de Talento',
+            description: 'El éxito de la empresa reside en su gente. Un puntaje bajo aquí indica una necesidad de invertir en el desarrollo, motivación y retención del equipo para construir una cultura de alto desempeño.',
             priority: 'MEDIO',
-            actions: ['Crear plan de capacitación', 'Implementar evaluación de desempeño', 'Fomentar colaboración']
+            actions: ['Diseñar un plan de capacitación y desarrollo profesional.', 'Implementar un sistema de evaluación de desempeño justo y periódico.', 'Lanzar iniciativas para fomentar la colaboración y el feedback.']
         },
         'innovacion_agilidad': {
-            title: 'Fomentar Innovación',
-            description: 'Crear entorno de experimentación.',
+            title: 'Fomentar la Innovación y Agilidad',
+            description: 'La incapacidad para adaptarse rápidamente es un riesgo en el mercado actual. Es vital crear un entorno donde se premie la experimentación y la empresa pueda responder con agilidad a los cambios.',
             priority: 'MEDIO',
-            actions: ['Asignar presupuesto para innovación', 'Crear programa de intraemprendimiento', 'Adoptar metodologías ágiles']
+            actions: ['Asignar un pequeño presupuesto para proyectos de innovación.', 'Crear un programa de intraemprendimiento para que surjan nuevas ideas.', 'Adoptar metodologías ágiles (como Scrum o Kanban) en equipos clave.']
         },
         'estrategia_tecnologica': {
-            title: 'Definir Estrategia Tecnológica',
-            description: 'Alinear tecnología con objetivos.',
+            title: 'Definir una Estrategia Tecnológica Clara',
+            description: 'La tecnología debe ser un habilitador, no un obstáculo. Es fundamental alinear las inversiones tecnológicas con los objetivos del negocio y asegurar que la infraestructura sea escalable y segura.',
             priority: 'ALTO',
-            actions: ['Realizar auditoría tecnológica', 'Crear roadmap a 3 años', 'Implementar ciberseguridad']
+            actions: ['Realizar una auditoría del estado tecnológico actual.', 'Crear un roadmap de tecnología alineado a la estrategia de negocio.', 'Fortalecer las políticas y herramientas de ciberseguridad.']
         },
         'inteligencia_negocio': {
-            title: 'Desarrollar Inteligencia de Negocio',
-            description: 'Convertir datos en activo estratégico.',
+            title: 'Desarrollar la Inteligencia de Negocio',
+            description: 'Tomar decisiones basadas en intuición es arriesgado. Es momento de transformar los datos en un activo estratégico, implementando herramientas y una cultura que priorice la evidencia para decidir.',
             priority: 'MEDIO',
-            actions: ['Implementar herramienta de BI', 'Definir KPIs clave', 'Capacitar en análisis de datos']
+            actions: ['Implementar una herramienta de Business Intelligence (BI) como Power BI o Looker Studio.', 'Definir y monitorear los 5-10 KPIs más importantes del negocio.', 'Capacitar al equipo directivo en interpretación y uso de datos.']
         },
         'experiencia_cliente': {
-            title: 'Mejorar Experiencia del Cliente',
-            description: 'Poner al cliente en el centro.',
+            title: 'Mejorar la Experiencia del Cliente (CX)',
+            description: 'Un cliente satisfecho es tu mejor vendedor. Un puntaje bajo aquí es una alerta para poner al cliente en el centro, entendiendo su viaje y eliminando fricciones para aumentar la lealtad.',
             priority: 'ALTO',
-            actions: ['Implementar NPS', 'Mapear customer journey', 'Crear protocolo de atención']
+            actions: ['Implementar un sistema para medir la satisfacción del cliente (ej. NPS).', 'Mapear el "customer journey" para identificar puntos de dolor.', 'Crear un protocolo de atención al cliente unificado para todos los canales.']
         },
         'sostenibilidad_responsabilidad': {
-            title: 'Integrar Sostenibilidad',
-            description: 'Adoptar prácticas responsables.',
+            title: 'Integrar la Sostenibilidad y RSC',
+            description: 'Las empresas modernas deben generar un impacto positivo. Definir una estrategia de Responsabilidad Social Corporativa (RSC) no solo mejora la reputación, sino que también atrae talento y clientes.',
             priority: 'BAJO',
-            actions: ['Definir política de RSC', 'Lanzar programa ambiental', 'Establecer alianza social']
+            actions: ['Definir una política de RSC alineada a los valores de la empresa.', 'Lanzar un programa de reducción de impacto ambiental (ej. reciclaje).', 'Establecer una alianza con una causa social local.']
         },
         'finanzas_rentabilidad': {
-            title: 'Fortalecer Gestión Financiera',
-            description: 'Asegurar salud financiera.',
+            title: 'Fortalecer la Gestión Financiera',
+            description: 'La salud financiera es la base de todo. Un control deficiente del flujo de caja y la rentabilidad es un riesgo crítico. Es urgente implementar herramientas y procesos para una gestión robusta.',
             priority: 'CRÍTICO',
-            actions: ['Implementar software financiero', 'Establecer presupuesto mensual', 'Analizar rentabilidad']
+            actions: ['Implementar un software contable o financiero en la nube.', 'Establecer un proceso de presupuesto mensual y anual.', 'Realizar un análisis de rentabilidad por producto/servicio.']
         }
     };
     
@@ -1326,8 +1327,9 @@ async function downloadPDF() {
         const evalLines = doc.splitTextToSize(evaluationText, contentWidth - 100);
         doc.text(evalLines, pageWidth/2, y + 42, { align: 'center' });
         
-        // CORRECCIÓN 3: Estadísticas bien posicionadas
-        y += 100;
+        // CORRECCIÓN 3: Ajustar espaciado para evitar superposición con el footer
+        y = pageHeight - 160; 
+        
         const statsY = y;
         const statsWidth = contentWidth / 3 - 10;
         let statsX = margin;
@@ -1419,6 +1421,15 @@ async function downloadPDF() {
             });
         });
         
+        // Añadir texto explicativo
+        y = baseY + 90;
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(...colors.gray);
+        const explanationText = 'Esta gráfica muestra su puntaje en cada una de las 10 dimensiones evaluadas, permitiéndole identificar rápidamente sus áreas más fuertes y las que presentan mayores oportunidades de mejora. Un puntaje más alto indica un mayor nivel de madurez en esa dimensión.';
+        const textLines = doc.splitTextToSize(explanationText, contentWidth - 40);
+        doc.text(textLines, margin + 20, y);
+        
         addFooter(doc, pageWidth, pageHeight, logoInfo);
         
         // ========== PÁGINA 3: PUNTUACIONES DETALLADAS ==========
@@ -1485,40 +1496,7 @@ async function downloadPDF() {
             }
         });
         
-        // CORRECCIÓN 6: Insights en la misma página
-        y = cardCount % 2 === 0 ? y + 20 : y + cardHeight + 35;
-        
-        if (y > pageHeight - 180) {
-            addFooter(doc, pageWidth, pageHeight, logoInfo);
-            doc.addPage();
-            addPageHeader(doc, pageWidth, 'INSIGHTS CLAVE', logoInfo);
-            y = 140;
-        }
-        
-        doc.setFillColor(...colors.purple);
-        doc.roundedRect(margin, y, contentWidth, 140, 10, 10, 'F');
-        
-        doc.setFontSize(14);
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(...colors.white);
-        doc.text('INSIGHTS CLAVE', margin + 20, y + 30);
-        
-        const avgScore = Math.round(finalScore);
-        const topCat = getTopCategory();
-        const lowestCat = getLowestCategory();
-        
-        const insights = [
-            `Desempeno promedio: ${avgScore}%`,
-            `Fortaleza principal: ${getCategoryNameById(topCat.id)} (${topCat.score} pts)`,
-            `Mayor oportunidad: ${getCategoryNameById(lowestCat.id)} (${lowestCat.score} pts)`,
-            `Desempeno consistente en multiples dimensiones`
-        ];
-        
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'normal');
-        insights.forEach((insight, idx) => {
-            doc.text(insight, margin + 20, y + 60 + (idx * 20));
-        });
+        // CORRECCIÓN 6: Insights en la misma página (ELIMINADO)
         
         addFooter(doc, pageWidth, pageHeight, logoInfo);
         
@@ -1551,9 +1529,9 @@ async function downloadPDF() {
             'PRIORIDAD 1': [170, 47, 12],
             'PRIORIDAD 2': [238, 128, 40],
             'PRIORIDAD 3': [76, 206, 213],
-            'CRITICO': [170, 47, 12],
-            'ALTO': [238, 128, 40],
-            'MEDIO': [76, 206, 213]
+            'CRITICO': [170, 47, 12], // Rojo
+            'ALTO': [238, 128, 40], // Naranja
+            'MEDIO': [136, 136, 136] // Gris
         };
         
         topRecommendations.forEach((rec, idx) => {
@@ -1594,16 +1572,15 @@ async function downloadPDF() {
             const descLines = doc.splitTextToSize(rec.description, contentWidth - 50);
             doc.text(descLines, margin + 20, y + 68);
             
-            doc.setFontSize(8);
+            doc.setFontSize(9);
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(...colors.primary);
-            doc.text('Acciones:', margin + 20, y + 95);
             
             doc.setFont('helvetica', 'normal');
             doc.setTextColor(60, 60, 60);
             rec.actions.slice(0, 3).forEach((action, i) => {
-                const actionText = `${action.substring(0, 55)}${action.length > 55 ? '...' : ''}`;
-                doc.text(actionText, margin + 20, y + 110 + (i * 10));
+                const actionText = `• ${action.substring(0, 80)}${action.length > 80 ? '...' : ''}`;
+                doc.text(actionText, margin + 20, y + 95 + (i * 12));
             });
             
             y += recHeight + 15;
@@ -1706,7 +1683,9 @@ async function downloadPDF() {
             { title: 'Consultoria Estrategica', desc: 'Implementacion de roadmap personalizado' },
             { title: 'Optimizacion de Procesos', desc: 'Automatizacion de operaciones clave' },
             { title: 'Transformacion Digital', desc: 'Tecnologias para impulsar crecimiento' },
-            { title: 'Business Intelligence', desc: 'Sistemas de datos para decisiones' }
+            { title: 'Business Intelligence', desc: 'Sistemas de datos para decisiones' },
+            { title: 'Definición y Automatización de Procesos', desc: 'Mapeo y optimización de flujos de trabajo' },
+            { title: 'Implementación de IA', desc: 'Soluciones de inteligencia artificial para tu negocio' }
         ];
         
         const serviceBoxWidth = (contentWidth - 20) / 2;
@@ -1768,8 +1747,8 @@ async function downloadPDF() {
         doc.setFontSize(12);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(...colors.primary);
-        doc.text('contacto@forjadigitalae.com', pageWidth/2, y + 55, { align: 'center' });
-        doc.text('+57 300 123 4567', pageWidth/2, y + 75, { align: 'center' });
+        doc.text('forjadigitalae@gmail.com', pageWidth/2, y + 55, { align: 'center' });
+        doc.text('+57-3143265590', pageWidth/2, y + 75, { align: 'center' });
         
         addFooter(doc, pageWidth, pageHeight, logoInfo);
         
@@ -1799,9 +1778,9 @@ function addPageHeader(doc, pageWidth, title, logoInfo) {
     
     if (logoInfo) {
         try {
-            const logoWidth = 60;
+            const logoWidth = 70;
             const logoHeight = logoWidth / logoInfo.aspectRatio;
-            doc.addImage(logoInfo.data, 'PNG', 40, 15, logoWidth, logoHeight);
+            doc.addImage(logoInfo.data, 'PNG', 40, (headerHeight - logoHeight) / 2, logoWidth, logoHeight);
         } catch (e) {}
     }
     
@@ -1836,7 +1815,7 @@ function addFooter(doc, pageWidth, pageHeight, logoInfo) {
     doc.text(`Pagina ${doc.internal.getCurrentPageInfo().pageNumber}`, pageWidth - 40, pageHeight - 20, { align: 'right' });
     
     doc.setFontSize(7);
-    doc.text('contacto@forjadigitalae.com | +57 300 123 4567 | www.forjadigitalae.com', pageWidth/2, pageHeight - 15, { align: 'center' });
+    doc.text('forjadigitalae@gmail.com | +57-3143265590 | www.forjadigitalae.com', pageWidth/2, pageHeight - 15, { align: 'center' });
 }
 
 // ===== FUNCIONES AUXILIARES PARA PDF MEJORADO =====
@@ -1852,7 +1831,9 @@ function addPageHeader(doc, pageWidth, title, logoData) {
     // Logo pequeño
     if (logoData) {
         try {
-            doc.addImage(logoData, 'PNG', 40, 15, 60, 30);
+            const logoWidth = 70;
+            const logoHeight = logoWidth / logoData.aspectRatio;
+            doc.addImage(logoData, 'PNG', 40, (headerHeight - logoHeight) / 2, logoWidth, logoHeight);
         } catch (e) {
             console.warn('Error al insertar logo en header:', e);
         }
@@ -1897,7 +1878,7 @@ function addFooter(doc, pageWidth, pageHeight, logoData) {
     
     // Contacto centrado
     doc.setFontSize(7);
-    doc.text('contacto@forjadigitalae.com | +57 300 123 4567 | www.forjadigitalae.com', pageWidth/2, pageHeight - 15, { align: 'center' });
+    doc.text('forjadigitalae@gmail.com | +57-3143265590 | www.forjadigitalae.com', pageWidth/2, pageHeight - 15, { align: 'center' });
 }
 
 // Funciones auxiliares para PDF

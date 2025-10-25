@@ -912,11 +912,6 @@ function renderRecommendations() {
             </div>
             <h3>${rec.title}</h3>
             <p class="recommendation-description">${rec.description}</p>
-            <div class="actions-list">
-                <ul>
-                    ${rec.actions.map(action => `<li>${action}</li>`).join('')}
-                </ul>
-            </div>
         </div>
     `}).join('');
 }
@@ -1338,15 +1333,11 @@ async function downloadPDF() {
             doc.setFillColor(...colors.lightGray);
             doc.roundedRect(x, y, statsWidth, 70, 8, 8, 'F');
             
-            doc.setFontSize(32);
+            doc.setFontSize(28);
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(...color);
-            doc.text(number, x + statsWidth/2, y + 35, { align: 'center' });
+            doc.text(number, x + statsWidth/2, y + 45, { align: 'center' });
             
-            doc.setFontSize(10);
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(...colors.gray);
-            doc.text(label, x + statsWidth/2, y + 55, { align: 'center' });
         }
         
         createStatBox(statsX, statsY, '10', 'Dimensiones', colors.purple);
@@ -1542,7 +1533,7 @@ async function downloadPDF() {
                 y = 140;
             }
             
-            const recHeight = 140;
+            const recHeight = 100;
             const priorityColor = priorityColors[rec.priority] || colors.gray;
             
             doc.setFillColor(...priorityColor);
@@ -1571,17 +1562,6 @@ async function downloadPDF() {
             doc.setTextColor(...colors.gray);
             const descLines = doc.splitTextToSize(rec.description, contentWidth - 50);
             doc.text(descLines, margin + 20, y + 68);
-            
-            doc.setFontSize(9);
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(...colors.primary);
-            
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(60, 60, 60);
-            rec.actions.slice(0, 3).forEach((action, i) => {
-                const actionText = `• ${action.substring(0, 80)}${action.length > 80 ? '...' : ''}`;
-                doc.text(actionText, margin + 20, y + 95 + (i * 12));
-            });
             
             y += recHeight + 15;
         });
@@ -1648,7 +1628,7 @@ async function downloadPDF() {
         
         doc.addPage();
         
-        y = 80;
+        y = 60;
         
         doc.setFillColor(...colors.primary);
         doc.roundedRect(0, y, pageWidth, 140, 0, 0, 'F');
@@ -1664,27 +1644,27 @@ async function downloadPDF() {
         doc.setFontSize(24);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(...colors.white);
-        doc.text('LISTO PARA TRANSFORMAR', pageWidth/2, y + 50, { align: 'center' });
+        doc.text('¿LISTO PARA TRANSFORMAR', pageWidth/2, y + 50, { align: 'center' });
         doc.text('TU PYME?', pageWidth/2, y + 78, { align: 'center' });
         
         doc.setFontSize(11);
         doc.setFont('helvetica', 'normal');
         doc.text('Este reporte es el primer paso. Ahora es momento de actuar.', pageWidth/2, y + 100, { align: 'center' });
-        doc.text('Nuestro equipo puede acompanarte en cada etapa.', pageWidth/2, y + 118, { align: 'center' });
+        doc.text('Nuestro equipo puede acompañarte en cada etapa.', pageWidth/2, y + 118, { align: 'center' });
         
-        y += 180;
+        y = 220;
         doc.setFontSize(16);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(...colors.primary);
         doc.text('NUESTROS SERVICIOS', pageWidth/2, y, { align: 'center' });
         
-        y += 40;
+        y = 250;
         const services = [
             { title: 'Consultoria Estrategica', desc: 'Implementacion de roadmap personalizado' },
             { title: 'Optimizacion de Procesos', desc: 'Automatizacion de operaciones clave' },
             { title: 'Transformacion Digital', desc: 'Tecnologias para impulsar crecimiento' },
             { title: 'Business Intelligence', desc: 'Sistemas de datos para decisiones' },
-            { title: 'Definición y Automatización de Procesos', desc: 'Mapeo y optimización de flujos de trabajo' },
+            { title: 'Definición de Procesos', desc: 'Mapeo y optimización de flujos de trabajo' },
             { title: 'Implementación de IA', desc: 'Soluciones de inteligencia artificial para tu negocio' }
         ];
         
@@ -1695,6 +1675,11 @@ async function downloadPDF() {
         let serviceCount = 0;
         
         services.forEach((service, idx) => {
+            if (serviceCount > 0 && serviceCount % 2 === 0) {
+                serviceX = margin;
+                serviceY += serviceBoxHeight + 15;
+            }
+
             doc.setFillColor(...colors.lightGray);
             doc.roundedRect(serviceX, serviceY, serviceBoxWidth, serviceBoxHeight, 10, 10, 'F');
             
@@ -1714,15 +1699,10 @@ async function downloadPDF() {
             doc.text(serviceDescLines, serviceX + 15, serviceY + 50);
             
             serviceCount++;
-            if (serviceCount % 2 === 0) {
-                serviceX = margin;
-                serviceY += serviceBoxHeight + 15;
-            } else {
-                serviceX = margin + serviceBoxWidth + 20;
-            }
+            serviceX += serviceBoxWidth + 20;
         });
         
-        y = serviceY + 30;
+        y = serviceY + serviceBoxHeight + 40;
         doc.setFillColor(...colors.purple);
         doc.roundedRect(margin, y, contentWidth, 70, 10, 10, 'F');
         
@@ -1735,7 +1715,7 @@ async function downloadPDF() {
         doc.setFont('helvetica', 'normal');
         doc.text('Analicemos los resultados y definamos el mejor camino', pageWidth/2, y + 50, { align: 'center' });
         
-        y += 100;
+        y += 90;
         doc.setFillColor(...colors.lightGray);
         doc.roundedRect(margin, y, contentWidth, 100, 10, 10, 'F');
         

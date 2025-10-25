@@ -1406,12 +1406,6 @@ body.section-view::before {
     align-items: center;
 }
 
-.progress-percentage::after {
-    content: 'ðŸŽ¯';
-    margin-left: 0.5rem;
-    font-size: 1.5rem;
-}
-
 /* Barra de progreso */
 .global-progress-bar {
     height: 12px;

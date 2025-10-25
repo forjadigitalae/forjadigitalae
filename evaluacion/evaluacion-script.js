@@ -588,9 +588,12 @@ function selectOptionImproved(value, element) {
         nextBtn.disabled = false;
     }
     
-    // Actualizar progreso global
+    // Actualizar progreso global y de categoría
     if (typeof updateGlobalProgress === 'function') {
         updateGlobalProgress();
+    }
+    if (typeof renderCategoryProgress === 'function') {
+        renderCategoryProgress();
     }
     
     // Guardar en localStorage (optimizado)
@@ -672,15 +675,13 @@ function selectAnswer(questionId, value) {
 
 function updateNavigationButtons() {
     // Intentar con ambos IDs por compatibilidad
-    const btnPrev = document.getElementById('btnPrevQuestion') || document.getElementById('prevBtn');
-    const btnNext = document.getElementById('btnNextQuestion') || document.getElementById('nextBtn');
+    const btnPrev = document.getElementById('prevBtn');
+    const btnNext = document.getElementById('nextBtn');
     
     if (btnPrev) {
         const isFirstQuestion = appState.evaluationData.currentCategory === 0 && 
                                appState.evaluationData.currentQuestion === 0;
         btnPrev.disabled = isFirstQuestion;
-        btnPrev.style.opacity = isFirstQuestion ? '0.5' : '1';
-        btnPrev.style.cursor = isFirstQuestion ? 'not-allowed' : 'pointer';
     }
     
     if (btnNext) {
@@ -689,8 +690,6 @@ function updateNavigationButtons() {
         const isAnswered = appState.evaluationData.answers[question.id] !== null && appState.evaluationData.answers[question.id] !== undefined;
         
         btnNext.disabled = !isAnswered;
-        btnNext.style.opacity = isAnswered ? '1' : '0.5';
-        btnNext.style.cursor = isAnswered ? 'pointer' : 'not-allowed';
         
         // Cambiar texto del botón en la última pregunta
         const isLastQuestion = appState.evaluationData.currentCategory === categories.length - 1 &&

@@ -1150,6 +1150,16 @@ function getScoreDescription(score) {
     return 'Excelente desempeño, mantener liderazgo';
 }
 
+// Función para calcular el score general a partir de los scores por categoría
+function calcularScoreGeneral(scores) {
+    if (!scores || Object.keys(scores).length === 0) {
+        return 0;
+    }
+    
+    const totalScore = Object.values(scores).reduce((sum, score) => sum + score, 0);
+    return Math.round(totalScore / Object.keys(scores).length);
+}
+
 // ===== ENVÍO A GOOGLE SHEETS =====
 // Las funciones para enviar datos a Google Sheets ahora son:
 // - sendScoresToSheet: para enviar los scores generales

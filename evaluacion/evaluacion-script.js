@@ -1546,60 +1546,16 @@ async function downloadPDF() {
 
             yBenchmark += statBoxHeight + 40;
 
-            // Horizontal bar charts
-            doc.setFontSize(12);
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(...colors.primary);
-            doc.text('Comparación por Dimensión', margin, yBenchmark);
-            yBenchmark += 20;
-
-            const barHeight = 10;
-            const barGroupSpacing = 40;
-            
-            categories.forEach(cat => {
-                if (yBenchmark > pageHeight - 120) {
-                    addFooter(doc, pageWidth, pageHeight, logoInfo);
-                    doc.addPage();
-                    addPageHeader(doc, pageWidth, 'ANÁLISIS COMPETITIVO', logoInfo);
-                    yBenchmark = 140;
-                }
-
-                doc.setFontSize(9);
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(...colors.primary);
-                doc.text(cat.name, margin, yBenchmark);
-                yBenchmark += 5;
-
-                const userScore = categoryScores[cat.id] || 0;
-                const pymeScore = pyme_promedio[cat.id] || 0;
-                const liderScore = lider_mercado[cat.id] || 0;
-                const barMaxWidth = contentWidth - 60;
-                
-                const items = [
-                    { label: 'Líder', score: liderScore, color: colors.green },
-                    { label: 'PYME', score: pymeScore, color: colors.orange },
-                    { label: 'Tú', score: userScore, color: colors.purple }
-                ];
-
-                items.forEach(item => {
-                    yBenchmark += 12;
-                    doc.setFontSize(7);
-                    doc.setTextColor(...colors.gray);
-                    doc.text(item.label, margin + 5, yBenchmark + barHeight / 2 + 2);
-                    
-                    doc.setFillColor(item.color[0], item.color[1], item.color[2]);
-                    doc.roundedRect(margin + 35, yBenchmark, (item.score / 100) * barMaxWidth, barHeight, 3, 3, 'F');
-                    
-                    doc.setFontSize(8);
-                    doc.setFont('helvetica', 'bold');
-                    doc.setTextColor(item.color[0], item.color[1], item.color[2]);
-                    doc.text(`${item.score}`, margin + 40 + (item.score / 100) * barMaxWidth, yBenchmark + barHeight / 2 + 3);
-                });
-                
-                yBenchmark += barGroupSpacing - (items.length * 12);
-            });
-            
-            yBenchmark += 15;
+            // Gráfico de radar como imagen
+            const canvas = document.getElementById('benchmarkRadarChart');
+            if (canvas) {
+                const imgData = canvas.toDataURL('image/png');
+                const chartWidth = contentWidth - 40;
+                const chartHeight = chartWidth * 0.8; // Mantener una proporción razonable
+                const chartX = (pageWidth - chartWidth) / 2;
+                doc.addImage(imgData, 'PNG', chartX, yBenchmark, chartWidth, chartHeight);
+                yBenchmark += chartHeight + 20;
+            }
 
             // Brechas críticas
              if (yBenchmark > pageHeight - 120) {
@@ -2224,38 +2180,33 @@ function renderBenchmarkComponent() {
         </div>
 
         <!-- 2. Gráfico de Radar Comparativo -->
-        <div class="chart-container" style="height: 400px; margin-top: 2rem;">
+        <div class="chart-container" style="position: relative; height: 400px; margin-top: 2rem;">
             <canvas id="benchmarkRadarChart"></canvas>
         </div>
 
         <!-- 3. Tabla de Análisis de Brechas -->
-        <h3 class="text-h3 mt-8 mb-4">Análisis de Brechas Competitivas</h3>
-        <div class="gap-analysis-table">
-            <div class="table-header">
-                <div>Dimensión</div>
-                <div>Tu Score</div>
-                <div>Brecha vs Promedio</div>
-                <div>Brecha vs Líder</div>
-                <div>Prioridad</div>
-            </div>
-            ${categories.map(cat => {
-                const userScore = userScores[cat.id] || 0;
-                const pymeScore = pyme_promedio[cat.id] || 0;
-                const liderScore = lider_mercado[cat.id] || 0;
-                const gapPyme = userScore - pymeScore;
-                const gapLider = userScore - liderScore;
-                const brechaInfo = brechas.find(b => b.dimension === cat.id) || { prioridad: 'Baja' };
+        <div class="mt-8">
+            <h3 class="text-h3 mb-4">Análisis de Brechas Competitivas</h3>
+            <div class="gap-analysis-table">
+                ${categories.map(cat => {
+                    const userScore = userScores[cat.id] || 0;
+                    const pymeScore = pyme_promedio[cat.id] || 0;
+                    const liderScore = lider_mercado[cat.id] || 0;
+                    const gapPyme = userScore - pymeScore;
+                    const gapLider = userScore - liderScore;
+                    const brechaInfo = brechas.find(b => b.dimension === cat.id) || { prioridad: 'Baja' };
 
-                return `
-                <div class="table-row">
-                    <div>${cat.name}</div>
-                    <div><strong>${userScore}</strong></div>
-                    <div style="color: ${gapPyme >= 0 ? '#10B981' : '#EF4444'};">${gapPyme >= 0 ? '+' : ''}${gapPyme}</div>
-                    <div style="color: ${gapLider >= 0 ? '#10B981' : '#EF4444'};">${gapLider >= 0 ? '+' : ''}${gapLider}</div>
-                    <div><span class="priority-pill ${brechaInfo.prioridad.toLowerCase()}">${brechaInfo.prioridad}</span></div>
-                </div>
-                `;
-            }).join('')}
+                    return `
+                    <div class="table-row">
+                        <div>${cat.name}</div>
+                        <div><strong>${userScore}</strong></div>
+                        <div style="color: ${gapPyme >= 0 ? '#10B981' : '#EF4444'};">${gapPyme >= 0 ? '+' : ''}${gapPyme}</div>
+                        <div style="color: ${gapLider >= 0 ? '#10B981' : '#EF4444'};">${gapLider >= 0 ? '+' : ''}${gapLider}</div>
+                        <div><span class="priority-pill ${brechaInfo.prioridad.toLowerCase()}">${brechaInfo.prioridad}</span></div>
+                    </div>
+                    `;
+                }).join('')}
+            </div>
         </div>
 
         <!-- 4. Interpretación de Posición -->

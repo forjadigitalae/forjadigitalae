@@ -271,11 +271,43 @@ async function handleRegistrationSubmit(event) {
     });
     formData.append('desafios_total', desafios.join(' | '));
 
+    // CORRECCIÓN: Mapear los nombres del formulario a los nombres que espera el Apps Script
+    const mappedData = {
+        action: 'register',
+        nombre_contacto: formData.get('contactName'),
+        email: formData.get('contactEmail'),
+        telefono: formData.get('contactPhone'),
+        cargo: formData.get('contactRole'),
+        empresa: formData.get('companyName'),
+        sector: formData.get('companySector'),
+        empleados: formData.get('companySize'),
+        tiempo_operacion: formData.get('companyYears'),
+        ubicacion: formData.get('companyLocation'),
+        sitio_web: formData.get('companyWebsite'),
+        desafios_total: formData.get('desafios_total'),
+        objetivo: formData.get('mainGoal'),
+        plazo_resultados: formData.get('resultTimeframe'),
+        como_conocio: formData.get('howFound'),
+        presupuesto: formData.get('budget'),
+        equipo_tecnico: formData.get('hasTeam'),
+        urgencia: formData.get('urgency'),
+        area_dolor: formData.get('painArea'),
+        horario_contacto: formData.get('contactTime'),
+        terminos: formData.get('terms')
+    };
+
+    // Crear un nuevo FormData con los datos mapeados
+    const finalFormData = new FormData();
+    for (const key in mappedData) {
+        if (mappedData[key] !== null && mappedData[key] !== undefined) {
+            finalFormData.append(key, mappedData[key]);
+        }
+    }
 
     try {
         const response = await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
-            body: formData
+            body: finalFormData
         });
 
         const result = await response.json();
@@ -285,7 +317,7 @@ async function handleRegistrationSubmit(event) {
             showToast('¡Registro completado!', 'success');
             
             // Guardar datos y el ID del Lead para el envío de scores
-            appState.companyData = Object.fromEntries(formData.entries());
+            appState.companyData = Object.fromEntries(finalFormData.entries());
             appState.id_lead = result.data.id_lead; // Este es el ID que usaremos como ID Evaluacion
             saveState();
 

@@ -220,7 +220,7 @@ function showToast(message, type = 'success') {
 
 function showLoading(message = 'Procesando...') {
     const overlay = document.getElementById('loadingOverlay');
-    const messageEl = document.getElementById('loadingMessage');
+    const messageEl = document.getElementById('loadingText'); // Corregido: loadingText en lugar de loadingMessage
     if (overlay) {
         if (messageEl) {
             messageEl.innerHTML = message;
@@ -400,9 +400,11 @@ async function handleRegistrationSubmit(event) {
                 sector: mappedData.sector
             };
             appState.id_lead = result.data.id_lead; // Este es el ID que usaremos como ID Evaluacion
-            saveState();
+            autoSave(); // Usamos autoSave en lugar de saveState
 
-            // Mostrar evaluación
+            // Inicializar y mostrar evaluación
+            appState.evaluationData.currentCategory = 0;
+            appState.evaluationData.currentQuestion = 0;
             showSection('evaluation');
             renderCurrentQuestion();
             renderSidebar();

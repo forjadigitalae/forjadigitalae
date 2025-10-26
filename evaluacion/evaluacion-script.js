@@ -4,7 +4,7 @@
    ================================ */
 
 // ===== CONFIGURACIÓN GLOBAL =====
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxV6oR9z1Px-YnlbZXR-rJ04Kz-6g7A6DLMDGwg9E460EGuBnS2X5TEcScXtXN0zCrVqA/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOV7RjRU9fOPsutSOscgbj-gPD4e5Eh9uLmLU789XqxBzrGWkRzz0p6Ti4o908kt4o/exec';
 
 // ===== ESTADO DE LA APLICACIÓN =====
 let appState = {
@@ -219,18 +219,20 @@ function showToast(message, type = 'success') {
 }
 
 function showLoading(message = 'Procesando...') {
-    const loader = document.getElementById('loader');
-    const loaderText = document.getElementById('loader-text');
-    if (loader && loaderText) {
-        loaderText.textContent = message;
-        loader.classList.remove('hidden');
+    const overlay = document.getElementById('loadingOverlay');
+    const messageEl = document.getElementById('loadingMessage');
+    if (overlay) {
+        if (messageEl) {
+            messageEl.innerHTML = message;
+        }
+        overlay.classList.remove('hidden');
     }
 }
 
 function hideLoading() {
-    const loader = document.getElementById('loader');
-    if (loader) {
-        loader.classList.add('hidden');
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) {
+        overlay.classList.add('hidden');
     }
 }
 
@@ -271,42 +273,62 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
-function handleRegistration(e) {
-    e.preventDefault();
+async function handleRegistrationSubmit(event) {
+    event.preventDefault();
+    const form = event.target;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.innerHTML;
+
+    submitButton.disabled = true;
+    submitButton.innerHTML = `<span class="spinner"></span> Registrando...`;
+
+    const formData = new FormData(form);
     
-    // Validar formulario
-    const missingFields = validateForm();
-    if (missingFields.length > 0) {
-        showToast(`Por favor completa: ${missingFields.join(', ')}`, 'error');
-        return;
+    // Añadimos la acción para el nuevo script
+    formData.append('action', 'register');
+
+    // Recolectar desafíos de checkboxes
+    const desafios = [];
+    document.querySelectorAll('input[name="desafios"]:checked').forEach(checkbox => {
+        desafios.push(checkbox.value);
+    });
+    formData.append('desafios_total', desafios.join(' | '));
+
+
+    try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success && result.data.id_lead) {
+            console.log('Registro exitoso. ID Lead:', result.data.id_lead);
+            showToast('¡Registro completado!', 'success');
+            
+            // Guardar el ID del Lead para el envío de scores
+            appState.companyData = Object.fromEntries(formData.entries());
+            appState.id_lead = result.data.id_lead;
+            saveState();
+
+            // Ocultar modal y mostrar evaluación
+            document.getElementById('registrationModal').classList.add('hidden');
+            showSection('evaluation');
+            renderCurrentQuestion();
+            renderSidebar();
+
+        } else {
+            throw new Error(result.message || 'Error desconocido al registrar.');
+        }
+
+    } catch (error) {
+        console.error('Error en el envío del formulario:', error);
+        showToast(error.message, 'error');
+    } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonText;
     }
-    
-    showLoading('Guardando información...');
-    
-    // Obtener datos del formulario
-    const formData = new FormData(e.target);
-    
-    appState.companyData = {
-        name: document.getElementById('companyName')?.value || formData.get('companyName'),
-        sector: document.getElementById('companySector')?.value || formData.get('sector'),
-        size: document.getElementById('companySize')?.value || formData.get('size'),
-        years: document.getElementById('companyYears')?.value || formData.get('years'),
-        location: document.getElementById('companyLocation')?.value || formData.get('location'),
-        city: document.getElementById('companyLocation')?.value?.split(',')[0] || 'N/A',
-        website: document.getElementById('companyWebsite')?.value || formData.get('website'),
-        contactName: document.getElementById('contactName')?.value || formData.get('contactName'),
-        email: document.getElementById('contactEmail')?.value || formData.get('email'),
-        phone: document.getElementById('contactPhone')?.value || formData.get('phone'),
-        role: document.getElementById('contactRole')?.value || formData.get('role')
-    };
-    
-    setTimeout(() => {
-        autoSave();
-        hideLoading();
-        showToast('✅ Información guardada correctamente', 'success');
-        showSection('evaluation');
-        initEvaluation();
-    }, 1000);
 }
 
 // ===== FUNCIONES DE EVALUACIÓN =====
@@ -2045,7 +2067,7 @@ function initEventListeners() {
     // Formulario de registro
     const registrationForm = document.getElementById('registrationForm');
     if (registrationForm) {
-        registrationForm.addEventListener('submit', handleRegistration);
+        registrationForm.addEventListener('submit', handleRegistrationSubmit);
     }
 
     // Botones de navegación de evaluación
@@ -2232,6 +2254,58 @@ function renderBenchmarkComponent() {
     `;
 
     renderBenchmarkRadar(userScores, pyme_promedio, lider_mercado);
+    
+    // Enviar los scores a Google Sheets en segundo plano
+    sendScoresToSheet(userScores, overallScores, percentile);
+}
+
+async function sendScoresToSheet(categoryScores, overallScores, percentile) {
+    if (!appState.id_lead) {
+        console.warn('No hay ID_Lead para enviar los scores. El registro inicial pudo haber fallado.');
+        return;
+    }
+
+    console.log(`Enviando scores para el ID_Lead: ${appState.id_lead}`);
+
+    const formData = new FormData();
+    formData.append('action', 'update_scores');
+    formData.append('id_lead', appState.id_lead);
+
+    // Mapeo de scores de categorías
+    formData.append('score_general', overallScores.user || 0);
+    formData.append('score_vision_estrategia', categoryScores.vision_estrategia || 0);
+    formData.append('score_gobierno_empresarial', categoryScores.gobierno_empresarial || 0);
+    formData.append('score_procesos_operaciones', categoryScores.procesos_operaciones || 0);
+    formData.append('score_talento_cultura', categoryScores.talento_cultura || 0);
+    formData.append('score_innovacion_agilidad', categoryScores.innovacion_agilidad || 0);
+    formData.append('score_estrategia_tecnologica', categoryScores.estrategia_tecnologica || 0);
+    formData.append('score_inteligencia_negocio', categoryScores.inteligencia_negocio || 0);
+    formData.append('score_experiencia_cliente', categoryScores.experiencia_cliente || 0);
+    formData.append('score_sostenibilidad', categoryScores.sostenibilidad_responsabilidad || 0);
+    formData.append('score_finanzas', categoryScores.finanzas_rentabilidad || 0);
+    
+    // Mapeo de scores de benchmark
+    formData.append('benchmark_pyme', overallScores.pyme || 0);
+    formData.append('benchmark_lider', overallScores.lider || 0);
+    formData.append('benchmark_percentil', percentile || 0);
+
+    try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            console.log('Scores enviados y actualizados en Google Sheets con éxito.');
+        } else {
+            throw new Error(result.message || 'Error desconocido al actualizar scores.');
+        }
+    } catch (error) {
+        console.error('Error al enviar los scores:', error);
+        // Opcional: Podríamos mostrar un toast no intrusivo si falla
+    }
 }
 
 function renderBenchmarkRadar(user, pyme, lider) {

@@ -304,6 +304,9 @@ document.getElementById('contactForm').addEventListener('submit', async function
         formData.append('acepta_politicas', 'Sí');
         formData.append('origen', 'Formulario Principal');
         
+        // Añadir acción para indicar que es un registro de formulario principal
+        formData.append('action', 'register');
+        
         // IMPORTANTE: Eliminar los desafíos individuales y agregar todos juntos
         formData.delete('desafio');
         

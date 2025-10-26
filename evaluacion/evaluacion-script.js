@@ -307,9 +307,9 @@ async function handleRegistrationSubmit(event) {
             console.log('Registro exitoso. ID Lead:', result.data.id_lead);
             showToast('¡Registro completado!', 'success');
             
-            // Guardar el ID del Lead para el envío de scores
+            // Guardar datos y el ID del Lead para el envío de scores
             appState.companyData = Object.fromEntries(formData.entries());
-            appState.id_lead = result.data.id_lead;
+            appState.id_lead = result.data.id_lead; // Este es el ID que usaremos como ID Evaluacion
             saveState();
 
             // Ocultar modal y mostrar evaluación
@@ -2257,6 +2257,8 @@ function renderBenchmarkComponent() {
     
     // Enviar los scores a Google Sheets en segundo plano
     sendScoresToSheet(userScores, overallScores, percentile);
+    // NUEVO: Enviar el detalle de la evaluación a la otra hoja
+    sendEvaluationDataToSheet(categoryScores);
 }
 
 async function sendScoresToSheet(categoryScores, overallScores, percentile) {
@@ -2444,3 +2446,68 @@ sidebar.innerHTML = `
         </div>
     </div>
 `;
+
+async function sendEvaluationDataToSheet(categoryScores) {
+    if (!appState.id_lead || !appState.companyData.empresa) {
+        console.warn('No hay ID de Evaluación o nombre de empresa para enviar el detalle.');
+        return;
+    }
+
+    const idEvaluacion = appState.id_lead;
+    const empresa = appState.companyData.empresa;
+    const timestamp = new Date().toISOString();
+    const finalScore = calcularScoreGeneral(appState.evaluationData.answers);
+    const maturityLevel = getMaturityLevel(finalScore).level;
+
+    const evaluationData = [];
+
+    categories.forEach(category => {
+        const categoryScore = categoryScores[category.id] || 0;
+        const categoryLevel = getMaturityLevel(categoryScore).level;
+
+        category.questions.forEach(question => {
+            const answer = appState.evaluationData.answers[question.id];
+            if (answer !== undefined) {
+                evaluationData.push({
+                    timestamp: timestamp,
+                    id_evaluacion: idEvaluacion,
+                    empresa: empresa,
+                    id_pregunta: question.id,
+                    pregunta: question.text,
+                    categoria: category.name,
+                    respuesta: answer,
+                    puntuacion_categoria: categoryScore,
+                    nivel_categoria: categoryLevel,
+                    puntuacion_final: finalScore,
+                    nivel_madurez: maturityLevel
+                });
+            }
+        });
+    });
+
+    if (evaluationData.length === 0) {
+        console.warn('No hay datos de evaluación para enviar.');
+        return;
+    }
+    
+    console.log(`Preparando el envío de ${evaluationData.length} respuestas detalladas.`);
+
+    const formData = new FormData();
+    formData.append('action', 'save_evaluation');
+    formData.append('data', JSON.stringify(evaluationData));
+
+    try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+        if (result.success) {
+            console.log('Datos detallados de la evaluación enviados con éxito.');
+        } else {
+            throw new Error(result.message || 'Error desconocido al guardar el detalle de la evaluación.');
+        }
+    } catch (error) {
+        console.error('Error al enviar el detalle de la evaluación:', error);
+    }
+}

@@ -30,13 +30,13 @@ const categories = [
         name: 'Visión y Estrategia',
         icon: '🎯',
         weight: 0.10,
-        description: 'Se evalúa si la empresa tiene una visión clara a largo plazo y una estrategia bien definida para alcanzarla.',
+        description: 'Se evalúa la claridad y comunicación de la visión a largo plazo de la empresa, así como la existencia de un plan estratégico formal y bien estructurado. Una estrategia sólida alinea a toda la organización hacia objetivos comunes, permitiendo una toma de decisiones coherente y una asignación de recursos eficaz para competir y crecer en el mercado.',
         questions: [
-            { id: 've_01', text: '¿La empresa tiene una visión a largo plazo, formalmente documentada y comunicada a todo el equipo?', tooltip: 'La visión debe ser un documento escrito, conocido y entendido por todos.', weight: 1.2 },
-            { id: 've_02', text: '¿Existe un plan estratégico claro que detalle los objetivos, metas y acciones para los próximos 3-5 años?', tooltip: 'El plan debe incluir KPIs para medir el progreso.', weight: 1.2 },
-            { id: 've_03', text: '¿La estrategia de la empresa considera activamente las tendencias del mercado y el entorno competitivo?', tooltip: 'Se deben realizar análisis periódicos del mercado.', weight: 1.0 },
-            { id: 've_04', text: '¿Los objetivos de los departamentos y empleados están claramente alineados con la estrategia general?', tooltip: 'La estrategia debe desglosarse en objetivos específicos para cada área.', weight: 1.1 },
-            { id: 've_05', text: '¿Se asignan recursos de manera coherente con las prioridades estratégicas?', tooltip: 'El presupuesto debe reflejar las prioridades estratégicas.', weight: 1.1 }
+            { id: 've_01', text: '¿La empresa tiene una visión a largo plazo, formalmente documentada y comunicada a todo el equipo?', tooltip: 'Evalúa si la visión es más que una idea: si está escrita, es conocida por todos y sirve como guía. Una visión compartida es el motor que impulsa a toda la organización en la misma dirección. Puntuaciones altas indican que es un documento vivo y comunicado.', weight: 1.2 },
+            { id: 've_02', text: '¿Existe un plan estratégico claro que detalle los objetivos, metas y acciones para los próximos 3-5 años?', tooltip: 'El plan debe ser una hoja de ruta con hitos, responsables e Indicadores Clave de Desempeño (KPIs) para monitorear el progreso. No se trata de tener un documento, sino una herramienta de gestión activa.', weight: 1.2 },
+            { id: 've_03', text: '¿La estrategia de la empresa considera activamente las tendencias del mercado y el entorno competitivo?', tooltip: 'Aquí se mide si la empresa mira hacia afuera. ¿Analiza a la competencia? ¿Está al tanto de las nuevas tecnologías, regulaciones y cambios en el comportamiento del consumidor? Una estrategia relevante debe ser dinámica y adaptarse al entorno.', weight: 1.0 },
+            { id: 've_04', text: '¿Los objetivos de los departamentos y empleados están claramente alineados con la estrategia general?', tooltip: 'La estrategia "aterriza" en el día a día a través de objetivos claros para cada área y persona. Se evalúa si existe un sistema (como OKRs o MBOs) que conecte el trabajo individual con las metas de la empresa.', weight: 1.1 },
+            { id: 've_05', text: '¿Se asignan recursos (presupuesto, personal, tiempo) de manera coherente con las prioridades estratégicas?', tooltip: 'El dinero y los recursos deben seguir a la estrategia. Esta pregunta evalúa si las inversiones más importantes se dirigen a las iniciativas que realmente impulsarán el cumplimiento de los objetivos estratégicos, en lugar de gastar por inercia.', weight: 1.1 }
         ]
     },
     {
@@ -44,13 +44,13 @@ const categories = [
         name: 'Gobierno Empresarial',
         icon: '🏛️',
         weight: 0.10,
-        description: 'Analiza la solidez de las estructuras de toma de decisiones y los procesos de control.',
+        description: 'Analiza la solidez de las estructuras de toma de decisiones, la claridad de roles y responsabilidades, y los mecanismos de control. Un buen gobierno corporativo reduce la dependencia en los fundadores, agiliza las decisiones y asegura la rendición de cuentas, sentando las bases para un crecimiento escalable y sostenible.',
         questions: [
-            { id: 'ge_01', text: '¿Existen roles y responsabilidades claramente definidos para los líderes?', tooltip: 'Debe haber un organigrama claro.', weight: 1.2 },
-            { id: 'ge_02', text: '¿La empresa cuenta con políticas y procedimientos internos documentados?', tooltip: 'Las políticas escritas garantizan consistencia.', weight: 1.1 },
-            { id: 'ge_03', text: '¿Se realizan reuniones de seguimiento periódicas para revisar el desempeño?', tooltip: 'Deben existir comités estructurados.', weight: 1.0 },
-            { id: 'ge_04', text: '¿Existe un proceso formal para la gestión de riesgos?', tooltip: 'La gestión de riesgos debe ser proactiva.', weight: 1.2 },
-            { id: 'ge_05', text: '¿Hay mecanismos de control interno y auditoría?', tooltip: 'Se deben realizar auditorías periódicas.', weight: 1.0 }
+            { id: 'ge_01', text: '¿Existen roles y responsabilidades claramente definidos para los líderes y los equipos?', tooltip: 'Más allá de un simple organigrama, se evalúa si cada persona sabe qué se espera de ella, a quién reporta y cuáles son sus responsabilidades. Esto evita duplicidad de funciones y "zonas grises" en la operación.', weight: 1.2 },
+            { id: 'ge_02', text: '¿La empresa cuenta con políticas y procedimientos internos documentados para las operaciones clave?', tooltip: 'Se busca evidencia de estandarización. ¿Hay manuales para procesos como ventas, contratación o gestión de calidad? Las políticas escritas aseguran consistencia y facilitan la incorporación de nuevo personal.', weight: 1.1 },
+            { id: 'ge_03', text: '¿Se realizan reuniones de seguimiento periódicas y efectivas para revisar el desempeño y los objetivos?', tooltip: 'Evalúa la disciplina de gestión. ¿Existen comités (de dirección, comerciales, etc.) con agendas claras, actas y seguimiento de compromisos? Las reuniones deben ser foros para la toma de decisiones, no solo para informar.', weight: 1.0 },
+            { id: 'ge_04', text: '¿Existe un proceso formal para la identificación, evaluación y mitigación de riesgos?', tooltip: 'Una gestión de riesgos proactiva va más allá de "apagar incendios". Se evalúa si la empresa piensa en qué podría salir mal (riesgos financieros, operativos, de mercado) y tiene planes para prevenir o mitigar su impacto.', weight: 1.2 },
+            { id: 'ge_05', text: '¿Hay mecanismos de control interno y auditoría para asegurar la transparencia y el cumplimiento?', tooltip: 'Se refiere a los controles que garantizan la fiabilidad de la información financiera y el cumplimiento de las políticas. Incluye desde la segregación de funciones (quien aprueba no es quien paga) hasta auditorías internas o externas.', weight: 1.0 }
         ]
     },
     {
@@ -58,13 +58,13 @@ const categories = [
         name: 'Procesos y Operaciones',
         icon: '⚙️',
         weight: 0.10,
-        description: 'Mide la eficiencia y estandarización de los flujos de trabajo clave.',
+        description: 'Mide la eficiencia, estandarización y automatización de los flujos de trabajo clave. Procesos optimizados reducen costos, minimizan errores y liberan al equipo de tareas repetitivas, permitiendo a la empresa escalar su capacidad operativa sin un aumento proporcional en su estructura.',
         questions: [
-            { id: 'po_01', text: '¿Los procesos clave del negocio están documentados y estandarizados?', tooltip: 'Procesos mapeados permiten operación consistente.', weight: 1.2 },
-            { id: 'po_02', text: '¿Se utilizan herramientas tecnológicas para automatizar tareas repetitivas?', tooltip: 'La automatización libera tiempo del personal.', weight: 1.1 },
-            { id: 'po_03', text: '¿Se miden y monitorean regularmente los indicadores de rendimiento de los procesos?', tooltip: 'Lo que no se mide no se puede mejorar.', weight: 1.1 },
-            { id: 'po_04', text: '¿Existe una cultura de mejora continua?', tooltip: 'Los equipos deben buscar formas de optimizar.', weight: 1.0 },
-            { id: 'po_05', text: '¿Los diferentes sistemas están integrados?', tooltip: 'Los sistemas deben "hablar" entre sí.', weight: 1.2 }
+            { id: 'po_01', text: '¿Los procesos clave del negocio (ventas, producción, etc.) están documentados y estandarizados?', tooltip: 'Se busca evidencia de que los procesos no dependen de la memoria de las personas. ¿Existen diagramas de flujo, manuales o instructivos que describan el "cómo se hacen las cosas aquí"? La estandarización es la base de la eficiencia.', weight: 1.2 },
+            { id: 'po_02', text: '¿Se utilizan herramientas tecnológicas (software, ERP, CRM) para automatizar tareas repetitivas?', tooltip: 'Evalúa el nivel de digitalización de la operación. Tareas como la facturación, el seguimiento de clientes o el control de inventario, ¿son manuales o se apoyan en software que reduce el trabajo y los errores humanos?', weight: 1.1 },
+            { id: 'po_03', text: '¿Se miden y monitorean regularmente los indicadores de rendimiento (KPIs) de los procesos?', tooltip: 'Lo que no se mide, no se mejora. Se evalúa si existen métricas claras para los procesos clave (ej. tiempo de entrega, costo por unidad, tasa de error) y si se revisan periódicamente para tomar acciones correctivas.', weight: 1.1 },
+            { id: 'po_04', text: '¿Existe una cultura de mejora continua donde los equipos proponen y ejecutan optimizaciones?', tooltip: 'La optimización no debe ser un proyecto único, sino un hábito cultural. Se busca evidencia de que los propios equipos tienen la autonomía y la motivación para identificar y solucionar ineficiencias en su día a día.', weight: 1.0 },
+            { id: 'po_05', text: '¿Los diferentes sistemas de información de la empresa (contabilidad, ventas, etc.) están integrados?', tooltip: 'La falta de integración crea "silos de información" y requiere doble digitación. Se evalúa si los sistemas "conversan" entre sí, permitiendo que los datos fluyan automáticamente de un área a otra sin intervención manual.', weight: 1.2 }
         ]
     },
     {
@@ -72,13 +72,13 @@ const categories = [
         name: 'Gestión de Talento',
         icon: '👥',
         weight: 0.10,
-        description: 'Evalúa si la cultura fomenta la colaboración y el desarrollo continuo.',
+        description: 'Evalúa las prácticas para atraer, desarrollar y retener al personal, así como la fortaleza de la cultura organizacional. El talento es el activo más importante; una gestión proactiva y una cultura positiva son esenciales para la innovación, la productividad y la construcción de una ventaja competitiva sostenible.',
         questions: [
-            { id: 'tc_01', text: '¿La empresa tiene un proceso estructurado para atraer y retener talento?', tooltip: 'Incluye planes de carrera y beneficios.', weight: 1.1 },
-            { id: 'tc_02', text: '¿Se invierte en programas de capacitación y desarrollo?', tooltip: 'El desarrollo de competencias es clave.', weight: 1.2 },
-            { id: 'tc_03', text: '¿La cultura organizacional promueve la colaboración?', tooltip: 'Una cultura saludable fomenta el trabajo en equipo.', weight: 1.0 },
-            { id: 'tc_04', text: '¿Se realizan evaluaciones de desempeño periódicas?', tooltip: 'Las evaluaciones deben alinearse con objetivos.', weight: 1.0 },
-            { id: 'tc_05', text: '¿El liderazgo inspira y modela los valores deseados?', tooltip: 'Los líderes son el motor de la cultura.', weight: 1.3 }
+            { id: 'tc_01', text: '¿La empresa tiene un proceso estructurado para atraer, seleccionar y retener talento clave?', tooltip: 'Se evalúa si la contratación es reactiva ("necesito a alguien ya") o estratégica. ¿Hay perfiles de cargo definidos? ¿Se usan entrevistas estructuradas? ¿Existen planes de retención para el personal de alto desempeño?', weight: 1.1 },
+            { id: 'tc_02', text: '¿Se invierte de forma planificada en programas de capacitación y desarrollo para el equipo?', tooltip: 'El desarrollo de competencias no debe ser esporádico. Se busca evidencia de un plan de capacitación anual, con presupuesto asignado y alineado a las necesidades futuras del negocio y los planes de carrera de los empleados.', weight: 1.2 },
+            { id: 'tc_03', text: '¿La cultura organizacional promueve activamente la colaboración, la confianza y la comunicación abierta?', tooltip: 'La cultura se refleja en el comportamiento diario. Se evalúa si los equipos colaboran entre áreas, si hay confianza para dar y recibir feedback, y si la comunicación fluye de manera transparente en todas las direcciones.', weight: 1.0 },
+            { id: 'tc_04', text: '¿Se realizan evaluaciones de desempeño justas y periódicas que impulsen el crecimiento profesional?', tooltip: 'Las evaluaciones deben ser más que un requisito anual. Se busca un proceso que incluya feedback 360°, planes de desarrollo individual (PDIs) y una conexión clara entre el desempeño y las oportunidades de crecimiento o compensación.', weight: 1.0 },
+            { id: 'tc_05', text: '¿El liderazgo de la empresa inspira, empodera y modela activamente los valores y comportamientos deseados?', tooltip: 'Los líderes son los principales guardianes de la cultura. Se evalúa si su comportamiento es coherente con lo que predican, si delegan de manera efectiva y si su estilo de liderazgo fomenta la motivación y el compromiso en lugar del miedo.', weight: 1.3 }
         ]
     },
     {
@@ -86,13 +86,13 @@ const categories = [
         name: 'Innovación y Agilidad',
         icon: '💡',
         weight: 0.10,
-        description: 'Analiza la capacidad de adaptarse rápidamente a los cambios del mercado.',
+        description: 'Analiza la capacidad de la empresa para adaptarse a los cambios del mercado, experimentar con nuevas ideas y lanzar soluciones de manera rápida. En un entorno volátil, la agilidad y la innovación no son un lujo, sino una condición de supervivencia para mantener la relevancia y capitalizar nuevas oportunidades.',
         questions: [
-            { id: 'ia_01', text: '¿La empresa dedica tiempo y recursos para explorar nuevas ideas?', tooltip: 'La innovación requiere inversión intencional.', weight: 1.2 },
-            { id: 'ia_02', text: '¿Se fomenta la experimentación y se aceptan los fracasos?', tooltip: 'Una cultura que castiga el error inhibe innovación.', weight: 1.1 },
-            { id: 'ia_03', text: '¿La empresa es capaz de tomar decisiones y ajustar su rumbo rápidamente?', tooltip: 'La agilidad evita burocracia excesiva.', weight: 1.1 },
-            { id: 'ia_04', text: '¿Se monitorean activamente las tecnologías emergentes?', tooltip: 'Tener un "radar" tecnológico es vital.', weight: 1.0 },
-            { id: 'ia_05', text: '¿Se colabora con clientes o proveedores para co-crear?', tooltip: 'Las alianzas aceleran la innovación.', weight: 1.0 }
+            { id: 'ia_01', text: '¿La empresa dedica formalmente tiempo y recursos (presupuesto, personas) para explorar nuevas ideas y proyectos?', tooltip: 'La innovación debe ser intencional. Se evalúa si existe un espacio formal (ej. "20% de tiempo libre", un laboratorio de innovación, un presupuesto específico) para que los equipos trabajen en ideas que no son parte de la operación diaria.', weight: 1.2 },
+            { id: 'ia_02', text: '¿Se fomenta la experimentación y se gestiona el fracaso como una oportunidad de aprendizaje?', tooltip: 'Una cultura innovadora no castiga el error que resulta de un experimento bien intencionado. Se evalúa si la empresa celebra los aprendizajes, incluso de iniciativas fallidas, y utiliza esos insights para futuros intentos.', weight: 1.1 },
+            { id: 'ia_03', text: '¿La estructura y los procesos de la empresa permiten tomar decisiones y ajustar el rumbo rápidamente?', tooltip: 'La agilidad es lo opuesto a la burocracia. Se evalúa qué tan rápido se puede aprobar un proyecto, pivotar una estrategia o responder a un movimiento de la competencia. Las jerarquías planas y los equipos empoderados son clave.', weight: 1.1 },
+            { id: 'ia_04', text: '¿Se monitorean activamente las tecnologías emergentes y las startups que podrían impactar el sector?', tooltip: 'Se busca evidencia de un "radar de innovación". ¿Alguien en la empresa tiene la responsabilidad de investigar nuevas tecnologías (IA, blockchain, etc.) y analizar cómo podrían aplicarse al negocio o representar una amenaza?', weight: 1.0 },
+            { id: 'ia_05', text: '¿Se colabora con clientes, proveedores o startups para desarrollar nuevas soluciones (innovación abierta)?', tooltip: 'La innovación no tiene por qué ser un proceso interno y secreto. Se evalúa si la empresa se abre al ecosistema, co-creando productos con clientes, colaborando con startups o participando en hackathons y desafíos de innovación.', weight: 1.0 }
         ]
     },
     {
@@ -100,13 +100,13 @@ const categories = [
         name: 'Estrategia Tecnológica',
         icon: '💻',
         weight: 0.10,
-        description: 'Evalúa si la tecnología está alineada con los objetivos y es escalable.',
+        description: 'Evalúa si la tecnología es un verdadero habilitador del negocio, alineada con los objetivos estratégicos y gestionada de forma proactiva. Una buena estrategia tecnológica garantiza que la infraestructura sea escalable, segura y capaz de soportar el crecimiento y la innovación futuros, en lugar de ser un simple centro de costos.',
         questions: [
-            { id: 'et_01', text: '¿La infraestructura tecnológica actual soporta las necesidades del negocio?', tooltip: 'La tecnología debe ser un habilitador.', weight: 1.1 },
-            { id: 'et_02', text: '¿Existe un roadmap tecnológico que guíe las inversiones?', tooltip: 'Las decisiones tecnológicas no deben ser improvisadas.', weight: 1.2 },
-            { id: 'et_03', text: '¿La arquitectura tecnológica es escalable?', tooltip: 'Los sistemas deben poder crecer.', weight: 1.1 },
-            { id: 'et_04', text: '¿Se cuenta con políticas robustas de ciberseguridad?', tooltip: 'Incluye antivirus, firewalls y capacitación.', weight: 1.3 },
-            { id: 'et_05', text: '¿Se evalúa el ROI de las iniciativas tecnológicas?', tooltip: 'La tecnología es una inversión medible.', weight: 1.0 }
+            { id: 'et_01', text: '¿La infraestructura tecnológica actual (servidores, redes, software) es estable, escalable y soporta las necesidades del negocio?', tooltip: 'La tecnología debe funcionar sin problemas. Se evalúa si los sistemas son robustos, si pueden crecer al ritmo del negocio y si realmente ayudan a los empleados a hacer su trabajo de manera eficiente.', weight: 1.1 },
+            { id: 'et_02', text: '¿Existe un roadmap tecnológico a 2-3 años que guíe las inversiones en hardware y software?', tooltip: 'Las decisiones tecnológicas no deben ser reactivas o improvisadas. Se busca un plan que defina qué tecnologías se adoptarán, cuáles se retirarán y cómo evolucionará la arquitectura para soportar la estrategia empresarial.', weight: 1.2 },
+            { id: 'et_03', text: '¿La arquitectura de sistemas está diseñada para ser flexible y permitir integraciones futuras con otras plataformas?', tooltip: 'Una arquitectura monolítica y cerrada es una deuda técnica. Se evalúa si los sistemas están basados en componentes o APIs que faciliten su conexión con nuevas herramientas (ej. un nuevo CRM, una plataforma de e-commerce).', weight: 1.1 },
+            { id: 'et_04', text: '¿Se cuenta con políticas, herramientas y capacitación robustas en materia de ciberseguridad?', tooltip: 'La seguridad ya no es opcional. Se evalúa si existen políticas claras (ej. gestión de contraseñas), herramientas (antivirus, firewall, backup) y programas de formación para proteger a la empresa de amenazas digitales.', weight: 1.3 },
+            { id: 'et_05', text: '¿Se evalúa el Retorno de la Inversión (ROI) de las principales iniciativas tecnológicas antes y después de su implementación?', tooltip: 'La tecnología es una inversión que debe generar valor. Se busca evidencia de que los proyectos tecnológicos se justifican con un caso de negocio claro (ahorro de costos, aumento de ventas) y que sus resultados se miden.', weight: 1.0 }
         ]
     },
     {
@@ -114,13 +114,13 @@ const categories = [
         name: 'Inteligencia de Negocio',
         icon: '📊',
         weight: 0.10,
-        description: 'Examina cómo la empresa utiliza datos para tomar decisiones.',
+        description: 'Examina la capacidad de la empresa para recopilar, analizar y utilizar datos para tomar decisiones informadas y estratégicas. Una cultura "data-driven" permite pasar de la intuición a la evidencia, optimizando operaciones, entendiendo mejor a los clientes y descubriendo nuevas oportunidades de negocio.',
         questions: [
-            { id: 'in_01', text: '¿La empresa recopila sistemáticamente datos de operaciones y clientes?', tooltip: 'Procesos definidos para capturar datos.', weight: 1.1 },
-            { id: 'in_02', text: '¿Los datos se almacenan de forma centralizada y organizada?', tooltip: 'Una "única fuente de verdad" es crucial.', weight: 1.2 },
-            { id: 'in_03', text: '¿Se utilizan herramientas de visualización de datos?', tooltip: 'Dashboards muestran rendimiento en tiempo real.', weight: 1.1 },
-            { id: 'in_04', text: '¿Las decisiones se respaldan con análisis de datos?', tooltip: 'Cultura de decisiones basadas en evidencia.', weight: 1.3 },
-            { id: 'in_05', text: '¿El personal tiene habilidades básicas para interpretar datos?', tooltip: 'Alfabetización de datos es esencial.', weight: 1.0 }
+            { id: 'in_01', text: '¿La empresa recopila sistemáticamente datos relevantes de sus operaciones, ventas y clientes?', tooltip: 'Los datos deben capturarse de forma estructurada. Se evalúa si la información clave (ej. quién compra, qué compra, con qué frecuencia) se registra en un sistema (CRM, ERP) o si se pierde en hojas de cálculo y correos.', weight: 1.1 },
+            { id: 'in_02', text: '¿Los datos se almacenan en un repositorio centralizado (Data Warehouse, Data Lake) que actúa como una "única fuente de verdad"?', tooltip: 'Tener múltiples versiones de la verdad en diferentes archivos de Excel es una receta para el desastre. Se busca evidencia de un esfuerzo por centralizar los datos para garantizar su consistencia y facilitar el análisis.', weight: 1.2 },
+            { id: 'in_03', text: '¿Se utilizan herramientas de visualización de datos (dashboards) para monitorear los KPIs en tiempo real?', tooltip: 'Los datos deben ser accesibles y fáciles de entender. Se evalúa si los líderes y equipos tienen dashboards (ej. en Power BI, Looker o Tableau) que les permitan ver el estado del negocio de un vistazo, sin tener que pedir reportes.', weight: 1.1 },
+            { id: 'in_04', text: '¿Las decisiones estratégicas y tácticas se respaldan habitualmente con análisis de datos en lugar de basarse solo en la intuición?', tooltip: 'Se busca un cambio cultural. En las reuniones, ¿se presentan datos y gráficos para justificar una decisión, o se depende principalmente de la "experiencia" y la "opinión" de los directivos?', weight: 1.3 },
+            { id: 'in_05', text: '¿El personal clave tiene las habilidades y la formación necesarias para interpretar y cuestionar los datos?', tooltip: 'La "alfabetización de datos" (data literacy) es fundamental. Se evalúa si se ha capacitado a los equipos no solo en el uso de herramientas, sino también en cómo hacer las preguntas correctas a los datos y cómo interpretar los resultados.', weight: 1.0 }
         ]
     },
     {
@@ -128,13 +128,13 @@ const categories = [
         name: 'Experiencia del Cliente',
         icon: '🧡',
         weight: 0.10,
-        description: 'Mide la satisfacción del cliente y analiza los puntos de contacto.',
+        description: 'Mide cómo la empresa gestiona y optimiza cada punto de contacto con sus clientes para maximizar su satisfacción y lealtad. Una experiencia de cliente superior es uno de los diferenciadores más poderosos y difíciles de copiar, convirtiendo a los clientes en promotores de la marca.',
         questions: [
-            { id: 'cx_01', text: '¿Se mide de forma sistemática la satisfacción del cliente?', tooltip: 'Método constante para escuchar al cliente.', weight: 1.2 },
-            { id: 'cx_02', text: '¿Se han mapeado los "viajes del cliente"?', tooltip: 'Identificar momentos de fricción.', weight: 1.1 },
-            { id: 'cx_03', text: '¿Se utiliza la retroalimentación para implementar mejoras?', tooltip: 'Actuar sobre el feedback del cliente.', weight: 1.3 },
-            { id: 'cx_04', text: '¿La experiencia es consistente a través de todos los canales?', tooltip: 'Mismo nivel de servicio en todos los puntos.', weight: 1.0 },
-            { id: 'cx_05', text: '¿Se personaliza la comunicación para diferentes segmentos?', tooltip: 'Experiencia relevante aumenta lealtad.', weight: 1.0 }
+            { id: 'cx_01', text: '¿Se mide de forma sistemática y periódica la satisfacción del cliente (ej. con encuestas NPS, CSAT)?', tooltip: 'Para gestionar la experiencia, primero hay que medirla. Se evalúa si la empresa tiene un método constante para "escuchar" al cliente y si esos indicadores se monitorean como un KPI clave del negocio.', weight: 1.2 },
+            { id: 'cx_02', text: '¿Se han mapeado los "viajes del cliente" (Customer Journeys) para identificar puntos de dolor y momentos clave?', tooltip: 'Se busca un entendimiento profundo de la experiencia del cliente de principio a fin. ¿La empresa ha dibujado el mapa de interacciones desde que un cliente descubre la marca hasta la postventa, identificando dónde hay fricciones?', weight: 1.1 },
+            { id: 'cx_03', text: '¿Se utiliza activamente la retroalimentación de los clientes para implementar mejoras en productos, servicios y procesos?', tooltip: 'Escuchar no es suficiente; hay que actuar. Se evalúa si existe un proceso formal para analizar las quejas, sugerencias y comentarios de los clientes y convertirlos en proyectos de mejora concretos.', weight: 1.3 },
+            { id: 'cx_04', text: '¿La experiencia que se ofrece al cliente es consistente y omnicanal a través de todos los puntos de contacto (web, tienda, vendedor, etc.)?', tooltip: 'El cliente percibe a la empresa como una sola entidad. Se evalúa si la calidad del servicio y el mensaje de marca son coherentes, sin importar si el cliente interactúa por la web, por teléfono o en persona.', weight: 1.0 },
+            { id: 'cx_05', text: '¿Se personaliza la comunicación y la oferta para diferentes segmentos de clientes basándose en su comportamiento o historial?', tooltip: 'Tratar a todos los clientes por igual es ineficiente. Se evalúa el nivel de sofisticación en la segmentación y si se utiliza la información del cliente para ofrecerle experiencias y productos más relevantes y personalizados.', weight: 1.0 }
         ]
     },
     {
@@ -142,13 +142,13 @@ const categories = [
         name: 'Sostenibilidad',
         icon: '🌍',
         weight: 0.10,
-        description: 'Evalúa el compromiso con prácticas de impacto positivo.',
+        description: 'Evalúa el compromiso de la empresa con prácticas de negocio éticas, socialmente responsables y medioambientalmente sostenibles. Más allá del cumplimiento, la sostenibilidad y la RSC (Responsabilidad Social Corporativa) son cada vez más importantes para la reputación de la marca, la atracción de talento y la conexión con los consumidores.',
         questions: [
-            { id: 'sr_01', text: '¿La empresa tiene una política de sostenibilidad definida?', tooltip: 'Compromiso formal en materia social y ambiental.', weight: 1.1 },
-            { id: 'sr_02', text: '¿Se han implementado prácticas para reducir el impacto ambiental?', tooltip: 'Acciones concretas de sostenibilidad.', weight: 1.0 },
-            { id: 'sr_03', text: '¿La empresa participa en iniciativas sociales?', tooltip: 'Apoyo a la comunidad local.', weight: 1.0 },
-            { id: 'sr_04', text: '¿Se consideran criterios éticos al seleccionar proveedores?', tooltip: 'Responsabilidad en la cadena de suministro.', weight: 1.2 },
-            { id: 'sr_05', text: '¿Se comunican de forma transparente las acciones de sostenibilidad?', tooltip: 'Transparencia genera confianza.', weight: 1.1 }
+            { id: 'sr_01', text: '¿La empresa tiene una política de sostenibilidad o RSC formalmente definida y comunicada?', tooltip: 'Se busca un compromiso explícito que vaya más allá de acciones aisladas. ¿La empresa ha definido en qué áreas (social, ambiental, de gobernanza) quiere generar un impacto positivo y lo ha documentado en una política oficial?', weight: 1.1 },
+            { id: 'sr_02', text: '¿Se han implementado y se miden prácticas concretas para reducir el impacto ambiental (ej. consumo de energía, reciclaje)?', tooltip: 'La política debe traducirse en acciones medibles. Se evalúa si existen programas específicos para, por ejemplo, reducir el consumo de agua o papel, gestionar residuos o medir la huella de carbono, y si se reportan sus resultados.', weight: 1.0 },
+            { id: 'sr_03', text: '¿La empresa participa activamente en iniciativas de apoyo a la comunidad local o a causas sociales?', tooltip: 'Se refiere al "rol ciudadano" de la empresa. Se evalúa si la compañía tiene programas de voluntariado corporativo, apoya a ONGs locales o participa en proyectos que benefician a la comunidad donde opera.', weight: 1.0 },
+            { id: 'sr_04', text: '¿Se aplican criterios éticos y de sostenibilidad en la selección y evaluación de proveedores?', tooltip: 'La responsabilidad se extiende a toda la cadena de suministro. Se evalúa si, al elegir un proveedor, se consideran no solo el precio y la calidad, sino también sus prácticas laborales, ambientales y de ética empresarial.', weight: 1.2 },
+            { id: 'sr_05', text: '¿Se comunican de forma transparente y pública las acciones y el progreso en materia de sostenibilidad?', tooltip: 'La transparencia genera confianza. Se evalúa si la empresa publica un reporte de sostenibilidad o tiene una sección en su web donde informa sobre sus objetivos, acciones y resultados en materia de RSC, de forma honesta y verificable.', weight: 1.1 }
         ]
     },
     {
@@ -156,13 +156,13 @@ const categories = [
         name: 'Finanzas',
         icon: '💰',
         weight: 0.10,
-        description: 'Analiza la gestión financiera y capacidad de generar rentabilidad.',
+        description: 'Analiza la salud y la gestión financiera de la empresa, incluyendo la presupuestación, el control del flujo de caja y la rentabilidad. Una gestión financiera robusta es el pilar que soporta toda la operación y la estrategia, permitiendo invertir en el crecimiento de forma sostenible y navegar con seguridad en tiempos de incertidumbre.',
         questions: [
-            { id: 'fr_01', text: '¿Se elabora un presupuesto anual detallado?', tooltip: 'Presupuesto es herramienta de control fundamental.', weight: 1.2 },
-            { id: 'fr_02', text: '¿Se monitorea de cerca el flujo de caja?', tooltip: 'Gestión proactiva del cash flow.', weight: 1.3 },
-            { id: 'fr_03', text: '¿Se analizan regularmente los estados financieros?', tooltip: 'Entender rentabilidad para decisiones.', weight: 1.1 },
-            { id: 'fr_04', text: '¿Existen políticas claras para la gestión de costos?', tooltip: 'Control de costos constante.', weight: 1.0 },
-            { id: 'fr_05', text: '¿La empresa tiene un plan financiero a largo plazo?', tooltip: 'Proyectar necesidades de capital.', weight: 1.1 }
+            { id: 'fr_01', text: '¿Se elabora un presupuesto anual detallado y se realiza un seguimiento mensual de las desviaciones?', tooltip: 'El presupuesto es una herramienta de control, no un mero formalismo. Se evalúa la disciplina de comparar mes a mes lo presupuestado versus lo real, para entender las desviaciones y tomar decisiones a tiempo.', weight: 1.2 },
+            { id: 'fr_02', text: '¿Se monitorea y proyecta de cerca el flujo de caja (cash flow) para anticipar necesidades de liquidez?', tooltip: 'El flujo de caja es el "oxígeno" de la empresa. Se evalúa si la gestión es proactiva, con proyecciones a varias semanas o meses vista que permitan anticipar déficits de caja y gestionar la tesorería eficientemente.', weight: 1.3 },
+            { id: 'fr_03', text: '¿Se analizan regularmente los estados financieros (P&G, Balance) para entender la rentabilidad y la salud del negocio?', tooltip: 'Los líderes deben ser capaces de "leer" la historia que cuentan los números. Se evalúa si se utilizan los informes contables como una herramienta de diagnóstico para entender qué productos o clientes son más rentables y dónde están los riesgos.', weight: 1.1 },
+            { id: 'fr_04', text: '¿Existen políticas claras y un control riguroso sobre los costos y los gastos operativos?', tooltip: 'Se busca una cultura de eficiencia en el uso de los recursos. ¿Existen políticas de gastos? ¿Se revisan periódicamente los principales costos? ¿Se buscan activamente oportunidades de optimización sin sacrificar la calidad?', weight: 1.0 },
+            { id: 'fr_05', text: '¿La empresa tiene un plan financiero a largo plazo que proyecte las necesidades de inversión y las fuentes de financiación?', tooltip: 'La estrategia de negocio debe tener un correlato financiero. Se evalúa si la empresa sabe cuánto dinero necesitará para ejecutar su plan de crecimiento a 3-5 años y cómo planea obtenerlo (deuda, capital, reinversión).', weight: 1.1 }
         ]
     }
 ];
@@ -440,6 +440,12 @@ function renderCurrentQuestion() {
     const category = categories[appState.evaluationData.currentCategory];
     const question = category.questions[appState.evaluationData.currentQuestion];
     
+    // Ocultar feedback de la pregunta anterior
+    const feedbackContainer = document.getElementById('selectedFeedback');
+    if (feedbackContainer) {
+        feedbackContainer.classList.add('hidden');
+    }
+
     // Actualizar información de categoría
     const categoryBadge = document.getElementById('categoryBadge');
     const categoryTitle = document.getElementById('categoryTitle');

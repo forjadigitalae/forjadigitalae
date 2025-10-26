@@ -1505,3 +1505,108 @@ body.section-view::before {
     color: var(--primary-700);
     margin: 0.5rem 0 0 0;
 }
+
+/* ===========================================
+   NUEVO DISEÑO: ANÁLISIS COMPETITIVO
+   =========================================== */
+
+.benchmark-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2.5rem;
+    align-items: flex-start;
+}
+
+.benchmark-stats-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.benchmark-stat-card {
+    background: linear-gradient(145deg, #ffffff, #f9fafb);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--primary-300);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+}
+
+.benchmark-stat-card .stat-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary-700);
+    margin-bottom: 0.5rem;
+}
+
+.benchmark-stat-card .stat-score {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.benchmark-stat-card.user-score .stat-score { color: var(--accent-purple); }
+.benchmark-stat-card.pyme-score .stat-score { color: var(--accent-orange); }
+.benchmark-stat-card.lider-score .stat-score { color: var(--success-500); }
+
+.benchmark-chart-col {
+    position: sticky;
+    top: 2rem;
+}
+
+/* Tabla de brechas rediseñada */
+.gap-analysis-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.gap-analysis-table th, 
+.gap-analysis-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--primary-300);
+}
+
+.gap-analysis-table th {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary-700);
+    text-transform: uppercase;
+    background-color: var(--primary-50);
+}
+
+.gap-analysis-table td:nth-child(2),
+.gap-analysis-table td:nth-child(3),
+.gap-analysis-table td:nth-child(4) {
+    text-align: center;
+    font-weight: 600;
+}
+
+.gap-value {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    color: white;
+    font-size: 0.85rem;
+}
+
+.pos-desarrollo { background-color: rgba(249, 115, 22, 0.1); border-color: #F97316; }
+.pos-mejora { background-color: rgba(239, 68, 68, 0.1); border-color: #EF4444; }
+
+@media (max-width: 1024px) {
+    .benchmark-grid {
+        grid-template-columns: 1fr;
+    }
+    .benchmark-chart-col {
+        position: static;
+        order: -1; /* Mueve el gráfico arriba en móvil */
+    }
+}
+
+@media (max-width: 768px) {
+    .benchmark-summary {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}

@@ -2142,7 +2142,7 @@ function renderBenchmarkComponent() {
     const benchmarkData = obtenerBenchmarkPorSector(userSector);
 
     if (!benchmarkData) {
-        container.innerHTML = `<p>No hay datos de benchmarking disponibles para el sector '${userSector}'.</p>`;
+        container.innerHTML = '<p class="text-center text-gray-600">No hay datos de benchmarking disponibles para el sector seleccionado.</p>';
         return;
     }
 
@@ -2152,73 +2152,82 @@ function renderBenchmarkComponent() {
         pyme: calcularScoreGeneral(pyme_promedio),
         lider: calcularScoreGeneral(lider_mercado)
     };
-
     const percentile = calcularPercentil(overallScores.user, overallScores.pyme, overallScores.lider);
     const position = obtenerPosicionMercado(percentile);
     const brechas = calcularBrechasCriticas(userScores, lider_mercado);
 
     container.innerHTML = `
-        <!-- 1. Resumen Competitivo -->
-        <div class="benchmark-summary">
-            <div class="summary-item">
-                <div class="summary-label">Tu Empresa</div>
-                <div class="summary-score" style="color: #8B5CF6;">${overallScores.user}</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-label">PYME Promedio</div>
-                <div class="summary-score" style="color: #F97316;">${overallScores.pyme}</div>
-            </div>
-            <div class="summary-item">
-                <div class="summary-label">Líder del Sector</div>
-                <div class="summary-score" style="color: #10B981;">${overallScores.lider}</div>
-            </div>
-        </div>
-        <div class="benchmark-progress-bar">
-            <div class="progress-marker user-marker" style="left: ${overallScores.user}%;" title="Tu Empresa: ${overallScores.user}">
-                <span class="marker-label">Tú</span>
-            </div>
-            <div class="progress-marker pyme-marker" style="left: ${overallScores.pyme}%;" title="PYME Promedio: ${overallScores.pyme}">
-                <span class="marker-label">Promedio</span>
-            </div>
-            <div class="progress-marker lider-marker" style="left: ${overallScores.lider}%;" title="Líder: ${overallScores.lider}">
-                <span class="marker-label">Líder</span>
-            </div>
-        </div>
+        <div class="benchmark-grid">
+            <div class="benchmark-stats-col">
+                
+                <!-- Summary Cards -->
+                <div class="benchmark-stat-card user-score">
+                    <div class="stat-label">Tu Empresa</div>
+                    <div class="stat-score">${overallScores.user}</div>
+                </div>
+                <div class="benchmark-stat-card pyme-score">
+                    <div class="stat-label">PYME Promedio</div>
+                    <div class="stat-score">${overallScores.pyme}</div>
+                </div>
+                <div class="benchmark-stat-card lider-score">
+                    <div class="stat-label">Líder del Sector</div>
+                    <div class="stat-score">${overallScores.lider}</div>
+                </div>
 
-        <!-- 2. Gráfico de Radar Comparativo -->
-        <div class="chart-container" style="position: relative; height: 400px; margin-top: 2rem;">
-            <canvas id="benchmarkRadarChart"></canvas>
-        </div>
-
-        <!-- 3. Tabla de Análisis de Brechas -->
-        <div class="mt-8">
-            <h3 class="text-h3 mb-4">Análisis de Brechas Competitivas</h3>
-            <div class="gap-analysis-table">
-                ${categories.map(cat => {
-                    const userScore = userScores[cat.id] || 0;
-                    const pymeScore = pyme_promedio[cat.id] || 0;
-                    const liderScore = lider_mercado[cat.id] || 0;
-                    const gapPyme = userScore - pymeScore;
-                    const gapLider = userScore - liderScore;
-                    const brechaInfo = brechas.find(b => b.dimension === cat.id) || { prioridad: 'Baja' };
-
-                    return `
-                    <div class="table-row">
-                        <div>${cat.name}</div>
-                        <div><strong>${userScore}</strong></div>
-                        <div style="color: ${gapPyme >= 0 ? '#10B981' : '#EF4444'};">${gapPyme >= 0 ? '+' : ''}${gapPyme}</div>
-                        <div style="color: ${gapLider >= 0 ? '#10B981' : '#EF4444'};">${gapLider >= 0 ? '+' : ''}${gapLider}</div>
-                        <div><span class="priority-pill ${brechaInfo.prioridad.toLowerCase()}">${brechaInfo.prioridad}</span></div>
+                <!-- Gap Analysis Table -->
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h3 class="text-h3 mb-4">Análisis de Brechas</h3>
+                        <table class="gap-analysis-table">
+                            <thead>
+                                <tr>
+                                    <th>Dimensión</th>
+                                    <th>Tu Score</th>
+                                    <th>vs Promedio</th>
+                                    <th>vs Líder</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${categories.map(cat => {
+                                    const userScore = userScores[cat.id] || 0;
+                                    const pymeScore = pyme_promedio[cat.id] || 0;
+                                    const liderScore = lider_mercado[cat.id] || 0;
+                                    const gapPyme = userScore - pymeScore;
+                                    const gapLider = userScore - liderScore;
+                                    return `
+                                        <tr>
+                                            <td>${cat.name}</td>
+                                            <td><strong>${userScore}</strong></td>
+                                            <td>
+                                                <span class="gap-value" style="background-color: ${gapPyme >= 0 ? '#10B981' : '#EF4444'};">
+                                                    ${gapPyme >= 0 ? '+' : ''}${gapPyme}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="gap-value" style="background-color: ${gapLider >= 0 ? '#10B981' : '#EF4444'};">
+                                                    ${gapLider >= 0 ? '+' : ''}${gapLider}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
                     </div>
-                    `;
-                }).join('')}
-            </div>
-        </div>
+                </div>
+                
+                <!-- Position Interpretation -->
+                <div class="position-interpretation ${position.class}">
+                    <h4 class="font-bold">${position.title} (Top ${percentile}%)</h4>
+                    <p>${position.message}</p>
+                </div>
 
-        <!-- 4. Interpretación de Posición -->
-        <div class="position-interpretation ${position.class}">
-            <h4>${position.title} (Top ${percentile}%)</h4>
-            <p>${position.message}</p>
+            </div>
+            <div class="benchmark-chart-col">
+                <div class="chart-container" style="height: 500px;">
+                    <canvas id="benchmarkRadarChart"></canvas>
+                </div>
+            </div>
         </div>
     `;
 

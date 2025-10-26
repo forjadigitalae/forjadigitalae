@@ -308,13 +308,50 @@ async function handleRegistrationSubmit(event) {
 
     try {
         showLoading('Enviando datos...');
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            body: finalFormData
+        
+        // Solución para CORS: Usar JSONP con un callback
+        const scriptId = 'googleScript' + new Date().getTime();
+        const callbackName = 'googleScriptCallback' + new Date().getTime();
+        
+        // Crear una promesa para manejar la respuesta
+        const responsePromise = new Promise((resolve, reject) => {
+            // Definir la función de callback global
+            window[callbackName] = function(response) {
+                // Limpiar después de recibir respuesta
+                document.body.removeChild(document.getElementById(scriptId));
+                delete window[callbackName];
+                
+                if (response && response.success) {
+                    resolve(response);
+                } else {
+                    reject(new Error((response && response.message) || 'Error desconocido'));
+                }
+            };
+            
+            // Crear URL con parámetros
+            let url = GOOGLE_SCRIPT_URL + '?callback=' + callbackName;
+            for (const [key, value] of finalFormData.entries()) {
+                url += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(value);
+            }
+            
+            // Crear y añadir el script
+            const script = document.createElement('script');
+            script.id = scriptId;
+            script.src = url;
+            script.onerror = () => {
+                document.body.removeChild(script);
+                delete window[callbackName];
+                reject(new Error('Error de red al contactar con el servidor'));
+            };
+            
+            document.body.appendChild(script);
         });
+        
+        // Esperar la respuesta
+        const result = await responsePromise;
 
-        const result = await response.json();
-
+        console.log('Respuesta recibida:', result);
+        
         if (result.success && result.data && result.data.id_lead) {
             console.log('Registro exitoso. ID Lead:', result.data.id_lead);
             showToast('¡Registro completado!', 'success');
@@ -332,11 +369,9 @@ async function handleRegistrationSubmit(event) {
             showSection('evaluation');
             renderCurrentQuestion();
             renderSidebar();
-
         } else {
             throw new Error(result.message || 'Error desconocido al registrar.');
         }
-
     } catch (error) {
         console.error('Error en el envío del formulario:', error);
         showToast('Error al enviar el formulario: ' + (error.message || 'Error desconocido'), 'error');
@@ -2262,36 +2297,69 @@ async function sendScoresToSheet(categoryScores, overallScores, percentile) {
 
     console.log(`Enviando scores para el ID_Lead: ${appState.id_lead}`);
 
-    const formData = new FormData();
-    formData.append('action', 'update_scores');
-    formData.append('id_lead', appState.id_lead);
-
-    // Mapeo de scores de categorías
-    formData.append('score_general', overallScores.user || 0);
-    formData.append('score_vision_estrategia', categoryScores.vision_estrategia || 0);
-    formData.append('score_gobierno_empresarial', categoryScores.gobierno_empresarial || 0);
-    formData.append('score_procesos_operaciones', categoryScores.procesos_operaciones || 0);
-    formData.append('score_talento_cultura', categoryScores.talento_cultura || 0);
-    formData.append('score_innovacion_agilidad', categoryScores.innovacion_agilidad || 0);
-    formData.append('score_estrategia_tecnologica', categoryScores.estrategia_tecnologica || 0);
-    formData.append('score_inteligencia_negocio', categoryScores.inteligencia_negocio || 0);
-    formData.append('score_experiencia_cliente', categoryScores.experiencia_cliente || 0);
-    formData.append('score_sostenibilidad', categoryScores.sostenibilidad_responsabilidad || 0);
-    formData.append('score_finanzas', categoryScores.finanzas_rentabilidad || 0);
-    
-    // Mapeo de scores de benchmark
-    formData.append('benchmark_pyme', overallScores.pyme || 0);
-    formData.append('benchmark_lider', overallScores.lider || 0);
-    formData.append('benchmark_percentil', percentile || 0);
+    // Crear objeto de datos para enviar
+    const dataToSend = {
+        action: 'update_scores',
+        id_lead: appState.id_lead,
+        score_general: overallScores.user || 0,
+        score_vision_estrategia: categoryScores.vision_estrategia || 0,
+        score_gobierno_empresarial: categoryScores.gobierno_empresarial || 0,
+        score_procesos_operaciones: categoryScores.procesos_operaciones || 0,
+        score_talento_cultura: categoryScores.talento_cultura || 0,
+        score_innovacion_agilidad: categoryScores.innovacion_agilidad || 0,
+        score_estrategia_tecnologica: categoryScores.estrategia_tecnologica || 0,
+        score_inteligencia_negocio: categoryScores.inteligencia_negocio || 0,
+        score_experiencia_cliente: categoryScores.experiencia_cliente || 0,
+        score_sostenibilidad: categoryScores.sostenibilidad_responsabilidad || 0,
+        score_finanzas: categoryScores.finanzas_rentabilidad || 0,
+        benchmark_pyme: overallScores.pyme || 0,
+        benchmark_lider: overallScores.lider || 0,
+        benchmark_percentil: percentile || 0
+    };
 
     try {
         showLoading('Guardando resultados...');
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            body: formData
+        
+        // Solución para CORS: Usar JSONP con un callback
+        const scriptId = 'googleScriptScores' + new Date().getTime();
+        const callbackName = 'googleScriptCallback' + new Date().getTime();
+        
+        // Crear una promesa para manejar la respuesta
+        const responsePromise = new Promise((resolve, reject) => {
+            // Definir la función de callback global
+            window[callbackName] = function(response) {
+                // Limpiar después de recibir respuesta
+                document.body.removeChild(document.getElementById(scriptId));
+                delete window[callbackName];
+                
+                if (response && response.success) {
+                    resolve(response);
+                } else {
+                    reject(new Error((response && response.message) || 'Error desconocido'));
+                }
+            };
+            
+            // Crear URL con parámetros
+            let url = GOOGLE_SCRIPT_URL + '?callback=' + callbackName;
+            for (const [key, value] of Object.entries(dataToSend)) {
+                url += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(value);
+            }
+            
+            // Crear y añadir el script
+            const script = document.createElement('script');
+            script.id = scriptId;
+            script.src = url;
+            script.onerror = () => {
+                document.body.removeChild(script);
+                delete window[callbackName];
+                reject(new Error('Error de red al contactar con el servidor'));
+            };
+            
+            document.body.appendChild(script);
         });
-
-        const result = await response.json();
+        
+        // Esperar la respuesta
+        const result = await responsePromise;
 
         if (result.success) {
             console.log('Scores enviados y actualizados en Google Sheets con éxito.');
@@ -2489,26 +2557,73 @@ async function sendEvaluationDataToSheet(categoryScores) {
     
     console.log(`Preparando el envío de ${evaluationData.length} respuestas detalladas.`);
 
-    const formData = new FormData();
-    formData.append('action', 'save_evaluation');
-    formData.append('data', JSON.stringify(evaluationData));
-
+    // Para datos grandes como este, usaremos una estrategia diferente
+    // Dividiremos los datos en bloques más pequeños para evitar URLs muy largas
     try {
         showLoading('Guardando evaluación detallada...');
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            body: formData
-        });
-        const result = await response.json();
-        if (result.success) {
-            console.log('Datos detallados de la evaluación enviados con éxito.');
-            showToast('Evaluación guardada correctamente', 'success');
-        } else {
-            throw new Error(result.message || 'Error desconocido al guardar el detalle de la evaluación.');
+        
+        // Dividir los datos en bloques de 10 preguntas
+        const chunkSize = 10;
+        const dataChunks = [];
+        
+        for (let i = 0; i < evaluationData.length; i += chunkSize) {
+            dataChunks.push(evaluationData.slice(i, i + chunkSize));
         }
+        
+        console.log(`Dividiendo datos en ${dataChunks.length} bloques para envío`);
+        
+        // Enviar cada bloque secuencialmente
+        for (let i = 0; i < dataChunks.length; i++) {
+            const chunk = dataChunks[i];
+            showLoading(`Guardando bloque ${i+1} de ${dataChunks.length}...`);
+            
+            // Solución para CORS: Usar JSONP con un callback
+            const scriptId = 'googleScriptEval' + new Date().getTime();
+            const callbackName = 'googleScriptCallback' + new Date().getTime();
+            
+            // Crear una promesa para manejar la respuesta
+            await new Promise((resolve, reject) => {
+                // Definir la función de callback global
+                window[callbackName] = function(response) {
+                    // Limpiar después de recibir respuesta
+                    document.body.removeChild(document.getElementById(scriptId));
+                    delete window[callbackName];
+                    
+                    if (response && response.success) {
+                        resolve(response);
+                    } else {
+                        reject(new Error((response && response.message) || 'Error desconocido'));
+                    }
+                };
+                
+                // Crear URL con parámetros básicos
+                let url = GOOGLE_SCRIPT_URL + '?callback=' + callbackName + '&action=save_evaluation';
+                
+                // Añadir los datos como parámetro JSON
+                url += '&data=' + encodeURIComponent(JSON.stringify(chunk));
+                
+                // Crear y añadir el script
+                const script = document.createElement('script');
+                script.id = scriptId;
+                script.src = url;
+                script.onerror = () => {
+                    document.body.removeChild(script);
+                    delete window[callbackName];
+                    reject(new Error('Error de red al contactar con el servidor'));
+                };
+                
+                document.body.appendChild(script);
+            });
+            
+            // Pequeña pausa entre bloques para no sobrecargar el servidor
+            await new Promise(resolve => setTimeout(resolve, 300));
+        }
+        
+        console.log('Datos detallados de la evaluación enviados con éxito.');
+        showToast('Evaluación guardada correctamente', 'success');
     } catch (error) {
         console.error('Error al enviar el detalle de la evaluación:', error);
-        showToast('Error al guardar la evaluación detallada', 'error');
+        showToast('Error al guardar la evaluación detallada: ' + error.message, 'error');
     } finally {
         hideLoading();
     }

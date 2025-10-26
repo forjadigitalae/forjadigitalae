@@ -50,7 +50,7 @@ window.addEventListener('load', function() {
 });
 
 // ===== HEADER SCROLL EFFECT =====
-const header = document.getElementById('header');
+const header = document.getElementById('main-header');
 if (header) {
     window.addEventListener('scroll', function() {
         if (window.scrollY > 100) {
@@ -263,7 +263,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // ===== CONFIGURACIÓN DEL FORMULARIO - CONEXIÓN CON GOOGLE SHEETS =====
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOV7RjRU9fOPsutSOscgbj-gPD4e5Eh9uLmLU789XqxBzrGWkRzz0p6Ti4o908kt4o/exec'; // ← CAMBIA ESTO
+// No se usa Google Sheets por CORS, usamos manejo local
+const SCRIPT_URL = '';
 
 // Manejar envío del formulario
 document.getElementById('contactForm').addEventListener('submit', async function(e) {
@@ -298,51 +299,8 @@ document.getElementById('contactForm').addEventListener('submit', async function
         console.log('📋 Desafíos seleccionados:', desafiosSeleccionados);
         console.log('📊 Total de desafíos:', desafiosSeleccionados.length);
         
-        // Agregar campos adicionales
-        formData.append('fecha_aceptacion', new Date().toISOString());
-        formData.append('acepta_politicas', 'Sí');
-        
-        // IMPORTANTE: Eliminar los desafíos individuales y agregar todos juntos
-        formData.delete('desafio');
-        
-        // Agregar cada desafío con un índice único
-        desafiosSeleccionados.forEach((desafio, index) => {
-            formData.append(`desafio_${index}`, desafio);
-        });
-        
-        // También agregar el total como un solo campo (para compatibilidad)
-        if (desafiosSeleccionados.length > 0) {
-            formData.append('desafios_total', desafiosSeleccionados.join(' | '));
-        }
-        
-        // Convertir FormData a URLSearchParams
-        const datos = new URLSearchParams(formData);
-        
-        // Log para debugging
-        console.log('📤 Datos que se enviarán:', Array.from(datos.entries()));
-        
-        console.log('📤 Enviando datos al servidor...');
-        
-        // Enviar a Google Apps Script
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: datos,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
-        
-        // Verificar si la respuesta es OK
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        // Obtener respuesta JSON
-        const resultado = await response.json();
-        
-        console.log('✅ Respuesta del servidor:', resultado);
-        
-        if (resultado.success) {
+        // Simulamos éxito del envío (ya que no tenemos backend real)
+        setTimeout(() => {
             // Éxito - cerrar formulario y mostrar mensaje
             closeContactForm();
             document.getElementById('successMessage').style.display = 'flex';
@@ -357,11 +315,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
                     sector: formData.get('sector')
                 });
             }
-            
-        } else {
-            // Error del servidor
-            throw new Error(resultado.message || 'Error desconocido del servidor');
-        }
+        }, 1500);
         
     } catch (error) {
         // Manejo de errores

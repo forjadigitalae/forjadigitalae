@@ -930,7 +930,7 @@ function generateRecommendations() {
         'vision_estrategia': {
             title: 'Fortalecer Visión Estratégica',
             description: 'Un puntaje bajo aquí sugiere que la empresa podría carecer de un rumbo claro y unificado. Esto puede generar desalineación entre equipos y dificultar la toma de decisiones a largo plazo. Es crucial definir un futuro inspirador y comunicarlo eficazmente.',
-            priority: 'CRÍTICO',
+            priority: 'CRITICO',
             actions: ['Documentar una visión y misión claras y ambiciosas.', 'Desarrollar un plan estratégico a 3-5 años con objetivos medibles (KPIs).', 'Asegurar que cada miembro del equipo entienda cómo su rol contribuye a la visión.']
         },
         'gobierno_empresarial': {
@@ -984,12 +984,12 @@ function generateRecommendations() {
         'finanzas_rentabilidad': {
             title: 'Fortalecer la Gestión Financiera',
             description: 'La salud financiera es la base de todo. Un control deficiente del flujo de caja y la rentabilidad es un riesgo crítico. Es urgente implementar herramientas y procesos para una gestión robusta.',
-            priority: 'CRÍTICO',
+            priority: 'CRITICO',
             actions: ['Implementar un software contable o financiero en la nube.', 'Establecer un proceso de presupuesto mensual y anual.', 'Realizar un análisis de rentabilidad por producto/servicio.']
         }
     };
     
-    return sortedCategories.map(category => {
+    const finalRecommendations = sortedCategories.map(category => {
         const rec = recs[category.id] || recs['vision_estrategia'];
         return {
             ...rec,
@@ -998,6 +998,11 @@ function generateRecommendations() {
             score: category.score
         };
     });
+
+    const priorityOrder = { 'CRITICO': 4, 'ALTO': 3, 'MEDIO': 2, 'BAJO': 1 };
+    finalRecommendations.sort((a, b) => (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0));
+
+    return finalRecommendations;
 }
 
 function getScoreColor(score) {
@@ -1546,13 +1551,13 @@ async function downloadPDF() {
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(...colors.primary);
             doc.text('Comparación por Dimensión', margin, yBenchmark);
-            yBenchmark += 25;
+            yBenchmark += 20;
 
-            const barHeight = 8;
-            const barSpacing = 25;
+            const barHeight = 10;
+            const barGroupSpacing = 40;
             
             categories.forEach(cat => {
-                if (yBenchmark > pageHeight - 100) {
+                if (yBenchmark > pageHeight - 120) {
                     addFooter(doc, pageWidth, pageHeight, logoInfo);
                     doc.addPage();
                     addPageHeader(doc, pageWidth, 'ANÁLISIS COMPETITIVO', logoInfo);
@@ -1561,37 +1566,37 @@ async function downloadPDF() {
 
                 doc.setFontSize(9);
                 doc.setFont('helvetica', 'bold');
-                doc.setTextColor(...colors.gray);
+                doc.setTextColor(...colors.primary);
                 doc.text(cat.name, margin, yBenchmark);
+                yBenchmark += 5;
 
                 const userScore = categoryScores[cat.id] || 0;
                 const pymeScore = pyme_promedio[cat.id] || 0;
                 const liderScore = lider_mercado[cat.id] || 0;
-                const barMaxWidth = contentWidth * 0.6;
-                const chartX = margin + contentWidth * 0.4;
+                const barMaxWidth = contentWidth - 60;
                 
-                const liderColor = hexToRgbArray(obtenerColorPorScore(liderScore));
-                const pymeColor = hexToRgbArray(obtenerColorPorScore(pymeScore));
-                const userColor = hexToRgbArray(obtenerColorPorScore(userScore));
+                const items = [
+                    { label: 'Líder', score: liderScore, color: colors.green },
+                    { label: 'PYME', score: pymeScore, color: colors.orange },
+                    { label: 'Tú', score: userScore, color: colors.purple }
+                ];
 
-                // Lider bar (bottom)
-                doc.setFillColor(liderColor[0], liderColor[1], liderColor[2]);
-                doc.roundedRect(chartX, yBenchmark - barHeight / 2, (liderScore / 100) * barMaxWidth, barHeight, 3, 3, 'F');
+                items.forEach(item => {
+                    yBenchmark += 12;
+                    doc.setFontSize(7);
+                    doc.setTextColor(...colors.gray);
+                    doc.text(item.label, margin + 5, yBenchmark + barHeight / 2 + 2);
+                    
+                    doc.setFillColor(item.color[0], item.color[1], item.color[2]);
+                    doc.roundedRect(margin + 35, yBenchmark, (item.score / 100) * barMaxWidth, barHeight, 3, 3, 'F');
+                    
+                    doc.setFontSize(8);
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(item.color[0], item.color[1], item.color[2]);
+                    doc.text(`${item.score}`, margin + 40 + (item.score / 100) * barMaxWidth, yBenchmark + barHeight / 2 + 3);
+                });
                 
-                // Pyme bar (middle)
-                doc.setFillColor(pymeColor[0], pymeColor[1], pymeColor[2]);
-                doc.roundedRect(chartX, yBenchmark - barHeight / 2, (pymeScore / 100) * barMaxWidth, barHeight, 3, 3, 'F');
-                
-                // User bar (top)
-                doc.setFillColor(userColor[0], userColor[1], userColor[2]);
-                doc.roundedRect(chartX, yBenchmark - barHeight / 2, (userScore / 100) * barMaxWidth, barHeight, 3, 3, 'F');
-                
-                doc.setFontSize(8);
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(userColor[0], userColor[1], userColor[2]);
-                doc.text(`${userScore}`, chartX + (userScore / 100) * barMaxWidth + 5, yBenchmark + 2);
-                
-                yBenchmark += barSpacing;
+                yBenchmark += barGroupSpacing - (items.length * 12);
             });
             
             yBenchmark += 15;
@@ -2270,8 +2275,8 @@ function renderBenchmarkRadar(user, pyme, lider) {
     const ctx = canvas.getContext('2d');
     const labels = categories.map(cat => cat.name);
 
-    if (window.radarChartInstance) {
-        window.radarChartInstance.destroy();
+    if (window.benchmarkRadarInstance) {
+        window.benchmarkRadarInstance.destroy();
     }
 
     const userData = categories.map(cat => user[cat.id] || 0);
@@ -2326,5 +2331,5 @@ function renderBenchmarkRadar(user, pyme, lider) {
         }
     };
 
-    window.radarChartInstance = new Chart(ctx, config);
+    window.benchmarkRadarInstance = new Chart(ctx, config);
 }

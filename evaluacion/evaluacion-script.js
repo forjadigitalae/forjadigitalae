@@ -819,6 +819,9 @@ function renderResults() {
     
     // Renderizar recomendaciones
     renderRecommendations();
+
+    // Renderizar componente de benchmarking
+    renderBenchmarkComponent();
 }
 
 function renderRadarChart() {
@@ -1491,7 +1494,151 @@ async function downloadPDF() {
         
         addFooter(doc, pageWidth, pageHeight, logoInfo);
         
-        // ========== PÁGINA 4: PLAN DE ACCIÓN ==========
+        // ========== PÁGINA 4: ANÁLISIS COMPETITIVO ==========
+        doc.addPage();
+        addPageHeader(doc, pageWidth, 'ANÁLISIS COMPETITIVO', logoInfo);
+        
+        let yBenchmark = 140;
+        const benchmarkData = obtenerBenchmarkPorSector(companyData.sector);
+
+        if (benchmarkData) {
+            const { pyme_promedio, lider_mercado } = benchmarkData;
+            const overallScores = {
+                user: calcularScoreGeneral(categoryScores),
+                pyme: calcularScoreGeneral(pyme_promedio),
+                lider: calcularScoreGeneral(lider_mercado)
+            };
+
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(...colors.purple);
+            doc.text(`Comparación con el sector: ${benchmarkData.nombre}`, margin, yBenchmark);
+            
+            yBenchmark += 30;
+
+            // Summary boxes
+            const statBoxWidth = contentWidth / 3 - 15;
+            const statBoxHeight = 60;
+            const statBoxes = [
+                { label: 'Tu Empresa', score: overallScores.user, color: colors.purple },
+                { label: 'PYME Promedio', score: overallScores.pyme, color: colors.orange },
+                { label: 'Líder del Mercado', score: overallScores.lider, color: colors.green }
+            ];
+
+            statBoxes.forEach((box, i) => {
+                const boxX = margin + i * (statBoxWidth + 22.5);
+                doc.setFillColor(...box.color);
+                doc.roundedRect(boxX, yBenchmark, statBoxWidth, statBoxHeight, 8, 8, 'F');
+                
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(...colors.white);
+                doc.text(box.label, boxX + statBoxWidth / 2, yBenchmark + 25, { align: 'center' });
+                
+                doc.setFontSize(18);
+                doc.text(`${box.score}%`, boxX + statBoxWidth / 2, yBenchmark + 48, { align: 'center' });
+            });
+
+            yBenchmark += statBoxHeight + 40;
+
+            // Horizontal bar charts
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(...colors.primary);
+            doc.text('Comparación por Dimensión', margin, yBenchmark);
+            yBenchmark += 25;
+
+            const barHeight = 8;
+            const barSpacing = 25;
+            
+            categories.forEach(cat => {
+                if (yBenchmark > pageHeight - 100) {
+                    addFooter(doc, pageWidth, pageHeight, logoInfo);
+                    doc.addPage();
+                    addPageHeader(doc, pageWidth, 'ANÁLISIS COMPETITIVO', logoInfo);
+                    yBenchmark = 140;
+                }
+
+                doc.setFontSize(9);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(...colors.gray);
+                doc.text(cat.name, margin, yBenchmark);
+
+                const userScore = categoryScores[cat.id] || 0;
+                const pymeScore = pyme_promedio[cat.id] || 0;
+                const liderScore = lider_mercado[cat.id] || 0;
+                const barMaxWidth = contentWidth * 0.6;
+                const chartX = margin + contentWidth * 0.4;
+                
+                const liderColor = hexToRgbArray(obtenerColorPorScore(liderScore));
+                const pymeColor = hexToRgbArray(obtenerColorPorScore(pymeScore));
+                const userColor = hexToRgbArray(obtenerColorPorScore(userScore));
+
+                // Lider bar (bottom)
+                doc.setFillColor(liderColor[0], liderColor[1], liderColor[2]);
+                doc.roundedRect(chartX, yBenchmark - barHeight / 2, (liderScore / 100) * barMaxWidth, barHeight, 3, 3, 'F');
+                
+                // Pyme bar (middle)
+                doc.setFillColor(pymeColor[0], pymeColor[1], pymeColor[2]);
+                doc.roundedRect(chartX, yBenchmark - barHeight / 2, (pymeScore / 100) * barMaxWidth, barHeight, 3, 3, 'F');
+                
+                // User bar (top)
+                doc.setFillColor(userColor[0], userColor[1], userColor[2]);
+                doc.roundedRect(chartX, yBenchmark - barHeight / 2, (userScore / 100) * barMaxWidth, barHeight, 3, 3, 'F');
+                
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(userColor[0], userColor[1], userColor[2]);
+                doc.text(`${userScore}`, chartX + (userScore / 100) * barMaxWidth + 5, yBenchmark + 2);
+                
+                yBenchmark += barSpacing;
+            });
+            
+            yBenchmark += 15;
+
+            // Brechas críticas
+             if (yBenchmark > pageHeight - 120) {
+                addFooter(doc, pageWidth, pageHeight, logoInfo);
+                doc.addPage();
+                addPageHeader(doc, pageWidth, 'ANÁLISIS COMPETITIVO', logoInfo);
+                yBenchmark = 140;
+            }
+
+            const brechas = calcularBrechasCriticas(categoryScores, lider_mercado);
+            const criticas = brechas.filter(b => b.brecha < 0).slice(0, 3);
+            
+            if (criticas.length > 0) {
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(...colors.primary);
+                doc.text('Brechas Críticas vs. Líder del Sector', margin, yBenchmark);
+                yBenchmark += 20;
+
+                doc.setFillColor(254, 226, 226); // Light red background
+                doc.roundedRect(margin, yBenchmark, contentWidth, criticas.length * 25 + 15, 8, 8, 'F');
+
+                criticas.forEach((brecha, i) => {
+                    const catName = getCategoryNameById(brecha.dimension);
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(...colors.primary);
+                    doc.text(`• ${catName}:`, margin + 15, yBenchmark + 20 + (i * 25));
+                    
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(...colors.gray);
+                    doc.text(`Tu score es de ${categoryScores[brecha.dimension]}, mientras que el líder tiene ${lider_mercado[brecha.dimension]}.`, margin + 120, yBenchmark + 20 + (i * 25));
+                });
+            }
+
+        } else {
+            doc.setFontSize(12);
+            doc.setTextColor(...colors.gray);
+            doc.text('No hay datos de benchmarking disponibles para este sector.', pageWidth/2, yBenchmark, { align: 'center' });
+        }
+
+        addFooter(doc, pageWidth, pageHeight, logoInfo);
+
+        // ========== PÁGINA 5: PLAN DE ACCIÓN ==========
         
         doc.addPage();
         addPageHeader(doc, pageWidth, 'PLAN DE ACCION ESTRATEGICO', logoInfo);
@@ -1624,7 +1771,7 @@ async function downloadPDF() {
         
         addFooter(doc, pageWidth, pageHeight, logoInfo);
         
-        // ========== PÁGINA 5: CTA ==========
+        // ========== PÁGINA 6: CTA ==========
         
         doc.addPage();
         
@@ -1809,11 +1956,11 @@ function addPageHeader(doc, pageWidth, title, logoData) {
     doc.rect(0, 0, pageWidth, headerHeight, 'F');
     
     // Logo pequeño
-    if (logoData) {
+    if (logoData && logoData.data) {
         try {
             const logoWidth = 70;
             const logoHeight = logoWidth / logoData.aspectRatio;
-            doc.addImage(logoData, 'PNG', 40, (headerHeight - logoHeight) / 2, logoWidth, logoHeight);
+            doc.addImage(logoData.data, 'PNG', 40, (headerHeight - logoHeight) / 2, logoWidth, logoHeight);
         } catch (e) {
             console.warn('Error al insertar logo en header:', e);
         }
@@ -2127,26 +2274,30 @@ function renderBenchmarkRadar(user, pyme, lider) {
         window.radarChartInstance.destroy();
     }
 
+    const userData = categories.map(cat => user[cat.id] || 0);
+    const pymeData = categories.map(cat => pyme[cat.id] || 0);
+    const liderData = categories.map(cat => lider[cat.id] || 0);
+
     const data = {
         labels: labels,
         datasets: [
             {
                 label: 'Tu Empresa',
-                data: Object.values(user),
+                data: userData,
                 backgroundColor: 'rgba(133, 96, 192, 0.2)',
                 borderColor: 'rgba(133, 96, 192, 1)',
                 borderWidth: 1
             },
             {
                 label: 'PYME Promedio',
-                data: Object.values(pyme),
+                data: pymeData,
                 backgroundColor: 'rgba(238, 128, 40, 0.2)',
                 borderColor: 'rgba(238, 128, 40, 1)',
                 borderWidth: 1
             },
             {
                 label: 'Líder del Sector',
-                data: Object.values(lider),
+                data: liderData,
                 backgroundColor: 'rgba(16, 185, 129, 0.2)',
                 borderColor: 'rgba(16, 185, 129, 1)',
                 borderWidth: 1

@@ -263,8 +263,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // ===== CONFIGURACIÓN DEL FORMULARIO - CONEXIÓN CON GOOGLE SHEETS =====
-// No se usa Google Sheets por CORS, usamos manejo local
-const SCRIPT_URL = '';
+// URL del script de Google Sheets (mismo que usa la evaluación)
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOV7RjRU9fOPsutSOscgbj-gPD4e5Eh9uLmLU789XqxBzrGWkRzz0p6Ti4o908kt4o/exec';
 
 // Manejar envío del formulario
 document.getElementById('contactForm').addEventListener('submit', async function(e) {
@@ -299,23 +299,60 @@ document.getElementById('contactForm').addEventListener('submit', async function
         console.log('📋 Desafíos seleccionados:', desafiosSeleccionados);
         console.log('📊 Total de desafíos:', desafiosSeleccionados.length);
         
-        // Simulamos éxito del envío (ya que no tenemos backend real)
-        setTimeout(() => {
-            // Éxito - cerrar formulario y mostrar mensaje
-            closeContactForm();
-            document.getElementById('successMessage').style.display = 'flex';
-            
-            // Limpiar formulario
-            this.reset();
-            
-            // Tracking de evento (si tienes analytics configurado)
-            if (typeof trackEvent === 'function') {
-                trackEvent('Formulario_Enviado', {
-                    empresa: formData.get('empresa'),
-                    sector: formData.get('sector')
-                });
-            }
-        }, 1500);
+        // Agregar campos adicionales
+        formData.append('fecha_aceptacion', new Date().toISOString());
+        formData.append('acepta_politicas', 'Sí');
+        formData.append('origen', 'Formulario Principal');
+        
+        // IMPORTANTE: Eliminar los desafíos individuales y agregar todos juntos
+        formData.delete('desafio');
+        
+        // Agregar cada desafío con un índice único
+        desafiosSeleccionados.forEach((desafio, index) => {
+            formData.append(`desafio_${index}`, desafio);
+        });
+        
+        // También agregar el total como un solo campo (para compatibilidad)
+        if (desafiosSeleccionados.length > 0) {
+            formData.append('desafios_total', desafiosSeleccionados.join(' | '));
+        }
+        
+        // Convertir FormData a URLSearchParams
+        const datos = new URLSearchParams(formData);
+        
+        // Log para debugging
+        console.log('📤 Datos que se enviarán:', Array.from(datos.entries()));
+        
+        console.log('📤 Enviando datos al servidor...');
+        
+        // Enviar a Google Apps Script
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: datos,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            mode: 'no-cors' // Importante para evitar errores CORS
+        });
+        
+        // Debido a mode: 'no-cors', no podemos verificar la respuesta
+        // Asumimos éxito si no hay error en el fetch
+        console.log('✅ Datos enviados correctamente');
+        
+        // Éxito - cerrar formulario y mostrar mensaje
+        closeContactForm();
+        document.getElementById('successMessage').style.display = 'flex';
+        
+        // Limpiar formulario
+        this.reset();
+        
+        // Tracking de evento (si tienes analytics configurado)
+        if (typeof trackEvent === 'function') {
+            trackEvent('Formulario_Enviado', {
+                empresa: formData.get('empresa'),
+                sector: formData.get('sector')
+            });
+        }
         
     } catch (error) {
         // Manejo de errores

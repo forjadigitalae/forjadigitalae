@@ -2290,3 +2290,43 @@ function renderBenchmarkRadar(user, pyme, lider) {
 
     window.benchmarkRadarInstance = new Chart(ctx, config);
 }
+
+function getCategoryStatusClass(categoryIndex) {
+    const category = categories[categoryIndex];
+    const answeredQuestions = category.questions.filter(q => 
+        appState.evaluationData.answers[q.id] !== undefined
+    ).length;
+    
+    const isCompleted = answeredQuestions === category.questions.length;
+    
+    return isCompleted ? 'completed' : '';
+}
+
+function getCategoryProgress(categoryIndex) {
+    const category = categories[categoryIndex];
+    const answeredQuestions = category.questions.filter(q => 
+        appState.evaluationData.answers[q.id] !== undefined
+    ).length;
+    
+    return answeredQuestions;
+}
+
+const sidebar = document.getElementById('evaluationSidebar');
+sidebar.innerHTML = `
+    <div class="card">
+        <div class="card-body">
+            <h3 class="text-h3 mb-6">Tu Progreso</h3>
+            <div class="category-list" id="categoryList">
+                ${categories.map((cat, index) => `
+                    <div class="category-item ${getCategoryStatusClass(index)}">
+                        <div class="category-icon">${cat.icon}</div>
+                        <div class="category-info">
+                            <div class="font-semibold">${cat.name}</div>
+                            <div class="text-sm text-gray-600">${getCategoryProgress(index)} / ${cat.questions.length} preguntas</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    </div>
+`;

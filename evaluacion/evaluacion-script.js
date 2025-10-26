@@ -2018,3 +2018,162 @@ window.addEventListener('error', function(e) {
 
 console.log('%c🚀 ForjaDigitalAE - Evaluación inicializada correctamente', 'color: #4CCED5; font-size: 16px; font-weight: bold;');
 console.log('%c📊 Versión: 4.0 - Separación Modular', 'color: #EE8028; font-size: 12px;')
+
+function renderBenchmarkComponent() {
+    const container = document.getElementById('benchmarkContainer');
+    if (!container) return;
+
+    const userScores = appState.evaluationData.categoryScores;
+    const userSector = appState.companyData.sector;
+    const benchmarkData = obtenerBenchmarkPorSector(userSector);
+
+    if (!benchmarkData) {
+        container.innerHTML = `<p>No hay datos de benchmarking disponibles para el sector '${userSector}'.</p>`;
+        return;
+    }
+
+    const { pyme_promedio, lider_mercado } = benchmarkData;
+    const overallScores = {
+        user: calcularScoreGeneral(userScores),
+        pyme: calcularScoreGeneral(pyme_promedio),
+        lider: calcularScoreGeneral(lider_mercado)
+    };
+
+    const percentile = calcularPercentil(overallScores.user, overallScores.pyme, overallScores.lider);
+    const position = obtenerPosicionMercado(percentile);
+    const brechas = calcularBrechasCriticas(userScores, lider_mercado);
+
+    container.innerHTML = `
+        <!-- 1. Resumen Competitivo -->
+        <div class="benchmark-summary">
+            <div class="summary-item">
+                <div class="summary-label">Tu Empresa</div>
+                <div class="summary-score" style="color: #8B5CF6;">${overallScores.user}</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">PYME Promedio</div>
+                <div class="summary-score" style="color: #F97316;">${overallScores.pyme}</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Líder del Sector</div>
+                <div class="summary-score" style="color: #10B981;">${overallScores.lider}</div>
+            </div>
+        </div>
+        <div class="benchmark-progress-bar">
+            <div class="progress-marker user-marker" style="left: ${overallScores.user}%;" title="Tu Empresa: ${overallScores.user}">
+                <span class="marker-label">Tú</span>
+            </div>
+            <div class="progress-marker pyme-marker" style="left: ${overallScores.pyme}%;" title="PYME Promedio: ${overallScores.pyme}">
+                <span class="marker-label">Promedio</span>
+            </div>
+            <div class="progress-marker lider-marker" style="left: ${overallScores.lider}%;" title="Líder: ${overallScores.lider}">
+                <span class="marker-label">Líder</span>
+            </div>
+        </div>
+
+        <!-- 2. Gráfico de Radar Comparativo -->
+        <div class="chart-container" style="height: 400px; margin-top: 2rem;">
+            <canvas id="benchmarkRadarChart"></canvas>
+        </div>
+
+        <!-- 3. Tabla de Análisis de Brechas -->
+        <h3 class="text-h3 mt-8 mb-4">Análisis de Brechas Competitivas</h3>
+        <div class="gap-analysis-table">
+            <div class="table-header">
+                <div>Dimensión</div>
+                <div>Tu Score</div>
+                <div>Brecha vs Promedio</div>
+                <div>Brecha vs Líder</div>
+                <div>Prioridad</div>
+            </div>
+            ${categories.map(cat => {
+                const userScore = userScores[cat.id] || 0;
+                const pymeScore = pyme_promedio[cat.id] || 0;
+                const liderScore = lider_mercado[cat.id] || 0;
+                const gapPyme = userScore - pymeScore;
+                const gapLider = userScore - liderScore;
+                const brechaInfo = brechas.find(b => b.dimension === cat.id) || { prioridad: 'Baja' };
+
+                return `
+                <div class="table-row">
+                    <div>${cat.name}</div>
+                    <div><strong>${userScore}</strong></div>
+                    <div style="color: ${gapPyme >= 0 ? '#10B981' : '#EF4444'};">${gapPyme >= 0 ? '+' : ''}${gapPyme}</div>
+                    <div style="color: ${gapLider >= 0 ? '#10B981' : '#EF4444'};">${gapLider >= 0 ? '+' : ''}${gapLider}</div>
+                    <div><span class="priority-pill ${brechaInfo.prioridad.toLowerCase()}">${brechaInfo.prioridad}</span></div>
+                </div>
+                `;
+            }).join('')}
+        </div>
+
+        <!-- 4. Interpretación de Posición -->
+        <div class="position-interpretation ${position.class}">
+            <h4>${position.title} (Top ${percentile}%)</h4>
+            <p>${position.message}</p>
+        </div>
+    `;
+
+    renderBenchmarkRadar(userScores, pyme_promedio, lider_mercado);
+}
+
+function renderBenchmarkRadar(user, pyme, lider) {
+    const canvas = document.getElementById('benchmarkRadarChart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const labels = categories.map(cat => cat.name);
+
+    if (window.radarChartInstance) {
+        window.radarChartInstance.destroy();
+    }
+
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Tu Empresa',
+                data: Object.values(user),
+                backgroundColor: 'rgba(133, 96, 192, 0.2)',
+                borderColor: 'rgba(133, 96, 192, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'PYME Promedio',
+                data: Object.values(pyme),
+                backgroundColor: 'rgba(238, 128, 40, 0.2)',
+                borderColor: 'rgba(238, 128, 40, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Líder del Sector',
+                data: Object.values(lider),
+                backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                borderColor: 'rgba(16, 185, 129, 1)',
+                borderWidth: 1
+            }
+        ]
+    };
+
+    const config = {
+        type: 'radar',
+        data: data,
+        options: {
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        stepSize: 20
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    };
+
+    window.radarChartInstance = new Chart(ctx, config);
+}

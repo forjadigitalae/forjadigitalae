@@ -266,7 +266,7 @@ async function handleRegistrationSubmit(event) {
 
     // Recolectar desafíos de checkboxes
     const desafios = [];
-    document.querySelectorAll('input[name="desafios"]:checked').forEach(checkbox => {
+    document.querySelectorAll('input[name="desafio"]:checked').forEach(checkbox => {
         desafios.push(checkbox.value);
     });
     formData.append('desafios_total', desafios.join(' | '));
@@ -275,26 +275,28 @@ async function handleRegistrationSubmit(event) {
     const mappedData = {
         action: 'register',
         nombre_contacto: formData.get('contactName'),
-        email: formData.get('contactEmail'),
-        telefono: formData.get('contactPhone'),
-        cargo: formData.get('contactRole'),
+        email: formData.get('email'),
+        telefono: formData.get('phone'),
+        cargo: formData.get('role'),
         empresa: formData.get('companyName'),
-        sector: formData.get('companySector'),
-        empleados: formData.get('companySize'),
-        tiempo_operacion: formData.get('companyYears'),
-        ubicacion: formData.get('companyLocation'),
-        sitio_web: formData.get('companyWebsite'),
-        desafios_total: formData.get('desafios_total'),
-        objetivo: formData.get('mainGoal'),
-        plazo_resultados: formData.get('resultTimeframe'),
-        como_conocio: formData.get('howFound'),
-        presupuesto: formData.get('budget'),
-        equipo_tecnico: formData.get('hasTeam'),
-        urgencia: formData.get('urgency'),
-        area_dolor: formData.get('painArea'),
-        horario_contacto: formData.get('contactTime'),
-        terminos: formData.get('terms')
+        sector: formData.get('sector'),
+        empleados: formData.get('size'),
+        tiempo_operacion: formData.get('years'),
+        ubicacion: formData.get('location'),
+        sitio_web: formData.get('website'),
+        desafio: desafios.join(' | '),
+        objetivo: formData.get('objetivo'),
+        plazo_resultados: formData.get('plazo'),
+        como_conocio: formData.get('conocimiento'),
+        presupuesto: formData.get('presupuesto'),
+        equipo_tecnico: formData.get('equipoTecnico'),
+        urgencia: formData.get('urgencia'),
+        area_dolor: formData.get('areaDolor'),
+        horario_contacto: formData.get('horario'),
+        terminos: formData.get('terminos')
     };
+
+    console.log('Datos mapeados para enviar:', mappedData);
 
     // Crear un nuevo FormData con los datos mapeados
     const finalFormData = new FormData();
@@ -305,6 +307,7 @@ async function handleRegistrationSubmit(event) {
     }
 
     try {
+        showLoading('Enviando datos...');
         const response = await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             body: finalFormData
@@ -312,17 +315,20 @@ async function handleRegistrationSubmit(event) {
 
         const result = await response.json();
 
-        if (result.success && result.data.id_lead) {
+        if (result.success && result.data && result.data.id_lead) {
             console.log('Registro exitoso. ID Lead:', result.data.id_lead);
             showToast('¡Registro completado!', 'success');
             
             // Guardar datos y el ID del Lead para el envío de scores
-            appState.companyData = Object.fromEntries(finalFormData.entries());
+            appState.companyData = {
+                name: mappedData.empresa,
+                email: mappedData.email,
+                sector: mappedData.sector
+            };
             appState.id_lead = result.data.id_lead; // Este es el ID que usaremos como ID Evaluacion
             saveState();
 
-            // Ocultar modal y mostrar evaluación
-            document.getElementById('registrationModal').classList.add('hidden');
+            // Mostrar evaluación
             showSection('evaluation');
             renderCurrentQuestion();
             renderSidebar();
@@ -333,8 +339,9 @@ async function handleRegistrationSubmit(event) {
 
     } catch (error) {
         console.error('Error en el envío del formulario:', error);
-        showToast(error.message, 'error');
+        showToast('Error al enviar el formulario: ' + (error.message || 'Error desconocido'), 'error');
     } finally {
+        hideLoading();
         submitButton.disabled = false;
         submitButton.innerHTML = originalButtonText;
     }
@@ -775,16 +782,25 @@ function nextQuestion() {
 }
 
 // ===== FINALIZACIÓN Y RESULTADOS =====
-function finishEvaluation() {
+async function finishEvaluation() {
     showLoading('Calculando resultados...');
     
-    setTimeout(() => {
+    try {
+        // Calcular puntuaciones
         calculateScores();
-        sendDataToGoogleSheets();
+        
+        // Mostrar sección de resultados
         showSection('results');
         renderResults();
+        
+        // No es necesario llamar a sendDataToGoogleSheets() aquí
+        // ya que renderResults() llama a renderBenchmarkComponent() que envía los datos
+    } catch (error) {
+        console.error('Error al finalizar la evaluación:', error);
+        showToast('Error al procesar los resultados', 'error');
+    } finally {
         hideLoading();
-    }, 1500);
+    }
 }
 
 function calculateScores() {
@@ -1059,41 +1075,9 @@ function getScoreDescription(score) {
 }
 
 // ===== ENVÍO A GOOGLE SHEETS =====
-async function sendDataToGoogleSheets() {
-    try {
-        // Validar que tenemos datos mínimos
-        if (!appState.companyData.name || !appState.companyData.email) {
-            console.warn('⚠️ Datos de empresa incompletos, no se enviarán a Google Sheets');
-            return;
-        }
-
-        const payload = {
-            timestamp: new Date().toISOString(),
-            companyData: appState.companyData,
-            evaluationData: {
-                totalScore: appState.evaluationData.totalScore || 0,
-                maturityLevel: appState.evaluationData.maturityLevel || { level: 'N/A', description: 'Sin datos' },
-                categoryScores: appState.evaluationData.categoryScores || {},
-                answers: appState.evaluationData.answers || {}
-            },
-            consent: appState.consent
-        };
-
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload)
-        });
-
-        console.log('✅ Datos enviados a Google Sheets');
-    } catch (error) {
-        console.error('❌ Error enviando datos:', error);
-        // No mostrar error al usuario para no interrumpir la experiencia
-    }
-}
+// Las funciones para enviar datos a Google Sheets ahora son:
+// - sendScoresToSheet: para enviar los scores generales
+// - sendEvaluationDataToSheet: para enviar los datos detallados de la evaluación
 
 // ===== FUNCIONES AUXILIARES =====
 function generateUUID() {
@@ -2301,6 +2285,7 @@ async function sendScoresToSheet(categoryScores, overallScores, percentile) {
     formData.append('benchmark_percentil', percentile || 0);
 
     try {
+        showLoading('Guardando resultados...');
         const response = await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             body: formData
@@ -2310,12 +2295,15 @@ async function sendScoresToSheet(categoryScores, overallScores, percentile) {
 
         if (result.success) {
             console.log('Scores enviados y actualizados en Google Sheets con éxito.');
+            showToast('Resultados guardados correctamente', 'success');
         } else {
             throw new Error(result.message || 'Error desconocido al actualizar scores.');
         }
     } catch (error) {
         console.error('Error al enviar los scores:', error);
-        // Opcional: Podríamos mostrar un toast no intrusivo si falla
+        showToast('Error al guardar los resultados', 'error');
+    } finally {
+        hideLoading();
     }
 }
 
@@ -2457,15 +2445,15 @@ sidebar.innerHTML = `
 `;
 
 async function sendEvaluationDataToSheet(categoryScores) {
-    if (!appState.id_lead || !appState.companyData.empresa) {
+    if (!appState.id_lead || !appState.companyData.name) {
         console.warn('No hay ID de Evaluación o nombre de empresa para enviar el detalle.');
         return;
     }
 
     const idEvaluacion = appState.id_lead;
-    const empresa = appState.companyData.empresa;
+    const empresa = appState.companyData.name;
     const timestamp = new Date().toISOString();
-    const finalScore = calcularScoreGeneral(appState.evaluationData.answers);
+    const finalScore = calcularScoreGeneral(categoryScores);
     const maturityLevel = getMaturityLevel(finalScore).level;
 
     const evaluationData = [];
@@ -2506,6 +2494,7 @@ async function sendEvaluationDataToSheet(categoryScores) {
     formData.append('data', JSON.stringify(evaluationData));
 
     try {
+        showLoading('Guardando evaluación detallada...');
         const response = await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             body: formData
@@ -2513,10 +2502,14 @@ async function sendEvaluationDataToSheet(categoryScores) {
         const result = await response.json();
         if (result.success) {
             console.log('Datos detallados de la evaluación enviados con éxito.');
+            showToast('Evaluación guardada correctamente', 'success');
         } else {
             throw new Error(result.message || 'Error desconocido al guardar el detalle de la evaluación.');
         }
     } catch (error) {
         console.error('Error al enviar el detalle de la evaluación:', error);
+        showToast('Error al guardar la evaluación detallada', 'error');
+    } finally {
+        hideLoading();
     }
 }

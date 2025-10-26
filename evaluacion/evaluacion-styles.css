@@ -1550,7 +1550,7 @@ body.section-view::before {
 .benchmark-stat-card.lider-score .stat-score { color: var(--success-500); }
 
 .benchmark-chart-col {
-    position: sticky;
+    /* position: sticky; /* Eliminado para evitar problemas de solapamiento */
     top: 2rem;
 }
 

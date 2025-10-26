@@ -2280,18 +2280,49 @@ function renderBenchmarkRadar(user, pyme, lider) {
         type: 'radar',
         data: data,
         options: {
-            scales: {
-                r: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: {
-                        stepSize: 20
-                    }
-                }
-            },
+            responsive: true,
+            maintainAspectRatio: false, // Clave para que el gráfico se ajuste al contenedor
             plugins: {
                 legend: {
                     position: 'top',
+                    labels: {
+                        font: {
+                            size: 12
+                        }
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    top: 10,
+                    bottom: 10,
+                    left: 20,
+                    right: 20
+                }
+            },
+            scales: {
+                r: {
+                    angleLines: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)'
+                    },
+                    pointLabels: {
+                        font: {
+                            size: 12
+                        },
+                        color: '#33487A',
+                    },
+                    ticks: {
+                        backdropColor: 'transparent',
+                        color: '#6c757d',
+                        font: {
+                            size: 10
+                        }
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 100
                 }
             }
         }

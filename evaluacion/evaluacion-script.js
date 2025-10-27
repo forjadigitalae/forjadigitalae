@@ -2362,7 +2362,7 @@ function renderBenchmarkComponent() {
     // Enviar los scores a Google Sheets en segundo plano
     sendScoresToSheet(userScores, overallScores, percentile);
     // NUEVO: Enviar el detalle de la evaluación a la otra hoja
-    sendEvaluationDataToSheet(categoryScores);
+    sendEvaluationDataToSheet(userScores);
 }
 
 async function sendScoresToSheet(categoryScores, overallScores, percentile) {
@@ -2635,6 +2635,8 @@ function renderSidebar() {
 }
 
 async function sendEvaluationDataToSheet(categoryScores) {
+    console.log('Iniciando envío de datos detallados de evaluación a Google Sheets...');
+    
     if (!appState.id_lead || !appState.companyData.name) {
         console.warn('No hay ID de Evaluación o nombre de empresa para enviar el detalle.');
         return;
@@ -2643,6 +2645,20 @@ async function sendEvaluationDataToSheet(categoryScores) {
     const idEvaluacion = appState.id_lead;
     const empresa = appState.companyData.name;
     const timestamp = new Date().toISOString();
+    
+    console.log('Datos para envío:', {
+        id_lead: idEvaluacion,
+        empresa: empresa,
+        categoryScores: categoryScores
+    });
+    
+    // Asegurarnos que categoryScores sea un objeto válido
+    if (!categoryScores || typeof categoryScores !== 'object') {
+        console.error('Error: categoryScores no es un objeto válido', categoryScores);
+        showToast('Error al guardar evaluación: datos de categorías no válidos', 'error');
+        return;
+    }
+    
     const finalScore = calcularScoreGeneral(categoryScores);
     const maturityLevel = getMaturityLevel(finalScore).level;
 
@@ -2699,6 +2715,12 @@ async function sendEvaluationDataToSheet(categoryScores) {
             const chunk = dataChunks[i];
             console.log(`Enviando bloque ${i+1} de ${dataChunks.length}...`, chunk);
             showLoading(`Guardando bloque ${i+1} de ${dataChunks.length}...`);
+            
+            // Verificar que el chunk tenga datos
+            if (!chunk || !Array.isArray(chunk) || chunk.length === 0) {
+                console.warn(`Bloque ${i+1} vacío o inválido, saltando...`);
+                continue;
+            }
             
             // Método alternativo: Usar iframe oculto para enviar el formulario
             const iframeId = 'hiddenIframeEval' + new Date().getTime();
@@ -2790,6 +2812,19 @@ async function sendEvaluationDataToSheet(categoryScores) {
         
         console.log('✅ Datos detallados de la evaluación enviados con éxito a la hoja Rt/:Madurez');
         showToast('Evaluación guardada correctamente', 'success');
+        
+        // Mostrar mensaje adicional para confirmar el guardado
+        const resultadosSection = document.getElementById('results');
+        if (resultadosSection) {
+            const confirmacionDiv = document.createElement('div');
+            confirmacionDiv.className = 'save-confirmation';
+            confirmacionDiv.innerHTML = `
+                <div style="background-color: #d1fae5; border-left: 4px solid #10b981; padding: 15px; margin: 20px 0; border-radius: 4px;">
+                    <p style="margin: 0; color: #065f46; font-weight: 500;">✅ Evaluación guardada exitosamente en Google Sheets</p>
+                </div>
+            `;
+            resultadosSection.prepend(confirmacionDiv);
+        }
     } catch (error) {
         console.error('Error al enviar el detalle de la evaluación:', error);
         showToast('Error al guardar la evaluación detallada: ' + error.message, 'error');

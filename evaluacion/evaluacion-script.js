@@ -2812,19 +2812,6 @@ async function sendEvaluationDataToSheet(categoryScores) {
         
         console.log('✅ Datos detallados de la evaluación enviados con éxito a la hoja Rt/:Madurez');
         showToast('Evaluación guardada correctamente', 'success');
-        
-        // Mostrar mensaje adicional para confirmar el guardado
-        const resultadosSection = document.getElementById('results');
-        if (resultadosSection) {
-            const confirmacionDiv = document.createElement('div');
-            confirmacionDiv.className = 'save-confirmation';
-            confirmacionDiv.innerHTML = `
-                <div style="background-color: #d1fae5; border-left: 4px solid #10b981; padding: 15px; margin: 20px 0; border-radius: 4px;">
-                    <p style="margin: 0; color: #065f46; font-weight: 500;">✅ Evaluación guardada exitosamente en Google Sheets</p>
-                </div>
-            `;
-            resultadosSection.prepend(confirmacionDiv);
-        }
     } catch (error) {
         console.error('Error al enviar el detalle de la evaluación:', error);
         showToast('Error al guardar la evaluación detallada: ' + error.message, 'error');

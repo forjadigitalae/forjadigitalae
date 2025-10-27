@@ -1219,17 +1219,18 @@ function loadSavedState() {
             // Validar estructura básica del estado guardado
             if (savedState && typeof savedState === 'object') {
                 savedState.consent = appState.consent;
+                
+                // Guardar la sección actual (landing) antes de cargar el estado
+                const currentSection = appState.currentSection;
+                
+                // Cargar el resto del estado guardado
                 appState = { ...appState, ...savedState };
                 
-                if (appState.currentSection && appState.currentSection !== 'landing') {
-                    showSection(appState.currentSection);
-                    if (appState.currentSection === 'evaluation') {
-                        renderCategoryProgress();
-                        renderCurrentQuestion();
-                    } else if (appState.currentSection === 'results') {
-                        renderResults();
-                    }
-                }
+                // Forzar que se mantenga en la sección de landing
+                appState.currentSection = currentSection;
+                
+                // No cambiamos la sección, permanecemos en landing
+                console.log('Estado cargado, pero manteniendo sección de landing');
             }
             console.log('✅ Estado guardado cargado correctamente');
         }
@@ -2199,7 +2200,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
+    // Forzar mostrar la sección de landing al inicio, independientemente del estado guardado
     showSection('landing');
+    
+    // Resetear el estado actual para asegurar que siempre comience en landing
+    appState.currentSection = 'landing';
+    
+    // Cargar estado guardado (pero sin cambiar la sección actual)
     loadSavedState();
     initEventListeners();
     

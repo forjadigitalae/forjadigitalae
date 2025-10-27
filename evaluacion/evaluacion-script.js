@@ -536,6 +536,9 @@ function updateGlobalProgress() {
 
 // Función de celebración al completar 100%
 function celebrateCompletion() {
+    // Esta función ahora solo se usa cuando se completa el 100% de la evaluación
+    // y se llama desde updateGlobalProgress
+    
     // Crear efecto de confetti (opcional - requiere librería canvas-confetti)
     // Si no quieres instalar librería, comenta esta parte
     if (typeof confetti === 'function') {
@@ -546,8 +549,7 @@ function celebrateCompletion() {
         });
     }
     
-    // Mostrar mensaje de felicitación
-    showToast('🎉 ¡Felicitaciones! Has completado todas las preguntas', 'success');
+    // Ya no mostramos el mensaje aquí, solo se mostrará al finalizar la evaluación
 }
 
 function renderCurrentQuestion() {
@@ -847,6 +849,8 @@ function nextQuestion() {
         appState.evaluationData.currentCategory++;
         appState.evaluationData.currentQuestion = 0;
     } else {
+        // Solo mostrar mensaje de felicitación al finalizar toda la evaluación
+        showToast('🎉 ¡Felicitaciones! Has completado todas las preguntas', 'success');
         finishEvaluation();
         return;
     }
@@ -2200,14 +2204,28 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    // Forzar mostrar la sección de landing al inicio, independientemente del estado guardado
+    // Limpiar estado anterior para evitar que aparezcan las marcas de verificación incorrectas
+    localStorage.removeItem('pymeEvaluationState');
+    
+    // Inicializar el estado de la aplicación
+    appState = {
+        currentSection: 'landing',
+        companyData: {},
+        evaluationData: {
+            currentCategory: 0,
+            currentQuestion: 0,
+            answers: {},
+            categoryScores: {}
+        },
+        consent: {
+            essential: true,
+            communications: false,
+            benchmarking: false
+        }
+    };
+    
+    // Forzar mostrar la sección de landing al inicio
     showSection('landing');
-    
-    // Resetear el estado actual para asegurar que siempre comience en landing
-    appState.currentSection = 'landing';
-    
-    // Cargar estado guardado (pero sin cambiar la sección actual)
-    loadSavedState();
     initEventListeners();
     
     // Precargar recursos críticos

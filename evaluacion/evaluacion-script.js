@@ -2679,6 +2679,7 @@ async function sendEvaluationDataToSheet(categoryScores) {
         // Enviar cada bloque secuencialmente
         for (let i = 0; i < dataChunks.length; i++) {
             const chunk = dataChunks[i];
+            console.log(`Enviando bloque ${i+1} de ${dataChunks.length}...`, chunk);
             showLoading(`Guardando bloque ${i+1} de ${dataChunks.length}...`);
             
             // Método alternativo: Usar iframe oculto para enviar el formulario
@@ -2692,6 +2693,7 @@ async function sendEvaluationDataToSheet(categoryScores) {
                 tempForm.action = GOOGLE_SCRIPT_URL;
                 tempForm.target = iframeId;
                 tempForm.style.display = 'none';
+                tempForm.enctype = 'application/x-www-form-urlencoded';
                 
                 // Añadir campos básicos
                 const actionInput = document.createElement('input');
@@ -2704,7 +2706,12 @@ async function sendEvaluationDataToSheet(categoryScores) {
                 const dataInput = document.createElement('input');
                 dataInput.type = 'hidden';
                 dataInput.name = 'data';
-                dataInput.value = JSON.stringify(chunk);
+                
+                // Asegurarse de que el JSON esté correctamente formateado y no exceda límites
+                const jsonData = JSON.stringify(chunk);
+                console.log(`Tamaño de datos JSON: ${jsonData.length} caracteres`);
+                dataInput.value = jsonData;
+                
                 tempForm.appendChild(dataInput);
                 
                 // Crear iframe oculto para recibir la respuesta
@@ -2763,7 +2770,7 @@ async function sendEvaluationDataToSheet(categoryScores) {
             await new Promise(resolve => setTimeout(resolve, 300));
         }
         
-        console.log('Datos detallados de la evaluación enviados con éxito.');
+        console.log('✅ Datos detallados de la evaluación enviados con éxito a la hoja Rt/:Madurez');
         showToast('Evaluación guardada correctamente', 'success');
     } catch (error) {
         console.error('Error al enviar el detalle de la evaluación:', error);

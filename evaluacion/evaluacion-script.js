@@ -1368,7 +1368,7 @@ async function downloadPDF() {
         let y = 100;
         
         // Título principal
-        doc.setFontSize(36);
+        doc.setFontSize(30);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(39, 50, 90);
         doc.text('REPORTE DE MADUREZ', pageWidth/2, y, { align: 'center' });
@@ -1382,7 +1382,7 @@ async function downloadPDF() {
         y += 40; // Espacio para el subtítulo
         
         // Subtítulo
-        doc.setFontSize(32);
+        doc.setFontSize(30);
         doc.setTextColor(133, 96, 192);
         doc.text('EMPRESARIAL', pageWidth/2, y, { align: 'center' });
         
@@ -1899,13 +1899,13 @@ async function downloadPDF() {
         
         if (logoInfo) {
             try {
-                const logoWidth = 80;
+                const logoWidth = 100;
                 const logoHeight = logoWidth / logoInfo.aspectRatio;
-                doc.addImage(logoInfo.data, 'PNG', margin, y + 30, logoWidth, logoHeight);
+                doc.addImage(logoInfo.data, 'PNG', margin, y + 50, logoWidth, logoHeight);
             } catch (e) {}
         }
         
-        doc.setFontSize(24);
+        doc.setFontSize(20);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(...colors.white);
         doc.text('¿LISTO PARA TRANSFORMAR', pageWidth/2, y + 50, { align: 'center' });
@@ -1917,7 +1917,7 @@ async function downloadPDF() {
         doc.text('Nuestro equipo puede acompañarte en cada etapa.', pageWidth/2, y + 118, { align: 'center' });
         
         y = 220;
-        doc.setFontSize(16);
+        doc.setFontSize(18);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(...colors.primary);
         doc.text('NUESTROS SERVICIOS', pageWidth/2, y, { align: 'center' });
@@ -1998,10 +1998,10 @@ async function downloadPDF() {
         // Logo pequeño en la sección de contacto exactamente como en la imagen
         if (logoInfo) {
             try {
-                const contactLogoWidth = 40;
+                const contactLogoWidth = 70;
                 const contactLogoHeight = contactLogoWidth / logoInfo.aspectRatio;
-                const contactLogoX = 70;
-                const contactLogoY = y + 10;
+                const contactLogoX = 100;
+                const contactLogoY = y + 40;
                 doc.addImage(logoInfo.data, 'PNG', contactLogoX, contactLogoY, contactLogoWidth, contactLogoHeight);
             } catch (e) {
                 console.warn('Error al insertar logo en contacto:', e);

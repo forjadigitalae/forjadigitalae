@@ -1280,7 +1280,34 @@ async function downloadPDF() {
         const categoryScores = evaluationData.categoryScores || {};
         
         // CORRECCIÓN 1: Función para cargar logo manteniendo proporción
+        // Función para cargar el logo principal (primera página)
         async function loadLogo() {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const aspectRatio = img.width / img.height;
+                    // Aumentamos el tamaño del logo para la primera página
+                    const targetWidth = 500; // Mayor tamaño para la portada
+                    const targetHeight = targetWidth / aspectRatio;
+                    
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+                    resolve({
+                        data: canvas.toDataURL('image/png'),
+                        aspectRatio: aspectRatio
+                    });
+                };
+                img.onerror = () => resolve(null);
+                img.src = 'https://forjadigitalae.github.io/LOGO%20F_OSC.png';
+            });
+        }
+        
+        // Función para cargar el logo para las páginas interiores (2-5)
+        async function loadInteriorLogo() {
             return new Promise((resolve) => {
                 const img = new Image();
                 img.crossOrigin = 'anonymous';
@@ -1300,11 +1327,13 @@ async function downloadPDF() {
                     });
                 };
                 img.onerror = () => resolve(null);
-                img.src = 'https://forjadigitalae.github.io/LOGO%20F_OSC.png';
+                // Usamos LOGO COLOR para las páginas interiores
+                img.src = '../LOGO COLOR.png';
             });
         }
         
         const logoInfo = await loadLogo();
+        const interiorLogoInfo = await loadInteriorLogo();
         
         // ========== PÁGINA 1: PORTADA ==========
         
@@ -1314,7 +1343,7 @@ async function downloadPDF() {
         // Logo con proporción correcta
         if (logoInfo) {
             try {
-                const logoWidth = 100;
+                const logoWidth = 150; // Aumentamos el tamaño del logo en la portada
                 const logoHeight = logoWidth / logoInfo.aspectRatio;
                 doc.addImage(logoInfo.data, 'PNG', margin, 20, logoWidth, logoHeight);
             } catch (e) {
@@ -1332,13 +1361,13 @@ async function downloadPDF() {
         doc.text('Arquitectura Empresarial & Transformacion Digital', pageWidth - margin, 60, { align: 'right' });
         
         let y = 140;
-        doc.setFontSize(36);
+        doc.setFontSize(42); // Aumentamos el tamaño del encabezado
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(...colors.primary);
         doc.text('REPORTE DE MADUREZ', pageWidth/2, y, { align: 'center' });
         
         y += 45;
-        doc.setFontSize(32);
+        doc.setFontSize(38); // Aumentamos el tamaño del encabezado
         doc.setTextColor(...colors.purple);
         doc.text('EMPRESARIAL', pageWidth/2, y, { align: 'center' });
         
@@ -1464,12 +1493,12 @@ async function downloadPDF() {
         createStatBox(statsX + statsWidth + 15, statsY, '50', 'Preguntas', colors.turquoise);
         createStatBox(statsX + (statsWidth + 15) * 2, statsY, companyData.sector || 'Sector', 'Sector', colors.orange);
         
-        addFooter(doc, pageWidth, pageHeight, logoInfo);
+        addFooter(doc, pageWidth, pageHeight, interiorLogoInfo);
         
         // ========== PÁGINA 2: BARRAS VERTICALES ==========
         
         doc.addPage();
-        addPageHeader(doc, pageWidth, 'ANALISIS POR DIMENSIONES', logoInfo);
+        addPageHeader(doc, pageWidth, 'ANALISIS POR DIMENSIONES', interiorLogoInfo);
         
         y = 140;
         
@@ -1541,12 +1570,12 @@ async function downloadPDF() {
         const textLines = doc.splitTextToSize(explanationText, contentWidth - 40);
         doc.text(textLines, margin + 20, y);
         
-        addFooter(doc, pageWidth, pageHeight, logoInfo);
+        addFooter(doc, pageWidth, pageHeight, interiorLogoInfo);
         
         // ========== PÁGINA 3: PUNTUACIONES DETALLADAS ==========
         
         doc.addPage();
-        addPageHeader(doc, pageWidth, 'PUNTUACIONES DETALLADAS', logoInfo);
+        addPageHeader(doc, pageWidth, 'PUNTUACIONES DETALLADAS', interiorLogoInfo);
         
         y = 140;
         
@@ -1598,9 +1627,9 @@ async function downloadPDF() {
             }
             
             if (y > pageHeight - 200 && index < categories.length - 1) {
-                addFooter(doc, pageWidth, pageHeight, logoInfo);
+                addFooter(doc, pageWidth, pageHeight, interiorLogoInfo);
                 doc.addPage();
-                addPageHeader(doc, pageWidth, 'PUNTUACIONES DETALLADAS', logoInfo);
+                addPageHeader(doc, pageWidth, 'PUNTUACIONES DETALLADAS', interiorLogoInfo);
                 y = 140;
                 cardX = margin;
                 cardCount = 0;
@@ -1609,11 +1638,11 @@ async function downloadPDF() {
         
         // CORRECCIÓN 6: Insights en la misma página (ELIMINADO)
         
-        addFooter(doc, pageWidth, pageHeight, logoInfo);
+        addFooter(doc, pageWidth, pageHeight, interiorLogoInfo);
         
         // ========== PÁGINA 4: ANÁLISIS COMPETITIVO ==========
         doc.addPage();
-        addPageHeader(doc, pageWidth, 'ANÁLISIS COMPETITIVO', logoInfo);
+        addPageHeader(doc, pageWidth, 'ANÁLISIS COMPETITIVO', interiorLogoInfo);
         
         let yBenchmark = 140;
         const benchmarkData = obtenerBenchmarkPorSector(companyData.sector);
@@ -1671,9 +1700,9 @@ async function downloadPDF() {
 
             // Brechas críticas
              if (yBenchmark > pageHeight - 120) {
-                addFooter(doc, pageWidth, pageHeight, logoInfo);
+                addFooter(doc, pageWidth, pageHeight, interiorLogoInfo);
                 doc.addPage();
-                addPageHeader(doc, pageWidth, 'ANÁLISIS COMPETITIVO', logoInfo);
+                addPageHeader(doc, pageWidth, 'ANÁLISIS COMPETITIVO', interiorLogoInfo);
                 yBenchmark = 140;
             }
 
@@ -1709,12 +1738,12 @@ async function downloadPDF() {
             doc.text('No hay datos de benchmarking disponibles para este sector.', pageWidth/2, yBenchmark, { align: 'center' });
         }
 
-        addFooter(doc, pageWidth, pageHeight, logoInfo);
+        addFooter(doc, pageWidth, pageHeight, interiorLogoInfo);
 
         // ========== PÁGINA 5: PLAN DE ACCIÓN ==========
         
         doc.addPage();
-        addPageHeader(doc, pageWidth, 'PLAN DE ACCION ESTRATEGICO', logoInfo);
+        addPageHeader(doc, pageWidth, 'PLAN DE ACCION ESTRATEGICO', interiorLogoInfo);
         
         y = 140;
         
@@ -1747,9 +1776,9 @@ async function downloadPDF() {
         
         topRecommendations.forEach((rec, idx) => {
             if (y > pageHeight - 200) {
-                addFooter(doc, pageWidth, pageHeight, logoInfo);
+                addFooter(doc, pageWidth, pageHeight, interiorLogoInfo);
                 doc.addPage();
-                addPageHeader(doc, pageWidth, 'PLAN DE ACCION ESTRATEGICO', logoInfo);
+                addPageHeader(doc, pageWidth, 'PLAN DE ACCION ESTRATEGICO', interiorLogoInfo);
                 y = 140;
             }
             
@@ -1787,9 +1816,9 @@ async function downloadPDF() {
         });
         
         if (y > pageHeight - 150) {
-            addFooter(doc, pageWidth, pageHeight, logoInfo);
+            addFooter(doc, pageWidth, pageHeight, interiorLogoInfo);
             doc.addPage();
-            addPageHeader(doc, pageWidth, 'CRONOGRAMA SUGERIDO', logoInfo);
+            addPageHeader(doc, pageWidth, 'CRONOGRAMA SUGERIDO', interiorLogoInfo);
             y = 140;
         } else {
             y += 10;
@@ -1842,7 +1871,7 @@ async function downloadPDF() {
             stepX += stepWidth;
         });
         
-        addFooter(doc, pageWidth, pageHeight, logoInfo);
+        addFooter(doc, pageWidth, pageHeight, interiorLogoInfo);
         
         // ========== PÁGINA 6: CTA ==========
         
@@ -1950,7 +1979,7 @@ async function downloadPDF() {
         doc.text('forjadigitalae@gmail.com', pageWidth/2, y + 55, { align: 'center' });
         doc.text('+57-3143265590', pageWidth/2, y + 75, { align: 'center' });
         
-        addFooter(doc, pageWidth, pageHeight, logoInfo);
+        addFooter(doc, pageWidth, pageHeight, interiorLogoInfo);
         
         // Guardar PDF
         const safeCompanyName = (companyData.name || 'Empresa').replace(/[^\w\s]/gi, '').replace(/\s+/g, '_');
@@ -1978,7 +2007,7 @@ function addPageHeader(doc, pageWidth, title, logoInfo) {
     
     if (logoInfo) {
         try {
-            const logoWidth = 70;
+            const logoWidth = 100; // Aumentamos el tamaño del logo en los encabezados
             const logoHeight = logoWidth / logoInfo.aspectRatio;
             doc.addImage(logoInfo.data, 'PNG', 40, (headerHeight - logoHeight) / 2, logoWidth, logoHeight);
         } catch (e) {}
@@ -2031,7 +2060,7 @@ function addPageHeader(doc, pageWidth, title, logoData) {
     // Logo pequeño
     if (logoData && logoData.data) {
         try {
-            const logoWidth = 70;
+            const logoWidth = 100; // Aumentamos el tamaño del logo en los encabezados
             const logoHeight = logoWidth / logoData.aspectRatio;
             doc.addImage(logoData.data, 'PNG', 40, (headerHeight - logoHeight) / 2, logoWidth, logoHeight);
         } catch (e) {

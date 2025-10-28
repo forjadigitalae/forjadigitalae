@@ -397,7 +397,11 @@ async function handleRegistrationSubmit(event) {
             appState.companyData = {
                 name: mappedData.empresa,
                 email: mappedData.email,
-                sector: mappedData.sector
+                sector: mappedData.sector,
+                size: mappedData.empleados,
+                city: mappedData.ubicacion,
+                contactName: mappedData.nombre_contacto,
+                phone: mappedData.telefono
             };
             appState.id_lead = result.data.id_lead; // Este es el ID que usaremos como ID Evaluacion
             autoSave(); // Usamos autoSave en lugar de saveState
@@ -1525,7 +1529,7 @@ async function downloadPDF() {
         
         y += 45;
         doc.setFillColor(...colors.lightGray);
-        doc.roundedRect(margin + 30, y, contentWidth - 60, 70, 8, 8, 'F');
+        doc.roundedRect(margin + 30, y, contentWidth - 60, 90, 8, 8, 'F');
         
         doc.setFontSize(11);
         doc.setFont('helvetica', 'bold');
@@ -1539,8 +1543,8 @@ async function downloadPDF() {
         const evalLines = doc.splitTextToSize(evaluationText, contentWidth - 100);
         doc.text(evalLines, pageWidth/2, y + 42, { align: 'center' });
         
-        // CORRECCIÓN 3: Ajustar espaciado para evitar superposición con el footer
-        y = pageHeight - 160; 
+        // Ajustar espaciado para evitar superposición con el footer y dar más espacio al texto de evaluación
+        y = pageHeight - 180; 
         
         const statsY = y;
         const statsWidth = contentWidth / 3 - 10;
@@ -1553,8 +1557,12 @@ async function downloadPDF() {
             doc.setFontSize(24);
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(...color);
-            doc.text(number, x + statsWidth/2, y + 45, { align: 'center' });
+            doc.text(number, x + statsWidth/2, y + 35, { align: 'center' });
             
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(...colors.gray);
+            doc.text(label, x + statsWidth/2, y + 55, { align: 'center' });
         }
         
         createStatBox(statsX, statsY, '10', 'Dimensiones', colors.purple);

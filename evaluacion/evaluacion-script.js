@@ -1280,7 +1280,7 @@ async function downloadPDF() {
         const categoryScores = evaluationData.categoryScores || {};
         
         // CORRECCIÓN 1: Función para cargar logo manteniendo proporción
-        // Función mejorada para cargar el logo principal con alta calidad (primera y última página)
+        // Función para cargar el logo exactamente como en la imagen
         async function loadLogo() {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -1289,33 +1289,31 @@ async function downloadPDF() {
                     const canvas = document.createElement('canvas');
                     const aspectRatio = img.width / img.height;
                     
-                    // Aumentamos significativamente la resolución para evitar pixelación
-                    const targetWidth = 1200; // Mucho mayor resolución para evitar pixelación
+                    // Usamos un tamaño suficiente para evitar pixelación
+                    const targetWidth = 800;
                     const targetHeight = targetWidth / aspectRatio;
                     
-                    // Configuramos el canvas con alta resolución
                     canvas.width = targetWidth;
                     canvas.height = targetHeight;
                     const ctx = canvas.getContext('2d');
                     
-                    // Aplicamos configuración para mejorar la calidad
+                    // Configuración para calidad
                     ctx.imageSmoothingEnabled = true;
-                    ctx.imageSmoothingQuality = 'high';
                     
-                    // Dibujamos la imagen con alta calidad
+                    // Dibujamos la imagen
                     ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
                     
                     resolve({
-                        data: canvas.toDataURL('image/png', 1.0), // Máxima calidad
+                        data: canvas.toDataURL('image/png'),
                         aspectRatio: aspectRatio
                     });
                 };
                 img.onerror = () => resolve(null);
-                img.src = '../LOGO F_OSC.png'; // Usamos el logo oscuro según lo solicitado
+                img.src = '../LOGO F_OSC.png';
             });
         }
         
-        // Función mejorada para cargar el logo para las páginas interiores (2-5)
+        // Función para cargar el logo para las páginas interiores (2-5)
         async function loadInteriorLogo() {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -1324,29 +1322,23 @@ async function downloadPDF() {
                     const canvas = document.createElement('canvas');
                     const aspectRatio = img.width / img.height;
                     
-                    // Aumentamos significativamente la resolución para evitar pixelación
-                    const targetWidth = 1000; // Mayor resolución para evitar pixelación
+                    const targetWidth = 600;
                     const targetHeight = targetWidth / aspectRatio;
                     
-                    // Configuramos el canvas con alta resolución
                     canvas.width = targetWidth;
                     canvas.height = targetHeight;
                     const ctx = canvas.getContext('2d');
                     
-                    // Aplicamos configuración para mejorar la calidad
                     ctx.imageSmoothingEnabled = true;
-                    ctx.imageSmoothingQuality = 'high';
                     
-                    // Dibujamos la imagen con alta calidad
                     ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
                     
                     resolve({
-                        data: canvas.toDataURL('image/png', 1.0), // Máxima calidad
+                        data: canvas.toDataURL('image/png'),
                         aspectRatio: aspectRatio
                     });
                 };
                 img.onerror = () => resolve(null);
-                // Usamos LOGO COLOR para las páginas interiores
                 img.src = '../LOGO COLOR.png';
             });
         }
@@ -1356,78 +1348,43 @@ async function downloadPDF() {
         
         // ========== PÁGINA 1: PORTADA ==========
         
-        // Creamos un diseño premium para el encabezado
-        // Fondo elegante para la parte superior
-        doc.setFillColor(29, 37, 73); // Azul oscuro más elegante
-        doc.rect(0, 0, pageWidth, 130, 'F');
+        // Encabezado exactamente como en la imagen
+        doc.setFillColor(39, 50, 90); // Azul oscuro
+        doc.rect(0, 0, pageWidth, 75, 'F');
         
-        // Barra decorativa moderna
-        doc.setFillColor(133, 96, 192); // Color púrpura
-        doc.rect(0, 130, pageWidth, 6, 'F');
-        
-        // Logo con proporción correcta y calidad mejorada
+        // Logo como en la imagen
         if (logoInfo) {
             try {
-                const logoWidth = 200; // Tamaño optimizado para calidad
+                const logoWidth = 180;
                 const logoHeight = logoWidth / logoInfo.aspectRatio;
-                // Centramos el logo en la parte superior con más espacio
-                const logoX = (pageWidth - logoWidth) / 2;
-                doc.addImage(logoInfo.data, 'PNG', logoX, 15, logoWidth, logoHeight);
-                
-                // Añadimos un efecto de "brillo" bajo el logo
-                doc.setFillColor(255, 255, 255, 0.1);
-                doc.setDrawColor(255, 255, 255, 0.3);
-                doc.roundedRect(logoX - 10, 15 + logoHeight - 5, logoWidth + 20, 10, 5, 5, 'FD');
+                const logoX = 30; // Posición a la izquierda como en la imagen
+                doc.addImage(logoInfo.data, 'PNG', logoX, 10, logoWidth, logoHeight);
             } catch (e) {
                 console.warn('Error al insertar logo:', e);
             }
         }
         
-        // Diseño premium para el título principal
-        let y = 180; // Mayor espacio desde el logo
+        // Títulos exactamente como en la imagen
+        let y = 100;
         
-        // Creamos un fondo elegante para el título
-        const titleBoxWidth = 450;
-        const titleBoxHeight = 140;
-        const titleBoxX = (pageWidth - titleBoxWidth) / 2;
-        
-        // Fondo del título con borde suave
-        doc.setFillColor(248, 250, 252, 0.95);
-        doc.setDrawColor(133, 96, 192);
-        doc.setLineWidth(2);
-        doc.roundedRect(titleBoxX, y - 40, titleBoxWidth, titleBoxHeight, 10, 10, 'FD');
-        
-        // Título principal con estilo premium
-        doc.setFontSize(52);
+        // Título principal
+        doc.setFontSize(36);
         doc.setFont('helvetica', 'bold');
-        
-        // Efecto de sombra mejorado
-        doc.setTextColor(39, 50, 90, 0.3); // Sombra semi-transparente
-        doc.text('REPORTE DE MADUREZ', pageWidth/2 + 2, y + 2, { align: 'center' }); // Sombra
-        
-        // Texto principal
         doc.setTextColor(39, 50, 90);
         doc.text('REPORTE DE MADUREZ', pageWidth/2, y, { align: 'center' });
         
-        // Línea decorativa elegante
+        // Línea decorativa morada debajo del título
         const textWidth = doc.getTextWidth('REPORTE DE MADUREZ');
-        const lineStartX = (pageWidth - textWidth*0.8) / 2;
-        const lineEndX = lineStartX + textWidth*0.8;
         doc.setDrawColor(133, 96, 192);
-        doc.setLineWidth(3);
-        doc.line(lineStartX, y + 15, lineEndX, y + 15);
+        doc.setLineWidth(2);
+        doc.line(pageWidth/2 - textWidth/2, y + 5, pageWidth/2 + textWidth/2, y + 5);
         
-        y += 60; // Mayor separación
+        y += 40; // Espacio para el subtítulo
         
-        // Texto secundario con estilo premium
-        doc.setFontSize(48);
+        // Subtítulo
+        doc.setFontSize(32);
         doc.setTextColor(133, 96, 192);
         doc.text('EMPRESARIAL', pageWidth/2, y, { align: 'center' });
-        
-        // Decoración adicional
-        doc.setDrawColor(133, 96, 192, 0.5);
-        doc.setLineWidth(1);
-        doc.line(titleBoxX + 20, y + 20, titleBoxX + titleBoxWidth - 20, y + 20);
         
         y += 70;
         doc.setFillColor(...colors.lightGray);
@@ -2023,115 +1980,40 @@ async function downloadPDF() {
         doc.text('Analicemos los resultados y definamos el mejor camino', pageWidth/2, y + 50, { align: 'center' });
         
         y += 90;
-        // Diseño premium para la sección de contacto
-        // Fondo elegante con borde suave
-        doc.setFillColor(248, 250, 252); 
-        doc.roundedRect(margin, y, contentWidth, 140, 15, 15, 'F'); // Aumentamos altura
+        // Sección de contacto exactamente como en la imagen
+        doc.setFillColor(248, 250, 252); // Fondo gris claro
+        doc.roundedRect(margin, y, contentWidth, 100, 10, 10, 'F');
         
-        // Borde con degradado simulado (líneas múltiples)
-        doc.setDrawColor(133, 96, 192, 0.8);
-        doc.setLineWidth(2);
-        doc.roundedRect(margin, y, contentWidth, 140, 15, 15, 'S');
-        
-        // Efecto de brillo superior
-        doc.setFillColor(255, 255, 255, 0.5);
-        doc.roundedRect(margin + 5, y + 5, contentWidth - 10, 20, 10, 10, 'F');
-        
-        // Decoración de esquinas
+        // Borde simple
         doc.setDrawColor(133, 96, 192);
-        doc.setLineWidth(3);
-        // Esquina superior izquierda
-        doc.line(margin + 5, y + 15, margin + 25, y + 15);
-        doc.line(margin + 15, y + 5, margin + 15, y + 25);
-        // Esquina superior derecha
-        doc.line(margin + contentWidth - 25, y + 15, margin + contentWidth - 5, y + 15);
-        doc.line(margin + contentWidth - 15, y + 5, margin + contentWidth - 15, y + 25);
-        
-        // Título con diseño premium
-        doc.setFontSize(22); // Título más grande y elegante
-        doc.setFont('helvetica', 'bold');
-        
-        // Efecto de sombra mejorado
-        doc.setTextColor(100, 100, 100, 0.5); // Sombra más sutil
-        doc.text('CONTACTO DIRECTO', pageWidth/2 + 1.5, y + 85 + 1.5, { align: 'center' });
-        
-        // Título principal
-        doc.setTextColor(133, 96, 192);
-        doc.text('CONTACTO DIRECTO', pageWidth/2, y + 85, { align: 'center' });
-        
-        // Decoración elegante bajo el título
-        const contactTextWidth = doc.getTextWidth('CONTACTO DIRECTO');
-        const contactLineStartX = (pageWidth - contactTextWidth*0.7) / 2;
-        const contactLineEndX = contactLineStartX + contactTextWidth*0.7;
-        
-        // Línea principal
-        doc.setDrawColor(133, 96, 192);
-        doc.setLineWidth(2);
-        doc.line(contactLineStartX, y + 92, contactLineEndX, y + 92);
-        
-        // Línea secundaria (efecto de doble línea)
-        doc.setDrawColor(39, 50, 90, 0.5);
         doc.setLineWidth(1);
-        doc.line(contactLineStartX + 10, y + 96, contactLineEndX - 10, y + 96);
+        doc.roundedRect(margin, y, contentWidth, 100, 10, 10, 'S');
         
-        // Diseño premium para el logo en la sección de contacto
+        // Título de contacto exactamente como en la imagen
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(133, 96, 192);
+        doc.text('CONTACTO DIRECTO', pageWidth/2, y + 30, { align: 'center' });
+        
+        // Logo pequeño en la sección de contacto exactamente como en la imagen
         if (logoInfo) {
             try {
-                // Tamaño optimizado para alta calidad
-                const contactLogoWidth = 140;
+                const contactLogoWidth = 40;
                 const contactLogoHeight = contactLogoWidth / logoInfo.aspectRatio;
-                const contactLogoX = (pageWidth - contactLogoWidth) / 2;
-                
-                // Coordenadas centrales
-                const centerX = pageWidth / 2;
-                const centerY = y + 10; // Ajustamos la posición vertical
-                const radius = Math.max(contactLogoWidth, contactLogoHeight) / 1.6;
-                
-                // Creamos un fondo elegante con múltiples capas
-                
-                // Capa 1: Sombra exterior
-                doc.setFillColor(200, 200, 200);
-                doc.circle(centerX + 4, centerY + 4, radius + 4, 'F');
-                
-                // Capa 2: Borde exterior
-                doc.setFillColor(133, 96, 192, 0.3);
-                doc.circle(centerX, centerY, radius + 6, 'F');
-                
-                // Capa 3: Fondo principal
-                doc.setFillColor(248, 250, 252);
-                doc.circle(centerX, centerY, radius, 'F');
-                
-                // Capa 4: Borde interior
-                doc.setDrawColor(133, 96, 192);
-                doc.setLineWidth(2);
-                doc.circle(centerX, centerY, radius, 'S');
-                
-                // Capa 5: Brillo superior (efecto de luz)
-                doc.setFillColor(255, 255, 255, 0.6);
-                doc.setDrawColor(255, 255, 255, 0);
-                doc.ellipse(centerX, centerY - radius/2, radius*0.8, radius/4, 'F');
-                
-                // Logo centrado con alta calidad
-                doc.addImage(logoInfo.data, 'PNG', contactLogoX, centerY - contactLogoHeight/2, contactLogoWidth, contactLogoHeight);
+                const contactLogoX = 70;
+                const contactLogoY = y + 10;
+                doc.addImage(logoInfo.data, 'PNG', contactLogoX, contactLogoY, contactLogoWidth, contactLogoHeight);
             } catch (e) {
                 console.warn('Error al insertar logo en contacto:', e);
             }
         }
         
-        // Información de contacto con estilo premium
-        doc.setFontSize(13);
-        doc.setFont('helvetica', 'bold');
+        // Información de contacto exactamente como en la imagen
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'normal');
         doc.setTextColor(39, 50, 90);
-        doc.text('forjadigitalae@gmail.com', pageWidth/2, y + 110, { align: 'center' });
-        
-        doc.setFontSize(13);
-        doc.setFont('helvetica', 'bold');
-        doc.text('+57-3143265590', pageWidth/2, y + 130, { align: 'center' });
-        
-        // Iconos simulados para los datos de contacto
-        doc.setFillColor(133, 96, 192);
-        doc.circle(pageWidth/2 - 100, y + 110, 4, 'F'); // Icono de email
-        doc.circle(pageWidth/2 - 80, y + 130, 4, 'F'); // Icono de teléfono
+        doc.text('forjadigitalae@gmail.com', pageWidth/2, y + 55, { align: 'center' });
+        doc.text('+57-3143265590', pageWidth/2, y + 75, { align: 'center' });
         
         addFooter(doc, pageWidth, pageHeight, interiorLogoInfo);
         

@@ -1368,7 +1368,7 @@ async function downloadPDF() {
         let y = 100;
         
         // Título principal
-        doc.setFontSize(30);
+        doc.setFontSize(24);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(39, 50, 90);
         doc.text('REPORTE DE MADUREZ', pageWidth/2, y, { align: 'center' });
@@ -1382,7 +1382,7 @@ async function downloadPDF() {
         y += 40; // Espacio para el subtítulo
         
         // Subtítulo
-        doc.setFontSize(30);
+        doc.setFontSize(24);
         doc.setTextColor(133, 96, 192);
         doc.text('EMPRESARIAL', pageWidth/2, y, { align: 'center' });
         
@@ -1444,7 +1444,7 @@ async function downloadPDF() {
         doc.setFillColor(...colors.white);
         doc.circle(circleX, circleY, circleRadius - 10, 'F');
         
-        doc.setFontSize(48);
+        doc.setFontSize(40);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(...colors.purple);
         doc.text(finalScore.toString(), circleX, circleY + 15, { align: 'center' });
@@ -1497,7 +1497,7 @@ async function downloadPDF() {
             doc.setFillColor(...colors.lightGray);
             doc.roundedRect(x, y, statsWidth, 70, 8, 8, 'F');
             
-            doc.setFontSize(28);
+            doc.setFontSize(24);
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(...color);
             doc.text(number, x + statsWidth/2, y + 45, { align: 'center' });
@@ -1905,7 +1905,7 @@ async function downloadPDF() {
             } catch (e) {}
         }
         
-        doc.setFontSize(20);
+        doc.setFontSize(18);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(...colors.white);
         doc.text('¿LISTO PARA TRANSFORMAR', pageWidth/2, y + 50, { align: 'center' });

@@ -1288,8 +1288,8 @@ async function downloadPDF() {
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
                     const aspectRatio = img.width / img.height;
-                    // Aumentamos el tamaño del logo para la primera página
-                    const targetWidth = 500; // Mayor tamaño para la portada
+                    // Aumentamos el tamaño del logo para la portada según el mockup
+                    const targetWidth = 600; // Mayor tamaño para la portada
                     const targetHeight = targetWidth / aspectRatio;
                     
                     canvas.width = targetWidth;
@@ -1302,7 +1302,7 @@ async function downloadPDF() {
                     });
                 };
                 img.onerror = () => resolve(null);
-                img.src = 'https://forjadigitalae.github.io/LOGO%20F_OSC.png';
+                img.src = '../LOGO COLOR.png'; // Usamos el logo a color según el mockup
             });
         }
         
@@ -1314,7 +1314,7 @@ async function downloadPDF() {
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
                     const aspectRatio = img.width / img.height;
-                    const targetWidth = 400;
+                    const targetWidth = 500; // Aumentamos aún más el tamaño para ser proporcional
                     const targetHeight = targetWidth / aspectRatio;
                     
                     canvas.width = targetWidth;
@@ -1327,7 +1327,7 @@ async function downloadPDF() {
                     });
                 };
                 img.onerror = () => resolve(null);
-                // Usamos LOGO COLOR para las páginas interiores
+                // Usamos LOGO COLOR para las páginas interiores según el mockup
                 img.src = '../LOGO COLOR.png';
             });
         }
@@ -1340,34 +1340,29 @@ async function downloadPDF() {
         doc.setFillColor(...colors.primary);
         doc.rect(0, 0, pageWidth, 100, 'F');
         
-        // Logo con proporción correcta
+        // Logo con proporción correcta según el mockup
         if (logoInfo) {
             try {
-                const logoWidth = 150; // Aumentamos el tamaño del logo en la portada
+                const logoWidth = 200; // Aumentamos el tamaño del logo en la portada según el mockup
                 const logoHeight = logoWidth / logoInfo.aspectRatio;
-                doc.addImage(logoInfo.data, 'PNG', margin, 20, logoWidth, logoHeight);
+                // Centramos el logo en la parte superior
+                const logoX = (pageWidth - logoWidth) / 2;
+                doc.addImage(logoInfo.data, 'PNG', logoX, 20, logoWidth, logoHeight);
             } catch (e) {
                 console.warn('Error al insertar logo:', e);
             }
         }
         
-        doc.setFontSize(14);
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(...colors.white);
-        doc.text('ForjaDigitalAE', pageWidth - margin, 40, { align: 'right' });
-        
-        doc.setFontSize(9);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Arquitectura Empresarial & Transformacion Digital', pageWidth - margin, 60, { align: 'right' });
+        // Según el mockup, no incluimos texto junto al logo en la portada
         
         let y = 140;
-        doc.setFontSize(42); // Aumentamos el tamaño del encabezado
+        doc.setFontSize(48); // Aumentamos aún más el tamaño del encabezado según el mockup
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(...colors.primary);
         doc.text('REPORTE DE MADUREZ', pageWidth/2, y, { align: 'center' });
         
         y += 45;
-        doc.setFontSize(38); // Aumentamos el tamaño del encabezado
+        doc.setFontSize(44); // Aumentamos aún más el tamaño del encabezado según el mockup
         doc.setTextColor(...colors.purple);
         doc.text('EMPRESARIAL', pageWidth/2, y, { align: 'center' });
         
@@ -1973,6 +1968,18 @@ async function downloadPDF() {
         doc.setTextColor(...colors.purple);
         doc.text('CONTACTO DIRECTO', pageWidth/2, y + 30, { align: 'center' });
         
+        // Añadimos logo en la sección de contacto según el mockup
+        if (logoInfo) {
+            try {
+                const contactLogoWidth = 120;
+                const contactLogoHeight = contactLogoWidth / logoInfo.aspectRatio;
+                const contactLogoX = (pageWidth - contactLogoWidth) / 2;
+                doc.addImage(logoInfo.data, 'PNG', contactLogoX, y - 20, contactLogoWidth, contactLogoHeight);
+            } catch (e) {
+                console.warn('Error al insertar logo en contacto:', e);
+            }
+        }
+        
         doc.setFontSize(12);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(...colors.primary);
@@ -2007,7 +2014,7 @@ function addPageHeader(doc, pageWidth, title, logoInfo) {
     
     if (logoInfo) {
         try {
-            const logoWidth = 100; // Aumentamos el tamaño del logo en los encabezados
+            const logoWidth = 140; // Aumentamos aún más el tamaño del logo en los encabezados
             const logoHeight = logoWidth / logoInfo.aspectRatio;
             doc.addImage(logoInfo.data, 'PNG', 40, (headerHeight - logoHeight) / 2, logoWidth, logoHeight);
         } catch (e) {}
@@ -2060,7 +2067,7 @@ function addPageHeader(doc, pageWidth, title, logoData) {
     // Logo pequeño
     if (logoData && logoData.data) {
         try {
-            const logoWidth = 100; // Aumentamos el tamaño del logo en los encabezados
+            const logoWidth = 140; // Aumentamos aún más el tamaño del logo en los encabezados
             const logoHeight = logoWidth / logoData.aspectRatio;
             doc.addImage(logoData.data, 'PNG', 40, (headerHeight - logoHeight) / 2, logoWidth, logoHeight);
         } catch (e) {

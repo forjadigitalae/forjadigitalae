@@ -1280,7 +1280,7 @@ async function downloadPDF() {
         const categoryScores = evaluationData.categoryScores || {};
         
         // CORRECCIÓN 1: Función para cargar logo manteniendo proporción
-        // Función para cargar el logo principal (primera página)
+        // Función para cargar el logo principal (primera y última página)
         async function loadLogo() {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -1288,8 +1288,8 @@ async function downloadPDF() {
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
                     const aspectRatio = img.width / img.height;
-                    // Aumentamos el tamaño del logo para la portada según el mockup
-                    const targetWidth = 600; // Mayor tamaño para la portada
+                    // Aumentamos el tamaño del logo para la portada
+                    const targetWidth = 700; // Mayor tamaño para la portada
                     const targetHeight = targetWidth / aspectRatio;
                     
                     canvas.width = targetWidth;
@@ -1302,7 +1302,7 @@ async function downloadPDF() {
                     });
                 };
                 img.onerror = () => resolve(null);
-                img.src = '../LOGO COLOR.png'; // Usamos el logo a color según el mockup
+                img.src = '../LOGO F_OSC.png'; // Usamos el logo oscuro según lo solicitado
             });
         }
         
@@ -1337,32 +1337,61 @@ async function downloadPDF() {
         
         // ========== PÁGINA 1: PORTADA ==========
         
-        doc.setFillColor(...colors.primary);
-        doc.rect(0, 0, pageWidth, 100, 'F');
+        // Creamos un diseño más elegante para el encabezado
+        // Fondo con degradado para la parte superior
+        const grd = doc.createLinearGradient(0, 0, pageWidth, 120);
+        grd.addColorStop(0, 'rgb(39, 50, 90)');
+        grd.addColorStop(1, 'rgb(76, 86, 126)');
+        doc.setFillColor(grd);
+        doc.rect(0, 0, pageWidth, 120, 'F');
         
-        // Logo con proporción correcta según el mockup
+        // Añadimos una línea decorativa
+        doc.setDrawColor(133, 96, 192);
+        doc.setLineWidth(3);
+        doc.line(40, 120, pageWidth - 40, 120);
+        
+        // Logo con proporción correcta y mejorado
         if (logoInfo) {
             try {
-                const logoWidth = 200; // Aumentamos el tamaño del logo en la portada según el mockup
+                const logoWidth = 230; // Aumentamos el tamaño del logo en la portada
                 const logoHeight = logoWidth / logoInfo.aspectRatio;
                 // Centramos el logo en la parte superior
                 const logoX = (pageWidth - logoWidth) / 2;
-                doc.addImage(logoInfo.data, 'PNG', logoX, 20, logoWidth, logoHeight);
+                doc.addImage(logoInfo.data, 'PNG', logoX, 10, logoWidth, logoHeight);
             } catch (e) {
                 console.warn('Error al insertar logo:', e);
             }
         }
         
-        // Según el mockup, no incluimos texto junto al logo en la portada
+        // Mejoramos el diseño del título principal
+        let y = 160; // Ajustamos la posición vertical para dar más espacio
         
-        let y = 140;
-        doc.setFontSize(48); // Aumentamos aún más el tamaño del encabezado según el mockup
+        // Añadimos un efecto de sombra para el texto principal
+        doc.setFontSize(50);
         doc.setFont('helvetica', 'bold');
+        doc.setTextColor(220, 220, 220); // Color de la sombra
+        doc.text('REPORTE DE MADUREZ', pageWidth/2 + 2, y + 2, { align: 'center' }); // Sombra
+        
+        // Texto principal
         doc.setTextColor(...colors.primary);
         doc.text('REPORTE DE MADUREZ', pageWidth/2, y, { align: 'center' });
         
-        y += 45;
-        doc.setFontSize(44); // Aumentamos aún más el tamaño del encabezado según el mockup
+        // Añadimos un subrayado decorativo
+        const textWidth = doc.getTextWidth('REPORTE DE MADUREZ');
+        const lineStartX = (pageWidth - textWidth) / 2;
+        const lineEndX = lineStartX + textWidth;
+        doc.setDrawColor(...colors.purple);
+        doc.setLineWidth(3);
+        doc.line(lineStartX, y + 10, lineEndX, y + 10);
+        
+        y += 60; // Mayor separación
+        
+        // Efecto de sombra para el segundo texto
+        doc.setFontSize(46);
+        doc.setTextColor(220, 220, 220); // Color de la sombra
+        doc.text('EMPRESARIAL', pageWidth/2 + 2, y + 2, { align: 'center' }); // Sombra
+        
+        // Texto secundario
         doc.setTextColor(...colors.purple);
         doc.text('EMPRESARIAL', pageWidth/2, y, { align: 'center' });
         
@@ -1960,21 +1989,65 @@ async function downloadPDF() {
         doc.text('Analicemos los resultados y definamos el mejor camino', pageWidth/2, y + 50, { align: 'center' });
         
         y += 90;
-        doc.setFillColor(...colors.lightGray);
-        doc.roundedRect(margin, y, contentWidth, 100, 10, 10, 'F');
+        // Mejoramos el diseño de la sección de contacto
+        // Fondo con degradado para la sección de contacto
+        const contactGrd = doc.createLinearGradient(margin, y, margin + contentWidth, y + 120);
+        contactGrd.addColorStop(0, 'rgb(248, 250, 252)');
+        contactGrd.addColorStop(1, 'rgb(237, 242, 247)');
+        doc.setFillColor(contactGrd);
+        doc.roundedRect(margin, y, contentWidth, 120, 15, 15, 'F');
         
-        doc.setFontSize(14);
+        // Borde decorativo
+        doc.setDrawColor(...colors.purple);
+        doc.setLineWidth(2);
+        doc.roundedRect(margin, y, contentWidth, 120, 15, 15, 'S');
+        
+        // Título con efecto de sombra
+        doc.setFontSize(18); // Título más grande
         doc.setFont('helvetica', 'bold');
-        doc.setTextColor(...colors.purple);
-        doc.text('CONTACTO DIRECTO', pageWidth/2, y + 30, { align: 'center' });
+        doc.setTextColor(220, 220, 220); // Sombra
+        doc.text('CONTACTO DIRECTO', pageWidth/2 + 1, y + 35 + 1, { align: 'center' });
         
-        // Añadimos logo en la sección de contacto según el mockup
+        // Título principal
+        doc.setTextColor(...colors.purple);
+        doc.text('CONTACTO DIRECTO', pageWidth/2, y + 35, { align: 'center' });
+        
+        // Línea decorativa bajo el título
+        const contactTextWidth = doc.getTextWidth('CONTACTO DIRECTO');
+        const contactLineStartX = (pageWidth - contactTextWidth) / 2;
+        const contactLineEndX = contactLineStartX + contactTextWidth;
+        doc.setDrawColor(...colors.primary);
+        doc.setLineWidth(1);
+        doc.line(contactLineStartX, y + 42, contactLineEndX, y + 42);
+        
+        // Añadimos logo en la sección de contacto con diseño mejorado
         if (logoInfo) {
             try {
-                const contactLogoWidth = 120;
+                // Creamos un fondo circular para el logo
+                const contactLogoWidth = 150;
                 const contactLogoHeight = contactLogoWidth / logoInfo.aspectRatio;
                 const contactLogoX = (pageWidth - contactLogoWidth) / 2;
-                doc.addImage(logoInfo.data, 'PNG', contactLogoX, y - 20, contactLogoWidth, contactLogoHeight);
+                
+                // Fondo circular con sombra para el logo
+                const centerX = pageWidth / 2;
+                const centerY = y - 10;
+                const radius = Math.max(contactLogoWidth, contactLogoHeight) / 1.7;
+                
+                // Sombra suave
+                doc.setFillColor(220, 220, 220);
+                doc.circle(centerX + 3, centerY + 3, radius + 3, 'F');
+                
+                // Círculo principal
+                doc.setFillColor(248, 250, 252);
+                doc.circle(centerX, centerY, radius, 'F');
+                
+                // Borde del círculo
+                doc.setDrawColor(133, 96, 192);
+                doc.setLineWidth(2);
+                doc.circle(centerX, centerY, radius, 'S');
+                
+                // Logo centrado en el círculo
+                doc.addImage(logoInfo.data, 'PNG', contactLogoX, y - 50, contactLogoWidth, contactLogoHeight);
             } catch (e) {
                 console.warn('Error al insertar logo en contacto:', e);
             }

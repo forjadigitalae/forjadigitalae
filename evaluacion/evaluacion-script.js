@@ -1397,14 +1397,67 @@ async function downloadPDF() {
         doc.setTextColor(...colors.primary);
         doc.text(companyData.name || 'Empresa', pageWidth/2, y + 40, { align: 'center' });
         
+        // Información de la empresa con formato como en la imagen1
         doc.setFontSize(12);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(...colors.gray);
-        const companyInfo = `${companyData.sector || 'N/A'} | ${companyData.size || 'N/A'} | ${companyData.city || 'N/A'}`;
-        doc.text(companyInfo, pageWidth/2, y + 65, { align: 'center' });
         
-        doc.setFontSize(11);
-        doc.text(`${companyData.contactName || 'N/A'} | ${companyData.email || 'N/A'}`, pageWidth/2, y + 90, { align: 'center' });
+        // Primera línea: Sector | Tamaño | Ciudad
+        const sector = companyData.sector || 'N/A';
+        const size = companyData.size || 'N/A';
+        const city = companyData.city || 'N/A';
+        
+        // Calculamos las posiciones para centrar el texto
+        const sectorText = `${sector} | `;
+        const sizeText = `${size} | `;
+        const cityText = city;
+        
+        const totalWidth = doc.getTextWidth(sectorText + sizeText + cityText);
+        const infoStartX = (pageWidth - totalWidth) / 2;
+        
+        let currentX = infoStartX;
+        
+        // Sector (texto normal)
+        doc.text(sector, currentX, y + 65);
+        currentX += doc.getTextWidth(sector + ' | ');
+        
+        // Tamaño (con fondo amarillo)
+        const sizeWidth = doc.getTextWidth(size);
+        doc.setFillColor(255, 255, 0); // Amarillo
+        doc.rect(currentX - 2, y + 65 - 10, sizeWidth + 4, 14, 'F');
+        doc.setTextColor(...colors.gray);
+        doc.text(size, currentX, y + 65);
+        currentX += doc.getTextWidth(size + ' | ');
+        
+        // Ciudad (con fondo amarillo)
+        const cityWidth = doc.getTextWidth(city);
+        doc.setFillColor(255, 255, 0); // Amarillo
+        doc.rect(currentX - 2, y + 65 - 10, cityWidth + 4, 14, 'F');
+        doc.setTextColor(...colors.gray);
+        doc.text(city, currentX, y + 65);
+        
+        // Segunda línea: Nombre de contacto | Email
+        const contactName = companyData.contactName || 'N/A';
+        const email = companyData.email || 'N/A';
+        
+        const contactText = `${contactName} | `;
+        const emailText = email;
+        
+        const contactTotalWidth = doc.getTextWidth(contactText + emailText);
+        const contactInfoStartX = (pageWidth - contactTotalWidth) / 2;
+        
+        currentX = contactInfoStartX;
+        
+        // Nombre de contacto (con fondo amarillo)
+        const contactWidth = doc.getTextWidth(contactName);
+        doc.setFillColor(255, 255, 0); // Amarillo
+        doc.rect(currentX - 2, y + 90 - 10, contactWidth + 4, 14, 'F');
+        doc.setTextColor(...colors.gray);
+        doc.text(contactName, currentX, y + 90);
+        currentX += doc.getTextWidth(contactName + ' | ');
+        
+        // Email (texto normal)
+        doc.text(email, currentX, y + 90);
         
         // CORRECCIÓN 2: Círculo con progreso real
         y += 170;

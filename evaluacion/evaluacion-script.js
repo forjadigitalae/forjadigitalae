@@ -1338,11 +1338,8 @@ async function downloadPDF() {
         // ========== PÁGINA 1: PORTADA ==========
         
         // Creamos un diseño más elegante para el encabezado
-        // Fondo con degradado para la parte superior
-        const grd = doc.createLinearGradient(0, 0, pageWidth, 120);
-        grd.addColorStop(0, 'rgb(39, 50, 90)');
-        grd.addColorStop(1, 'rgb(76, 86, 126)');
-        doc.setFillColor(grd);
+        // Fondo para la parte superior
+        doc.setFillColor(...colors.primary); // Usamos el color primario definido
         doc.rect(0, 0, pageWidth, 120, 'F');
         
         // Añadimos una línea decorativa
@@ -1990,11 +1987,8 @@ async function downloadPDF() {
         
         y += 90;
         // Mejoramos el diseño de la sección de contacto
-        // Fondo con degradado para la sección de contacto
-        const contactGrd = doc.createLinearGradient(margin, y, margin + contentWidth, y + 120);
-        contactGrd.addColorStop(0, 'rgb(248, 250, 252)');
-        contactGrd.addColorStop(1, 'rgb(237, 242, 247)');
-        doc.setFillColor(contactGrd);
+        // Fondo para la sección de contacto
+        doc.setFillColor(...colors.lightGray); // Usamos el color lightGray definido
         doc.roundedRect(margin, y, contentWidth, 120, 15, 15, 'F');
         
         // Borde decorativo

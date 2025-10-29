@@ -1359,7 +1359,7 @@ async function downloadPDF() {
         // Logo como en la imagen
         if (logoInfo) {
             try {
-                const logoWidth = 250;
+                const logoWidth = 200;
                 const logoHeight = logoWidth / logoInfo.aspectRatio;
                 const logoX = 30; // Posición a la izquierda como en la imagen
                 doc.addImage(logoInfo.data, 'PNG', logoX, 10, logoWidth, logoHeight);
@@ -1427,7 +1427,7 @@ async function downloadPDF() {
         
         // Tamaño (con fondo amarillo)
         const sizeWidth = doc.getTextWidth(size);
-        //doc.setFillColor(255, 255, 0); // Amarillo
+        doc.setFillColor(247, 247, 247); // Amarillo
         doc.rect(currentX - 2, y + 65 - 10, sizeWidth + 4, 14, 'F');
         doc.setTextColor(...colors.gray);
         doc.text(size, currentX, y + 65);
@@ -1435,7 +1435,7 @@ async function downloadPDF() {
         
         // Ciudad (con fondo amarillo)
         const cityWidth = doc.getTextWidth(city);
-        //doc.setFillColor(255, 255, 0); // Amarillo
+        doc.setFillColor(247, 247, 247); // Amarillo
         doc.rect(currentX - 2, y + 65 - 10, cityWidth + 4, 14, 'F');
         doc.setTextColor(...colors.gray);
         doc.text(city, currentX, y + 65);
@@ -1454,7 +1454,7 @@ async function downloadPDF() {
         
         // Nombre de contacto (con fondo amarillo)
         const contactWidth = doc.getTextWidth(contactName);
-        //doc.setFillColor(255, 255, 0); // Amarillo
+        doc.setFillColor(247, 247, 247); // Amarillo
         doc.rect(currentX - 2, y + 90 - 10, contactWidth + 4, 14, 'F');
         doc.setTextColor(...colors.gray);
         doc.text(contactName, currentX, y + 90);
@@ -1960,7 +1960,7 @@ async function downloadPDF() {
         
         if (logoInfo) {
             try {
-                const logoWidth = 200;
+                const logoWidth = 150;
                 const logoHeight = logoWidth / logoInfo.aspectRatio;
                 doc.addImage(logoInfo.data, 'PNG', margin, y + 50, logoWidth, logoHeight);
             } catch (e) {}
@@ -2059,7 +2059,7 @@ async function downloadPDF() {
         // Logo pequeño en la sección de contacto exactamente como en la imagen
         if (logoInfo) {
             try {
-                const contactLogoWidth = 70;
+                const contactLogoWidth = 100;
                 const contactLogoHeight = contactLogoWidth / logoInfo.aspectRatio;
                 const contactLogoX = 100;
                 const contactLogoY = y + 40;
